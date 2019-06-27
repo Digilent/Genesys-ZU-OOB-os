@@ -1,1 +1,1 @@
-# Root commit
+# Petalinux repository for Zuca
