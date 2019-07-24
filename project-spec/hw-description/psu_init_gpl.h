@@ -1,6 +1,6 @@
 /******************************************************************************
 *
-* Copyright (C) 2015 Xilinx, Inc.  All rights reserved.
+* Copyright (C) 2018 Xilinx, Inc.  All rights reserved.
 * 
 *  This program is free software; you can redistribute it and/or modify
 *  it under the terms of the GNU General Public License as published by
@@ -33217,6 +33217,8 @@
 #define IOU_SLCR_MIO_LOOPBACK_SPI0_LOOP_SPI1_MASK              0x00000001U
 #undef CRL_APB_AMS_REF_CTRL_OFFSET 
 #define CRL_APB_AMS_REF_CTRL_OFFSET                                                0XFF5E0108
+#undef CRL_APB_RST_LPD_IOU2_OFFSET 
+#define CRL_APB_RST_LPD_IOU2_OFFSET                                                0XFF5E0238
 
 /*
 * 6 bit divider
@@ -33259,6 +33261,16 @@
 #define CRL_APB_AMS_REF_CTRL_CLKACT_DEFVAL                     0x01001800
 #define CRL_APB_AMS_REF_CTRL_CLKACT_SHIFT                      24
 #define CRL_APB_AMS_REF_CTRL_CLKACT_MASK                       0x01000000U
+
+/*
+* Block level reset
+*/
+#undef CRL_APB_RST_LPD_IOU2_QSPI_RESET_DEFVAL 
+#undef CRL_APB_RST_LPD_IOU2_QSPI_RESET_SHIFT 
+#undef CRL_APB_RST_LPD_IOU2_QSPI_RESET_MASK 
+#define CRL_APB_RST_LPD_IOU2_QSPI_RESET_DEFVAL                 0x0017FFFF
+#define CRL_APB_RST_LPD_IOU2_QSPI_RESET_SHIFT                  0
+#define CRL_APB_RST_LPD_IOU2_QSPI_RESET_MASK                   0x00000001U
 #undef CRF_APB_RST_FPD_TOP_OFFSET 
 #define CRF_APB_RST_FPD_TOP_OFFSET                                                 0XFD1A0100
 #undef CRL_APB_RST_LPD_IOU2_OFFSET 
@@ -33321,6 +33333,12 @@
 #define GPIO_OEN_0_OFFSET                                                          0XFF0A0208
 #undef GPIO_MASK_DATA_0_LSW_OFFSET 
 #define GPIO_MASK_DATA_0_LSW_OFFSET                                                0XFF0A0000
+#undef GPIO_MASK_DATA_0_LSW_OFFSET 
+#define GPIO_MASK_DATA_0_LSW_OFFSET                                                0XFF0A0000
+#undef GPIO_DIRM_0_OFFSET 
+#define GPIO_DIRM_0_OFFSET                                                         0XFF0A0204
+#undef GPIO_OEN_0_OFFSET 
+#define GPIO_OEN_0_OFFSET                                                          0XFF0A0208
 #undef GPIO_MASK_DATA_0_LSW_OFFSET 
 #define GPIO_MASK_DATA_0_LSW_OFFSET                                                0XFF0A0000
 
@@ -34176,6 +34194,53 @@
 #define GPIO_MASK_DATA_0_LSW_DATA_0_LSW_DEFVAL                 0x00000000
 #define GPIO_MASK_DATA_0_LSW_DATA_0_LSW_SHIFT                  0
 #define GPIO_MASK_DATA_0_LSW_DATA_0_LSW_MASK                   0x0000FFFFU
+
+/*
+* On a write, only bits with a corresponding deasserted mask will change t
+    * he output value. 0: pin value is updated 1: pin is masked Each bit contr
+    * ols the corresponding pin within the 16-bit half-bank. Reads return 0's.
+*/
+#undef GPIO_MASK_DATA_0_LSW_MASK_0_LSW_DEFVAL 
+#undef GPIO_MASK_DATA_0_LSW_MASK_0_LSW_SHIFT 
+#undef GPIO_MASK_DATA_0_LSW_MASK_0_LSW_MASK 
+#define GPIO_MASK_DATA_0_LSW_MASK_0_LSW_DEFVAL                 0x00000000
+#define GPIO_MASK_DATA_0_LSW_MASK_0_LSW_SHIFT                  16
+#define GPIO_MASK_DATA_0_LSW_MASK_0_LSW_MASK                   0xFFFF0000U
+
+/*
+* On a write, these are the data values for the corresponding GPIO output
+    * bits. Each bit controls the corresponding pin within the 16-bit half-ban
+    * k. Reads return the previous value written to this register or DATA_0[15
+    * :0]. Reads do not return the value on the GPIO pin.
+*/
+#undef GPIO_MASK_DATA_0_LSW_DATA_0_LSW_DEFVAL 
+#undef GPIO_MASK_DATA_0_LSW_DATA_0_LSW_SHIFT 
+#undef GPIO_MASK_DATA_0_LSW_DATA_0_LSW_MASK 
+#define GPIO_MASK_DATA_0_LSW_DATA_0_LSW_DEFVAL                 0x00000000
+#define GPIO_MASK_DATA_0_LSW_DATA_0_LSW_SHIFT                  0
+#define GPIO_MASK_DATA_0_LSW_DATA_0_LSW_MASK                   0x0000FFFFU
+
+/*
+* Direction mode 0: input 1: output Each bit configures the corresponding
+    * pin within the 32-bit bank
+*/
+#undef GPIO_DIRM_0_DIRECTION_0_DEFVAL 
+#undef GPIO_DIRM_0_DIRECTION_0_SHIFT 
+#undef GPIO_DIRM_0_DIRECTION_0_MASK 
+#define GPIO_DIRM_0_DIRECTION_0_DEFVAL                         0x00000000
+#define GPIO_DIRM_0_DIRECTION_0_SHIFT                          0
+#define GPIO_DIRM_0_DIRECTION_0_MASK                           0x03FFFFFFU
+
+/*
+* Output enables 0: disabled 1: enabled Each bit configures the correspond
+    * ing pin within the 32-bit bank
+*/
+#undef GPIO_OEN_0_OP_ENABLE_0_DEFVAL 
+#undef GPIO_OEN_0_OP_ENABLE_0_SHIFT 
+#undef GPIO_OEN_0_OP_ENABLE_0_MASK 
+#define GPIO_OEN_0_OP_ENABLE_0_DEFVAL                          0x00000000
+#define GPIO_OEN_0_OP_ENABLE_0_SHIFT                           0
+#define GPIO_OEN_0_OP_ENABLE_0_MASK                            0x03FFFFFFU
 
 /*
 * On a write, only bits with a corresponding deasserted mask will change t
@@ -37542,6 +37607,17 @@
 #define PCIE_ATTRIB_ATTR_37_ATTR_LINK_CAP_LINK_BANDWIDTH_NOTIFICATION_CAP_MASK  0x00000200U
 
 /*
+* Maximum Link Speed. Valid settings are: 0001b [2.5 GT/s], 0010b [5.0 GT/
+    * s and 2.5 GT/s].; EP=0x0002; RP=0x0002
+*/
+#undef PCIE_ATTRIB_ATTR_37_ATTR_LINK_CAP_MAX_LINK_SPEED_DEFVAL 
+#undef PCIE_ATTRIB_ATTR_37_ATTR_LINK_CAP_MAX_LINK_SPEED_SHIFT 
+#undef PCIE_ATTRIB_ATTR_37_ATTR_LINK_CAP_MAX_LINK_SPEED_MASK 
+#define PCIE_ATTRIB_ATTR_37_ATTR_LINK_CAP_MAX_LINK_SPEED_DEFVAL  0x000009FF
+#define PCIE_ATTRIB_ATTR_37_ATTR_LINK_CAP_MAX_LINK_SPEED_SHIFT  10
+#define PCIE_ATTRIB_ATTR_37_ATTR_LINK_CAP_MAX_LINK_SPEED_MASK  0x00003C00U
+
+/*
 * Sets the ASPM Optionality Compliance bit, to comply with the 2.1 ASPM Op
     * tionality ECN. Transferred to the Link Capabilities register.; EP=0x0001
     * ; RP=0x0001
@@ -38067,30 +38143,6 @@
 #define CRF_APB_RST_FPD_TOP_OFFSET                                                 0XFD1A0100
 #undef CRL_APB_RST_LPD_TOP_OFFSET 
 #define CRL_APB_RST_LPD_TOP_OFFSET                                                 0XFF5E023C
-#undef FPD_SLCR_AFI_FS_OFFSET 
-#define FPD_SLCR_AFI_FS_OFFSET                                                     0XFD615000
-#undef LPD_SLCR_AFI_FS_OFFSET 
-#define LPD_SLCR_AFI_FS_OFFSET                                                     0XFF419000
-#undef AFIFM0_AFIFM_RDCTRL_OFFSET 
-#define AFIFM0_AFIFM_RDCTRL_OFFSET                                                 0XFD360000
-#undef AFIFM2_AFIFM_RDCTRL_OFFSET 
-#define AFIFM2_AFIFM_RDCTRL_OFFSET                                                 0XFD380000
-#undef AFIFM3_AFIFM_RDCTRL_OFFSET 
-#define AFIFM3_AFIFM_RDCTRL_OFFSET                                                 0XFD390000
-#undef AFIFM4_AFIFM_RDCTRL_OFFSET 
-#define AFIFM4_AFIFM_RDCTRL_OFFSET                                                 0XFD3A0000
-#undef AFIFM5_AFIFM_RDCTRL_OFFSET 
-#define AFIFM5_AFIFM_RDCTRL_OFFSET                                                 0XFD3B0000
-#undef AFIFM0_AFIFM_WRCTRL_OFFSET 
-#define AFIFM0_AFIFM_WRCTRL_OFFSET                                                 0XFD360014
-#undef AFIFM2_AFIFM_WRCTRL_OFFSET 
-#define AFIFM2_AFIFM_WRCTRL_OFFSET                                                 0XFD380014
-#undef AFIFM3_AFIFM_WRCTRL_OFFSET 
-#define AFIFM3_AFIFM_WRCTRL_OFFSET                                                 0XFD390014
-#undef AFIFM4_AFIFM_WRCTRL_OFFSET 
-#define AFIFM4_AFIFM_WRCTRL_OFFSET                                                 0XFD3A0014
-#undef AFIFM5_AFIFM_WRCTRL_OFFSET 
-#define AFIFM5_AFIFM_WRCTRL_OFFSET                                                 0XFD3B0014
 
 /*
 * AF_FM0 block level reset
@@ -38161,140 +38213,6 @@
 #define CRL_APB_RST_LPD_TOP_AFI_FM6_RESET_DEFVAL               0x00188FDF
 #define CRL_APB_RST_LPD_TOP_AFI_FM6_RESET_SHIFT                19
 #define CRL_APB_RST_LPD_TOP_AFI_FM6_RESET_MASK                 0x00080000U
-
-/*
-* Select the 32/64/128-bit data width selection for the Slave 0 00: 32-bit
-    *  AXI data width (default) 01: 64-bit AXI data width 10: 128-bit AXI data
-    *  width 11: reserved
-*/
-#undef FPD_SLCR_AFI_FS_DW_SS0_SEL_DEFVAL 
-#undef FPD_SLCR_AFI_FS_DW_SS0_SEL_SHIFT 
-#undef FPD_SLCR_AFI_FS_DW_SS0_SEL_MASK 
-#define FPD_SLCR_AFI_FS_DW_SS0_SEL_DEFVAL                      0x00000A00
-#define FPD_SLCR_AFI_FS_DW_SS0_SEL_SHIFT                       8
-#define FPD_SLCR_AFI_FS_DW_SS0_SEL_MASK                        0x00000300U
-
-/*
-* Select the 32/64/128-bit data width selection for the Slave 0 00: 32-bit
-    *  AXI data width (default) 01: 64-bit AXI data width 10: 128-bit AXI data
-    *  width 11: reserved
-*/
-#undef LPD_SLCR_AFI_FS_DW_SS2_SEL_DEFVAL 
-#undef LPD_SLCR_AFI_FS_DW_SS2_SEL_SHIFT 
-#undef LPD_SLCR_AFI_FS_DW_SS2_SEL_MASK 
-#define LPD_SLCR_AFI_FS_DW_SS2_SEL_DEFVAL                      0x00000200
-#define LPD_SLCR_AFI_FS_DW_SS2_SEL_SHIFT                       8
-#define LPD_SLCR_AFI_FS_DW_SS2_SEL_MASK                        0x00000300U
-
-/*
-* Configures the Read Channel Fabric interface width. 2'b11 : Reserved 2'b
-    * 10 : 32-bit Fabric 2'b01 : 64-bit enabled 2'b00 : 128-bit enabled
-*/
-#undef AFIFM0_AFIFM_RDCTRL_FABRIC_WIDTH_DEFVAL 
-#undef AFIFM0_AFIFM_RDCTRL_FABRIC_WIDTH_SHIFT 
-#undef AFIFM0_AFIFM_RDCTRL_FABRIC_WIDTH_MASK 
-#define AFIFM0_AFIFM_RDCTRL_FABRIC_WIDTH_DEFVAL                0x000003B0
-#define AFIFM0_AFIFM_RDCTRL_FABRIC_WIDTH_SHIFT                 0
-#define AFIFM0_AFIFM_RDCTRL_FABRIC_WIDTH_MASK                  0x00000003U
-
-/*
-* Configures the Read Channel Fabric interface width. 2'b11 : Reserved 2'b
-    * 10 : 32-bit Fabric 2'b01 : 64-bit enabled 2'b00 : 128-bit enabled
-*/
-#undef AFIFM2_AFIFM_RDCTRL_FABRIC_WIDTH_DEFVAL 
-#undef AFIFM2_AFIFM_RDCTRL_FABRIC_WIDTH_SHIFT 
-#undef AFIFM2_AFIFM_RDCTRL_FABRIC_WIDTH_MASK 
-#define AFIFM2_AFIFM_RDCTRL_FABRIC_WIDTH_DEFVAL                0x000003B0
-#define AFIFM2_AFIFM_RDCTRL_FABRIC_WIDTH_SHIFT                 0
-#define AFIFM2_AFIFM_RDCTRL_FABRIC_WIDTH_MASK                  0x00000003U
-
-/*
-* Configures the Read Channel Fabric interface width. 2'b11 : Reserved 2'b
-    * 10 : 32-bit Fabric 2'b01 : 64-bit enabled 2'b00 : 128-bit enabled
-*/
-#undef AFIFM3_AFIFM_RDCTRL_FABRIC_WIDTH_DEFVAL 
-#undef AFIFM3_AFIFM_RDCTRL_FABRIC_WIDTH_SHIFT 
-#undef AFIFM3_AFIFM_RDCTRL_FABRIC_WIDTH_MASK 
-#define AFIFM3_AFIFM_RDCTRL_FABRIC_WIDTH_DEFVAL                0x000003B0
-#define AFIFM3_AFIFM_RDCTRL_FABRIC_WIDTH_SHIFT                 0
-#define AFIFM3_AFIFM_RDCTRL_FABRIC_WIDTH_MASK                  0x00000003U
-
-/*
-* Configures the Read Channel Fabric interface width. 2'b11 : Reserved 2'b
-    * 10 : 32-bit Fabric 2'b01 : 64-bit enabled 2'b00 : 128-bit enabled
-*/
-#undef AFIFM4_AFIFM_RDCTRL_FABRIC_WIDTH_DEFVAL 
-#undef AFIFM4_AFIFM_RDCTRL_FABRIC_WIDTH_SHIFT 
-#undef AFIFM4_AFIFM_RDCTRL_FABRIC_WIDTH_MASK 
-#define AFIFM4_AFIFM_RDCTRL_FABRIC_WIDTH_DEFVAL                0x000003B0
-#define AFIFM4_AFIFM_RDCTRL_FABRIC_WIDTH_SHIFT                 0
-#define AFIFM4_AFIFM_RDCTRL_FABRIC_WIDTH_MASK                  0x00000003U
-
-/*
-* Configures the Read Channel Fabric interface width. 2'b11 : Reserved 2'b
-    * 10 : 32-bit Fabric 2'b01 : 64-bit enabled 2'b00 : 128-bit enabled
-*/
-#undef AFIFM5_AFIFM_RDCTRL_FABRIC_WIDTH_DEFVAL 
-#undef AFIFM5_AFIFM_RDCTRL_FABRIC_WIDTH_SHIFT 
-#undef AFIFM5_AFIFM_RDCTRL_FABRIC_WIDTH_MASK 
-#define AFIFM5_AFIFM_RDCTRL_FABRIC_WIDTH_DEFVAL                0x000003B0
-#define AFIFM5_AFIFM_RDCTRL_FABRIC_WIDTH_SHIFT                 0
-#define AFIFM5_AFIFM_RDCTRL_FABRIC_WIDTH_MASK                  0x00000003U
-
-/*
-* Configures the Write Channel Fabric interface width. 2'b11 : Reserved 2'
-    * b10 : 32-bit Fabric 2'b01 : 64-bit enabled 2'b00 : 128-bit enabled
-*/
-#undef AFIFM0_AFIFM_WRCTRL_FABRIC_WIDTH_DEFVAL 
-#undef AFIFM0_AFIFM_WRCTRL_FABRIC_WIDTH_SHIFT 
-#undef AFIFM0_AFIFM_WRCTRL_FABRIC_WIDTH_MASK 
-#define AFIFM0_AFIFM_WRCTRL_FABRIC_WIDTH_DEFVAL                0x000003B0
-#define AFIFM0_AFIFM_WRCTRL_FABRIC_WIDTH_SHIFT                 0
-#define AFIFM0_AFIFM_WRCTRL_FABRIC_WIDTH_MASK                  0x00000003U
-
-/*
-* Configures the Write Channel Fabric interface width. 2'b11 : Reserved 2'
-    * b10 : 32-bit Fabric 2'b01 : 64-bit enabled 2'b00 : 128-bit enabled
-*/
-#undef AFIFM2_AFIFM_WRCTRL_FABRIC_WIDTH_DEFVAL 
-#undef AFIFM2_AFIFM_WRCTRL_FABRIC_WIDTH_SHIFT 
-#undef AFIFM2_AFIFM_WRCTRL_FABRIC_WIDTH_MASK 
-#define AFIFM2_AFIFM_WRCTRL_FABRIC_WIDTH_DEFVAL                0x000003B0
-#define AFIFM2_AFIFM_WRCTRL_FABRIC_WIDTH_SHIFT                 0
-#define AFIFM2_AFIFM_WRCTRL_FABRIC_WIDTH_MASK                  0x00000003U
-
-/*
-* Configures the Write Channel Fabric interface width. 2'b11 : Reserved 2'
-    * b10 : 32-bit Fabric 2'b01 : 64-bit enabled 2'b00 : 128-bit enabled
-*/
-#undef AFIFM3_AFIFM_WRCTRL_FABRIC_WIDTH_DEFVAL 
-#undef AFIFM3_AFIFM_WRCTRL_FABRIC_WIDTH_SHIFT 
-#undef AFIFM3_AFIFM_WRCTRL_FABRIC_WIDTH_MASK 
-#define AFIFM3_AFIFM_WRCTRL_FABRIC_WIDTH_DEFVAL                0x000003B0
-#define AFIFM3_AFIFM_WRCTRL_FABRIC_WIDTH_SHIFT                 0
-#define AFIFM3_AFIFM_WRCTRL_FABRIC_WIDTH_MASK                  0x00000003U
-
-/*
-* Configures the Write Channel Fabric interface width. 2'b11 : Reserved 2'
-    * b10 : 32-bit Fabric 2'b01 : 64-bit enabled 2'b00 : 128-bit enabled
-*/
-#undef AFIFM4_AFIFM_WRCTRL_FABRIC_WIDTH_DEFVAL 
-#undef AFIFM4_AFIFM_WRCTRL_FABRIC_WIDTH_SHIFT 
-#undef AFIFM4_AFIFM_WRCTRL_FABRIC_WIDTH_MASK 
-#define AFIFM4_AFIFM_WRCTRL_FABRIC_WIDTH_DEFVAL                0x000003B0
-#define AFIFM4_AFIFM_WRCTRL_FABRIC_WIDTH_SHIFT                 0
-#define AFIFM4_AFIFM_WRCTRL_FABRIC_WIDTH_MASK                  0x00000003U
-
-/*
-* Configures the Write Channel Fabric interface width. 2'b11 : Reserved 2'
-    * b10 : 32-bit Fabric 2'b01 : 64-bit enabled 2'b00 : 128-bit enabled
-*/
-#undef AFIFM5_AFIFM_WRCTRL_FABRIC_WIDTH_DEFVAL 
-#undef AFIFM5_AFIFM_WRCTRL_FABRIC_WIDTH_SHIFT 
-#undef AFIFM5_AFIFM_WRCTRL_FABRIC_WIDTH_MASK 
-#define AFIFM5_AFIFM_WRCTRL_FABRIC_WIDTH_DEFVAL                0x000003B0
-#define AFIFM5_AFIFM_WRCTRL_FABRIC_WIDTH_SHIFT                 0
-#define AFIFM5_AFIFM_WRCTRL_FABRIC_WIDTH_MASK                  0x00000003U
 #undef GPIO_MASK_DATA_5_MSW_OFFSET 
 #define GPIO_MASK_DATA_5_MSW_OFFSET                                                0XFF0A002C
 #undef GPIO_DIRM_5_OFFSET 
