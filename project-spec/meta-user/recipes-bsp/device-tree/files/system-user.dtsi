@@ -33,7 +33,7 @@
 		reg = <1>;
 		spi-max-frequency = <10000000>;
 	};
-	wilc_spi@0 {
+	/*wilc_spi@0 {
 			compatible = "microchip,wilc1000", "microchip,wilc3000";
 			spi-max-frequency = <48000000>;
 			reg = <0>;
@@ -41,7 +41,7 @@
 			reset-gpios = <&gpiom1 2 0>;
 			chip_en-gpios = <&gpiom1 0 0>;
 			status = "okay";
-		};
+		};*/
 
 };
 
