@@ -33327,6 +33327,12 @@
 #define IOU_SCNTRS_BASE_FREQUENCY_ID_REGISTER_OFFSET                               0XFF260020
 #undef IOU_SCNTRS_COUNTER_CONTROL_REGISTER_OFFSET 
 #define IOU_SCNTRS_COUNTER_CONTROL_REGISTER_OFFSET                                 0XFF260000
+#undef CRL_APB_BOOT_PIN_CTRL_OFFSET 
+#define CRL_APB_BOOT_PIN_CTRL_OFFSET                                               0XFF5E0250
+#undef CRL_APB_BOOT_PIN_CTRL_OFFSET 
+#define CRL_APB_BOOT_PIN_CTRL_OFFSET                                               0XFF5E0250
+#undef CRL_APB_BOOT_PIN_CTRL_OFFSET 
+#define CRL_APB_BOOT_PIN_CTRL_OFFSET                                               0XFF5E0250
 #undef GPIO_DIRM_0_OFFSET 
 #define GPIO_DIRM_0_OFFSET                                                         0XFF0A0204
 #undef GPIO_OEN_0_OFFSET 
@@ -34149,76 +34155,67 @@
 #define IOU_SCNTRS_COUNTER_CONTROL_REGISTER_EN_MASK            0x00000001U
 
 /*
-* Direction mode 0: input 1: output Each bit configures the corresponding
-    * pin within the 32-bit bank
+* Value driven onto the mode pins, when out_en = 1
 */
-#undef GPIO_DIRM_0_DIRECTION_0_DEFVAL 
-#undef GPIO_DIRM_0_DIRECTION_0_SHIFT 
-#undef GPIO_DIRM_0_DIRECTION_0_MASK 
-#define GPIO_DIRM_0_DIRECTION_0_DEFVAL                         0x00000000
-#define GPIO_DIRM_0_DIRECTION_0_SHIFT                          0
-#define GPIO_DIRM_0_DIRECTION_0_MASK                           0x03FFFFFFU
+#undef CRL_APB_BOOT_PIN_CTRL_OUT_VAL_DEFVAL 
+#undef CRL_APB_BOOT_PIN_CTRL_OUT_VAL_SHIFT 
+#undef CRL_APB_BOOT_PIN_CTRL_OUT_VAL_MASK 
+#define CRL_APB_BOOT_PIN_CTRL_OUT_VAL_DEFVAL                   0x00000000
+#define CRL_APB_BOOT_PIN_CTRL_OUT_VAL_SHIFT                    8
+#define CRL_APB_BOOT_PIN_CTRL_OUT_VAL_MASK                     0x00000F00U
 
 /*
-* Output enables 0: disabled 1: enabled Each bit configures the correspond
-    * ing pin within the 32-bit bank
+* When 0, the pins will be inputs from the board to the PS. When 1, the PS
+    *  will drive these pins
 */
-#undef GPIO_OEN_0_OP_ENABLE_0_DEFVAL 
-#undef GPIO_OEN_0_OP_ENABLE_0_SHIFT 
-#undef GPIO_OEN_0_OP_ENABLE_0_MASK 
-#define GPIO_OEN_0_OP_ENABLE_0_DEFVAL                          0x00000000
-#define GPIO_OEN_0_OP_ENABLE_0_SHIFT                           0
-#define GPIO_OEN_0_OP_ENABLE_0_MASK                            0x03FFFFFFU
+#undef CRL_APB_BOOT_PIN_CTRL_OUT_EN_DEFVAL 
+#undef CRL_APB_BOOT_PIN_CTRL_OUT_EN_SHIFT 
+#undef CRL_APB_BOOT_PIN_CTRL_OUT_EN_MASK 
+#define CRL_APB_BOOT_PIN_CTRL_OUT_EN_DEFVAL                    0x00000000
+#define CRL_APB_BOOT_PIN_CTRL_OUT_EN_SHIFT                     0
+#define CRL_APB_BOOT_PIN_CTRL_OUT_EN_MASK                      0x0000000FU
 
 /*
-* On a write, only bits with a corresponding deasserted mask will change t
-    * he output value. 0: pin value is updated 1: pin is masked Each bit contr
-    * ols the corresponding pin within the 16-bit half-bank. Reads return 0's.
+* Value driven onto the mode pins, when out_en = 1
 */
-#undef GPIO_MASK_DATA_0_LSW_MASK_0_LSW_DEFVAL 
-#undef GPIO_MASK_DATA_0_LSW_MASK_0_LSW_SHIFT 
-#undef GPIO_MASK_DATA_0_LSW_MASK_0_LSW_MASK 
-#define GPIO_MASK_DATA_0_LSW_MASK_0_LSW_DEFVAL                 0x00000000
-#define GPIO_MASK_DATA_0_LSW_MASK_0_LSW_SHIFT                  16
-#define GPIO_MASK_DATA_0_LSW_MASK_0_LSW_MASK                   0xFFFF0000U
+#undef CRL_APB_BOOT_PIN_CTRL_OUT_VAL_DEFVAL 
+#undef CRL_APB_BOOT_PIN_CTRL_OUT_VAL_SHIFT 
+#undef CRL_APB_BOOT_PIN_CTRL_OUT_VAL_MASK 
+#define CRL_APB_BOOT_PIN_CTRL_OUT_VAL_DEFVAL                   0x00000000
+#define CRL_APB_BOOT_PIN_CTRL_OUT_VAL_SHIFT                    8
+#define CRL_APB_BOOT_PIN_CTRL_OUT_VAL_MASK                     0x00000F00U
 
 /*
-* On a write, these are the data values for the corresponding GPIO output
-    * bits. Each bit controls the corresponding pin within the 16-bit half-ban
-    * k. Reads return the previous value written to this register or DATA_0[15
-    * :0]. Reads do not return the value on the GPIO pin.
+* When 0, the pins will be inputs from the board to the PS. When 1, the PS
+    *  will drive these pins
 */
-#undef GPIO_MASK_DATA_0_LSW_DATA_0_LSW_DEFVAL 
-#undef GPIO_MASK_DATA_0_LSW_DATA_0_LSW_SHIFT 
-#undef GPIO_MASK_DATA_0_LSW_DATA_0_LSW_MASK 
-#define GPIO_MASK_DATA_0_LSW_DATA_0_LSW_DEFVAL                 0x00000000
-#define GPIO_MASK_DATA_0_LSW_DATA_0_LSW_SHIFT                  0
-#define GPIO_MASK_DATA_0_LSW_DATA_0_LSW_MASK                   0x0000FFFFU
+#undef CRL_APB_BOOT_PIN_CTRL_OUT_EN_DEFVAL 
+#undef CRL_APB_BOOT_PIN_CTRL_OUT_EN_SHIFT 
+#undef CRL_APB_BOOT_PIN_CTRL_OUT_EN_MASK 
+#define CRL_APB_BOOT_PIN_CTRL_OUT_EN_DEFVAL                    0x00000000
+#define CRL_APB_BOOT_PIN_CTRL_OUT_EN_SHIFT                     0
+#define CRL_APB_BOOT_PIN_CTRL_OUT_EN_MASK                      0x0000000FU
 
 /*
-* On a write, only bits with a corresponding deasserted mask will change t
-    * he output value. 0: pin value is updated 1: pin is masked Each bit contr
-    * ols the corresponding pin within the 16-bit half-bank. Reads return 0's.
+* Value driven onto the mode pins, when out_en = 1
 */
-#undef GPIO_MASK_DATA_0_LSW_MASK_0_LSW_DEFVAL 
-#undef GPIO_MASK_DATA_0_LSW_MASK_0_LSW_SHIFT 
-#undef GPIO_MASK_DATA_0_LSW_MASK_0_LSW_MASK 
-#define GPIO_MASK_DATA_0_LSW_MASK_0_LSW_DEFVAL                 0x00000000
-#define GPIO_MASK_DATA_0_LSW_MASK_0_LSW_SHIFT                  16
-#define GPIO_MASK_DATA_0_LSW_MASK_0_LSW_MASK                   0xFFFF0000U
+#undef CRL_APB_BOOT_PIN_CTRL_OUT_VAL_DEFVAL 
+#undef CRL_APB_BOOT_PIN_CTRL_OUT_VAL_SHIFT 
+#undef CRL_APB_BOOT_PIN_CTRL_OUT_VAL_MASK 
+#define CRL_APB_BOOT_PIN_CTRL_OUT_VAL_DEFVAL                   0x00000000
+#define CRL_APB_BOOT_PIN_CTRL_OUT_VAL_SHIFT                    8
+#define CRL_APB_BOOT_PIN_CTRL_OUT_VAL_MASK                     0x00000F00U
 
 /*
-* On a write, these are the data values for the corresponding GPIO output
-    * bits. Each bit controls the corresponding pin within the 16-bit half-ban
-    * k. Reads return the previous value written to this register or DATA_0[15
-    * :0]. Reads do not return the value on the GPIO pin.
+* When 0, the pins will be inputs from the board to the PS. When 1, the PS
+    *  will drive these pins
 */
-#undef GPIO_MASK_DATA_0_LSW_DATA_0_LSW_DEFVAL 
-#undef GPIO_MASK_DATA_0_LSW_DATA_0_LSW_SHIFT 
-#undef GPIO_MASK_DATA_0_LSW_DATA_0_LSW_MASK 
-#define GPIO_MASK_DATA_0_LSW_DATA_0_LSW_DEFVAL                 0x00000000
-#define GPIO_MASK_DATA_0_LSW_DATA_0_LSW_SHIFT                  0
-#define GPIO_MASK_DATA_0_LSW_DATA_0_LSW_MASK                   0x0000FFFFU
+#undef CRL_APB_BOOT_PIN_CTRL_OUT_EN_DEFVAL 
+#undef CRL_APB_BOOT_PIN_CTRL_OUT_EN_SHIFT 
+#undef CRL_APB_BOOT_PIN_CTRL_OUT_EN_MASK 
+#define CRL_APB_BOOT_PIN_CTRL_OUT_EN_DEFVAL                    0x00000000
+#define CRL_APB_BOOT_PIN_CTRL_OUT_EN_SHIFT                     0
+#define CRL_APB_BOOT_PIN_CTRL_OUT_EN_MASK                      0x0000000FU
 
 /*
 * Direction mode 0: input 1: output Each bit configures the corresponding
@@ -34266,6 +34263,162 @@
 #define GPIO_MASK_DATA_0_LSW_DATA_0_LSW_DEFVAL                 0x00000000
 #define GPIO_MASK_DATA_0_LSW_DATA_0_LSW_SHIFT                  0
 #define GPIO_MASK_DATA_0_LSW_DATA_0_LSW_MASK                   0x0000FFFFU
+
+/*
+* On a write, only bits with a corresponding deasserted mask will change t
+    * he output value. 0: pin value is updated 1: pin is masked Each bit contr
+    * ols the corresponding pin within the 16-bit half-bank. Reads return 0's.
+*/
+#undef GPIO_MASK_DATA_0_LSW_MASK_0_LSW_DEFVAL 
+#undef GPIO_MASK_DATA_0_LSW_MASK_0_LSW_SHIFT 
+#undef GPIO_MASK_DATA_0_LSW_MASK_0_LSW_MASK 
+#define GPIO_MASK_DATA_0_LSW_MASK_0_LSW_DEFVAL                 0x00000000
+#define GPIO_MASK_DATA_0_LSW_MASK_0_LSW_SHIFT                  16
+#define GPIO_MASK_DATA_0_LSW_MASK_0_LSW_MASK                   0xFFFF0000U
+
+/*
+* On a write, these are the data values for the corresponding GPIO output
+    * bits. Each bit controls the corresponding pin within the 16-bit half-ban
+    * k. Reads return the previous value written to this register or DATA_0[15
+    * :0]. Reads do not return the value on the GPIO pin.
+*/
+#undef GPIO_MASK_DATA_0_LSW_DATA_0_LSW_DEFVAL 
+#undef GPIO_MASK_DATA_0_LSW_DATA_0_LSW_SHIFT 
+#undef GPIO_MASK_DATA_0_LSW_DATA_0_LSW_MASK 
+#define GPIO_MASK_DATA_0_LSW_DATA_0_LSW_DEFVAL                 0x00000000
+#define GPIO_MASK_DATA_0_LSW_DATA_0_LSW_SHIFT                  0
+#define GPIO_MASK_DATA_0_LSW_DATA_0_LSW_MASK                   0x0000FFFFU
+
+/*
+* Direction mode 0: input 1: output Each bit configures the corresponding
+    * pin within the 32-bit bank
+*/
+#undef GPIO_DIRM_0_DIRECTION_0_DEFVAL 
+#undef GPIO_DIRM_0_DIRECTION_0_SHIFT 
+#undef GPIO_DIRM_0_DIRECTION_0_MASK 
+#define GPIO_DIRM_0_DIRECTION_0_DEFVAL                         0x00000000
+#define GPIO_DIRM_0_DIRECTION_0_SHIFT                          0
+#define GPIO_DIRM_0_DIRECTION_0_MASK                           0x03FFFFFFU
+
+/*
+* Output enables 0: disabled 1: enabled Each bit configures the correspond
+    * ing pin within the 32-bit bank
+*/
+#undef GPIO_OEN_0_OP_ENABLE_0_DEFVAL 
+#undef GPIO_OEN_0_OP_ENABLE_0_SHIFT 
+#undef GPIO_OEN_0_OP_ENABLE_0_MASK 
+#define GPIO_OEN_0_OP_ENABLE_0_DEFVAL                          0x00000000
+#define GPIO_OEN_0_OP_ENABLE_0_SHIFT                           0
+#define GPIO_OEN_0_OP_ENABLE_0_MASK                            0x03FFFFFFU
+
+/*
+* On a write, only bits with a corresponding deasserted mask will change t
+    * he output value. 0: pin value is updated 1: pin is masked Each bit contr
+    * ols the corresponding pin within the 16-bit half-bank. Reads return 0's.
+*/
+#undef GPIO_MASK_DATA_0_LSW_MASK_0_LSW_DEFVAL 
+#undef GPIO_MASK_DATA_0_LSW_MASK_0_LSW_SHIFT 
+#undef GPIO_MASK_DATA_0_LSW_MASK_0_LSW_MASK 
+#define GPIO_MASK_DATA_0_LSW_MASK_0_LSW_DEFVAL                 0x00000000
+#define GPIO_MASK_DATA_0_LSW_MASK_0_LSW_SHIFT                  16
+#define GPIO_MASK_DATA_0_LSW_MASK_0_LSW_MASK                   0xFFFF0000U
+
+/*
+* On a write, these are the data values for the corresponding GPIO output
+    * bits. Each bit controls the corresponding pin within the 16-bit half-ban
+    * k. Reads return the previous value written to this register or DATA_0[15
+    * :0]. Reads do not return the value on the GPIO pin.
+*/
+#undef GPIO_MASK_DATA_0_LSW_DATA_0_LSW_DEFVAL 
+#undef GPIO_MASK_DATA_0_LSW_DATA_0_LSW_SHIFT 
+#undef GPIO_MASK_DATA_0_LSW_DATA_0_LSW_MASK 
+#define GPIO_MASK_DATA_0_LSW_DATA_0_LSW_DEFVAL                 0x00000000
+#define GPIO_MASK_DATA_0_LSW_DATA_0_LSW_SHIFT                  0
+#define GPIO_MASK_DATA_0_LSW_DATA_0_LSW_MASK                   0x0000FFFFU
+#undef PMU_GLOBAL_REQ_PWRDWN_INT_EN_OFFSET 
+#define PMU_GLOBAL_REQ_PWRDWN_INT_EN_OFFSET                                        0XFFD80218
+#undef PMU_GLOBAL_REQ_PWRDWN_TRIG_OFFSET 
+#define PMU_GLOBAL_REQ_PWRDWN_TRIG_OFFSET                                          0XFFD80220
+
+/*
+* Power-down Request Interrupt Enable for GPU PP0
+*/
+#undef PMU_GLOBAL_REQ_PWRDWN_INT_EN_PP0_DEFVAL 
+#undef PMU_GLOBAL_REQ_PWRDWN_INT_EN_PP0_SHIFT 
+#undef PMU_GLOBAL_REQ_PWRDWN_INT_EN_PP0_MASK 
+#define PMU_GLOBAL_REQ_PWRDWN_INT_EN_PP0_DEFVAL                0x00000000
+#define PMU_GLOBAL_REQ_PWRDWN_INT_EN_PP0_SHIFT                 4
+#define PMU_GLOBAL_REQ_PWRDWN_INT_EN_PP0_MASK                  0x00000010U
+
+/*
+* Power-down Request Interrupt Enable for GPU PP1
+*/
+#undef PMU_GLOBAL_REQ_PWRDWN_INT_EN_PP1_DEFVAL 
+#undef PMU_GLOBAL_REQ_PWRDWN_INT_EN_PP1_SHIFT 
+#undef PMU_GLOBAL_REQ_PWRDWN_INT_EN_PP1_MASK 
+#define PMU_GLOBAL_REQ_PWRDWN_INT_EN_PP1_DEFVAL                0x00000000
+#define PMU_GLOBAL_REQ_PWRDWN_INT_EN_PP1_SHIFT                 5
+#define PMU_GLOBAL_REQ_PWRDWN_INT_EN_PP1_MASK                  0x00000020U
+
+/*
+* Power-down Request Interrupt Enable for ACPU2
+*/
+#undef PMU_GLOBAL_REQ_PWRDWN_INT_EN_ACPU2_DEFVAL 
+#undef PMU_GLOBAL_REQ_PWRDWN_INT_EN_ACPU2_SHIFT 
+#undef PMU_GLOBAL_REQ_PWRDWN_INT_EN_ACPU2_MASK 
+#define PMU_GLOBAL_REQ_PWRDWN_INT_EN_ACPU2_DEFVAL              0x00000000
+#define PMU_GLOBAL_REQ_PWRDWN_INT_EN_ACPU2_SHIFT               2
+#define PMU_GLOBAL_REQ_PWRDWN_INT_EN_ACPU2_MASK                0x00000004U
+
+/*
+* Power-down Request Interrupt Enable for ACPU3
+*/
+#undef PMU_GLOBAL_REQ_PWRDWN_INT_EN_ACPU3_DEFVAL 
+#undef PMU_GLOBAL_REQ_PWRDWN_INT_EN_ACPU3_SHIFT 
+#undef PMU_GLOBAL_REQ_PWRDWN_INT_EN_ACPU3_MASK 
+#define PMU_GLOBAL_REQ_PWRDWN_INT_EN_ACPU3_DEFVAL              0x00000000
+#define PMU_GLOBAL_REQ_PWRDWN_INT_EN_ACPU3_SHIFT               3
+#define PMU_GLOBAL_REQ_PWRDWN_INT_EN_ACPU3_MASK                0x00000008U
+
+/*
+* Power-down Request Trigger for GPU PP0
+*/
+#undef PMU_GLOBAL_REQ_PWRDWN_TRIG_PP0_DEFVAL 
+#undef PMU_GLOBAL_REQ_PWRDWN_TRIG_PP0_SHIFT 
+#undef PMU_GLOBAL_REQ_PWRDWN_TRIG_PP0_MASK 
+#define PMU_GLOBAL_REQ_PWRDWN_TRIG_PP0_DEFVAL                  0x00000000
+#define PMU_GLOBAL_REQ_PWRDWN_TRIG_PP0_SHIFT                   4
+#define PMU_GLOBAL_REQ_PWRDWN_TRIG_PP0_MASK                    0x00000010U
+
+/*
+* Power-down Request Trigger for GPU PP1
+*/
+#undef PMU_GLOBAL_REQ_PWRDWN_TRIG_PP1_DEFVAL 
+#undef PMU_GLOBAL_REQ_PWRDWN_TRIG_PP1_SHIFT 
+#undef PMU_GLOBAL_REQ_PWRDWN_TRIG_PP1_MASK 
+#define PMU_GLOBAL_REQ_PWRDWN_TRIG_PP1_DEFVAL                  0x00000000
+#define PMU_GLOBAL_REQ_PWRDWN_TRIG_PP1_SHIFT                   5
+#define PMU_GLOBAL_REQ_PWRDWN_TRIG_PP1_MASK                    0x00000020U
+
+/*
+* Power-down Request Trigger for ACPU2
+*/
+#undef PMU_GLOBAL_REQ_PWRDWN_TRIG_ACPU2_DEFVAL 
+#undef PMU_GLOBAL_REQ_PWRDWN_TRIG_ACPU2_SHIFT 
+#undef PMU_GLOBAL_REQ_PWRDWN_TRIG_ACPU2_MASK 
+#define PMU_GLOBAL_REQ_PWRDWN_TRIG_ACPU2_DEFVAL                0x00000000
+#define PMU_GLOBAL_REQ_PWRDWN_TRIG_ACPU2_SHIFT                 2
+#define PMU_GLOBAL_REQ_PWRDWN_TRIG_ACPU2_MASK                  0x00000004U
+
+/*
+* Power-down Request Trigger for ACPU3
+*/
+#undef PMU_GLOBAL_REQ_PWRDWN_TRIG_ACPU3_DEFVAL 
+#undef PMU_GLOBAL_REQ_PWRDWN_TRIG_ACPU3_SHIFT 
+#undef PMU_GLOBAL_REQ_PWRDWN_TRIG_ACPU3_MASK 
+#define PMU_GLOBAL_REQ_PWRDWN_TRIG_ACPU3_DEFVAL                0x00000000
+#define PMU_GLOBAL_REQ_PWRDWN_TRIG_ACPU3_SHIFT                 3
+#define PMU_GLOBAL_REQ_PWRDWN_TRIG_ACPU3_MASK                  0x00000008U
 #undef FPD_SLCR_SECURE_SLCR_DPDMA_OFFSET 
 #define FPD_SLCR_SECURE_SLCR_DPDMA_OFFSET                                          0XFD690040
 #undef FPD_SLCR_SECURE_SLCR_PCIE_OFFSET 
@@ -34774,6 +34927,10 @@
 #define SERDES_PLL_REF_SEL0_OFFSET                                                 0XFD410000
 #undef SERDES_PLL_REF_SEL1_OFFSET 
 #define SERDES_PLL_REF_SEL1_OFFSET                                                 0XFD410004
+#undef SERDES_PLL_REF_SEL2_OFFSET 
+#define SERDES_PLL_REF_SEL2_OFFSET                                                 0XFD410008
+#undef SERDES_PLL_REF_SEL3_OFFSET 
+#define SERDES_PLL_REF_SEL3_OFFSET                                                 0XFD41000C
 #undef SERDES_L0_L0_REF_CLK_SEL_OFFSET 
 #define SERDES_L0_L0_REF_CLK_SEL_OFFSET                                            0XFD402860
 #undef SERDES_L0_L1_REF_CLK_SEL_OFFSET 
@@ -34994,6 +35151,34 @@
 #define SERDES_PLL_REF_SEL1_PLLREFSEL1_DEFVAL                  0x00000008
 #define SERDES_PLL_REF_SEL1_PLLREFSEL1_SHIFT                   0
 #define SERDES_PLL_REF_SEL1_PLLREFSEL1_MASK                    0x0000001FU
+
+/*
+* PLL2 Reference Selection. 0x0 - 5MHz, 0x1 - 9.6MHz, 0x2 - 10MHz, 0x3 - 1
+    * 2MHz, 0x4 - 13MHz, 0x5 - 19.2MHz, 0x6 - 20MHz, 0x7 - 24MHz, 0x8 - 26MHz,
+    *  0x9 - 27MHz, 0xA - 38.4MHz, 0xB - 40MHz, 0xC - 52MHz, 0xD - 100MHz, 0xE
+    *  - 108MHz, 0xF - 125MHz, 0x10 - 135MHz, 0x11 - 150 MHz. 0x12 to 0x1F - R
+    * eserved
+*/
+#undef SERDES_PLL_REF_SEL2_PLLREFSEL2_DEFVAL 
+#undef SERDES_PLL_REF_SEL2_PLLREFSEL2_SHIFT 
+#undef SERDES_PLL_REF_SEL2_PLLREFSEL2_MASK 
+#define SERDES_PLL_REF_SEL2_PLLREFSEL2_DEFVAL                  0x0000000F
+#define SERDES_PLL_REF_SEL2_PLLREFSEL2_SHIFT                   0
+#define SERDES_PLL_REF_SEL2_PLLREFSEL2_MASK                    0x0000001FU
+
+/*
+* PLL3 Reference Selection. 0x0 - 5MHz, 0x1 - 9.6MHz, 0x2 - 10MHz, 0x3 - 1
+    * 2MHz, 0x4 - 13MHz, 0x5 - 19.2MHz, 0x6 - 20MHz, 0x7 - 24MHz, 0x8 - 26MHz,
+    *  0x9 - 27MHz, 0xA - 38.4MHz, 0xB - 40MHz, 0xC - 52MHz, 0xD - 100MHz, 0xE
+    *  - 108MHz, 0xF - 125MHz, 0x10 - 135MHz, 0x11 - 150 MHz. 0x12 to 0x1F - R
+    * eserved
+*/
+#undef SERDES_PLL_REF_SEL3_PLLREFSEL3_DEFVAL 
+#undef SERDES_PLL_REF_SEL3_PLLREFSEL3_SHIFT 
+#undef SERDES_PLL_REF_SEL3_PLLREFSEL3_MASK 
+#define SERDES_PLL_REF_SEL3_PLLREFSEL3_DEFVAL                  0x0000000E
+#define SERDES_PLL_REF_SEL3_PLLREFSEL3_SHIFT                   0
+#define SERDES_PLL_REF_SEL3_PLLREFSEL3_MASK                    0x0000001FU
 
 /*
 * Sel of lane 0 ref clock local mux. Set to 1 to select lane 0 slicer outp
