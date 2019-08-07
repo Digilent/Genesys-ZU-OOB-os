@@ -1,0 +1,63 @@
+From 4f7763772ceddbe0db548b6337f6ee1a2c7b0cac Mon Sep 17 00:00:00 2001
+From: Ionel Badisor <ionel.badisor@digilent.ro>
+Date: Wed, 7 Aug 2019 15:49:51 +0300
+Subject: [PATCH 1/2] Rmeove i2c mux code
+
+---
+ lib/sw_apps/zynqmp_fsbl/src/xfsbl_ddr_init.c | 40 +-------------------
+ 1 file changed, 1 insertion(+), 39 deletions(-)
+
+diff --git a/lib/sw_apps/zynqmp_fsbl/src/xfsbl_ddr_init.c b/lib/sw_apps/zynqmp_fsbl/src/xfsbl_ddr_init.c
+index 7b7fb1ab2..9a9cf9e5b 100644
+--- a/lib/sw_apps/zynqmp_fsbl/src/xfsbl_ddr_init.c
++++ b/lib/sw_apps/zynqmp_fsbl/src/xfsbl_ddr_init.c
+@@ -6624,45 +6624,7 @@ static u32 XFsbl_IicReadSpdEeprom(u8 *SpdData)
+ 		goto END;
+ 	}
+ 
+-	/*
+-	 * Configure I2C Mux to select DDR4 SODIMM Slave
+-	 * 0x08U - Enable DDR4 SODIMM module
+-	 */
+-	TxArray = 0x08U;
+-	XIicPs_MasterSendPolled(&IicInstance, &TxArray, 1U, XFSBL_MUX_ADDR);
+-
+-	/*
+-	 * Wait until bus is idle to start another transfer.
+-	 */
+-	Status = Xil_poll_timeout(Xil_In32, IicInstance.Config.BaseAddress +
+-			XIICPS_SR_OFFSET, Regval, (Regval & XIICPS_SR_BA_MASK) == 0x0U,
+-			XFSBL_IIC_BUS_TIMEOUT);
+-	if (Status != XST_SUCCESS) {
+-		UStatus = XFSBL_FAILURE;
+-		goto END;
+-	}
+-
+-	/*
+-	 * Get Configuration to confirm the selection of the slave
+-	 * device.
+-	 */
+-	Status = XIicPs_MasterRecvPolled(&IicInstance, SpdData, 1U,
+-			XFSBL_MUX_ADDR);
+-	if (Status != XST_SUCCESS) {
+-		UStatus = XFSBL_FAILURE;
+-		goto END;
+-	}
+-	/*
+-	 * Wait until bus is idle to start another transfer.
+-	 */
+-	Status = Xil_poll_timeout(Xil_In32, IicInstance.Config.BaseAddress +
+-			XIICPS_SR_OFFSET, Regval, (Regval &
+-				XIICPS_SR_BA_MASK) == 0x0U,
+-			XFSBL_IIC_BUS_TIMEOUT);
+-	if (Status != XST_SUCCESS) {
+-		UStatus = XFSBL_FAILURE;
+-		goto END;
+-	}
++	//REMOVED I2C MUX
+ 
+ 	/*
+ 	 * Set SODIMM control address to enable access to lower
+-- 
+2.22.0
+
