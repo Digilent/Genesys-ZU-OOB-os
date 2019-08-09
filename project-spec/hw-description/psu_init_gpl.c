@@ -14699,7 +14699,7 @@ unsigned long psu_mio_init_data(void)
     * Register : bank0_ctrl6 @ 0XFF18014C
 
     * Each bit applies to a single IO. Bit 0 for MIO[0].
-    *  PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_0             0
+    *  PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_0             1
 
     * Each bit applies to a single IO. Bit 0 for MIO[0].
     *  PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_1             0
@@ -14777,10 +14777,10 @@ unsigned long psu_mio_init_data(void)
     *  PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_25            1
 
     * Slew rate control to MIO Bank 0 - control MIO[25:0]
-    * (OFFSET, MASK, VALUE)      (0XFF18014C, 0x03FFFFFFU ,0x03FBFF80U)
+    * (OFFSET, MASK, VALUE)      (0XFF18014C, 0x03FFFFFFU ,0x03FBFF81U)
     */
 	PSU_Mask_Write(IOU_SLCR_BANK0_CTRL6_OFFSET,
-		0x03FFFFFFU, 0x03FBFF80U);
+		0x03FFFFFFU, 0x03FBFF81U);
 /*##################################################################### */
 
     /*
@@ -18756,15 +18756,15 @@ unsigned long psu_serdes_init_data(void)
     * ut. Set to 0 to select lane1 ref clock mux output.
     *  PSU_SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_LCL_SEL             0x0
 
-    * Bit 0 of lane 1 ref clock mux one hot sel. Set to 1 to select lane 0 sli
+    * Bit 3 of lane 1 ref clock mux one hot sel. Set to 1 to select lane 3 sli
     * cer output from ref clock network
-    *  PSU_SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_SEL_0               0x1
+    *  PSU_SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_SEL_3               0x1
 
     * Lane1 Ref Clock Selection Register
-    * (OFFSET, MASK, VALUE)      (0XFD402864, 0x00000081U ,0x00000001U)
+    * (OFFSET, MASK, VALUE)      (0XFD402864, 0x00000088U ,0x00000008U)
     */
 	PSU_Mask_Write(SERDES_L0_L1_REF_CLK_SEL_OFFSET,
-		0x00000081U, 0x00000001U);
+		0x00000088U, 0x00000008U);
 /*##################################################################### */
 
     /*

@@ -35203,15 +35203,15 @@
 #define SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_LCL_SEL_MASK       0x00000080U
 
 /*
-* Bit 0 of lane 1 ref clock mux one hot sel. Set to 1 to select lane 0 sli
+* Bit 3 of lane 1 ref clock mux one hot sel. Set to 1 to select lane 3 sli
     * cer output from ref clock network
 */
-#undef SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_SEL_0_DEFVAL 
-#undef SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_SEL_0_SHIFT 
-#undef SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_SEL_0_MASK 
-#define SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_SEL_0_DEFVAL       0x00000080
-#define SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_SEL_0_SHIFT        0
-#define SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_SEL_0_MASK         0x00000001U
+#undef SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_SEL_3_DEFVAL 
+#undef SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_SEL_3_SHIFT 
+#undef SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_SEL_3_MASK 
+#define SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_SEL_3_DEFVAL       0x00000080
+#define SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_SEL_3_SHIFT        3
+#define SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_SEL_3_MASK         0x00000008U
 
 /*
 * Sel of lane 2 ref clock local mux. Set to 1 to select lane 1 slicer outp
