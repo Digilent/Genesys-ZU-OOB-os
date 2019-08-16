@@ -53,16 +53,44 @@ EMIO[0] which is line 78.
                         #address-cells = <1>;
                         #size-cells = <0>;
                         reg = <3>;
+			irps5401@43 { /* IRPS5401 - IC81 */
+				#clock-cells = <0>;
+				compatible = "infineon,irps5401";
+				reg = <0x43>; /*PMBUS address*/
+			};
+			irps5401@44 { /* IRPS5401 - IC83 */
+                                #clock-cells = <0>;
+                                compatible = "infineon,irps5401";
+                                reg = <0x44>; /*PMBUS address*/
+                        };
+			irps5401@45 { /* IRPS5401 - IC84 */
+                                #clock-cells = <0>;
+                                compatible = "infineon,irps5401";
+                                reg = <0x45>; /*PMBUS address*/
+                        };
                 };
 		i2c@4 {
                         #address-cells = <1>;
                         #size-cells = <0>;
                         reg = <4>;
+			eeprom@51 {
+				compatible = "atmel,24c02";
+				reg = <0x51>;
+				pagesize = <1>; /* varies between models, so use a safe value */
+			};
                 };
 		i2c@5 {
                         #address-cells = <1>;
                         #size-cells = <0>;
                         reg = <5>;
+			/* not sure if we should bind the eeprom driver to the SYZYGY DNA */
+			eeprom@30 {
+				compatible = "atmel,24c02";
+				reg = <0x30>;
+				read-only;
+				address-width = <16>;
+				size = <65536>; /*the whole 16-bit address range*/
+			};
                 };
 		i2c@6 {
                         #address-cells = <1>;
