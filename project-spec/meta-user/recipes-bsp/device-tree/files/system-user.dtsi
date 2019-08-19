@@ -1,7 +1,14 @@
 /include/ "system-conf.dtsi"
 #include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/media/xilinx-vip.h>
 
 / {
+	xclk_a: oscillator { /*12MHz oscillator on-board the Pcam 5C */
+     		compatible = "fixed-clock";
+     		#clock-cells = <1>;
+     		clock-frequency  = <12000000>;
+     		clock-output-names = "out";
+	};
 };
 
 &sdhci1 {
@@ -20,13 +27,14 @@
 	};
 };
 
+
 /*
 Adding support for the mux and expose all 8 segments.
 RESET# pin of TCA9548 is inverted on-board. Mapped to
 EMIO[0] which is line 78.
 */
 &i2c0 {
-	i2c_mux@70 {
+	i2c-mux@70 {
 		compatible = "nxp,pca9548";
 		#address-cells = <1>;
 		#size-cells = <0>;
@@ -38,7 +46,24 @@ EMIO[0] which is line 78.
 			#address-cells = <1>;
 			#size-cells = <0>;
 			reg = <0>;
+		
+			pcam5c_a: sensor@3c {
+				compatible = "ovti,ov5640";
+				reg = <0x3c>;
+				clocks = <&xclk_a 0>;
+				clock-names = "xclk";
+				reset-gpios = <&gpio 79 GPIO_ACTIVE_LOW>;
+				port@0 {
+					reg = <0>;
+					sensor_out: endpoint {
+						remote-endpoint = <&csiss_in>;
+						clock-lanes = <0>;
+						data-lanes = <1 2>;
+					};
+				};
+			};
 		};
+
 		i2c@1 {
                         #address-cells = <1>;
                         #size-cells = <0>;
@@ -53,17 +78,17 @@ EMIO[0] which is line 78.
                         #address-cells = <1>;
                         #size-cells = <0>;
                         reg = <3>;
-			irps5401@43 { /* IRPS5401 - IC81 */
+			pmu@43 { /* IRPS5401 - IC81 */
 				#clock-cells = <0>;
 				compatible = "infineon,irps5401";
 				reg = <0x43>; /*PMBUS address*/
 			};
-			irps5401@44 { /* IRPS5401 - IC83 */
+			pmu@44 { /* IRPS5401 - IC83 */
                                 #clock-cells = <0>;
                                 compatible = "infineon,irps5401";
                                 reg = <0x44>; /*PMBUS address*/
                         };
-			irps5401@45 { /* IRPS5401 - IC84 */
+			pmu@45 { /* IRPS5401 - IC84 */
                                 #clock-cells = <0>;
                                 compatible = "infineon,irps5401";
                                 reg = <0x45>; /*PMBUS address*/
@@ -73,7 +98,7 @@ EMIO[0] which is line 78.
                         #address-cells = <1>;
                         #size-cells = <0>;
                         reg = <4>;
-			eeprom@51 {
+			eeprom@51 { /*FMC VITA 57.1 FRU*/
 				compatible = "atmel,24c02";
 				reg = <0x51>;
 				pagesize = <1>; /* varies between models, so use a safe value */
@@ -84,7 +109,7 @@ EMIO[0] which is line 78.
                         #size-cells = <0>;
                         reg = <5>;
 			/* not sure if we should bind the eeprom driver to the SYZYGY DNA */
-			eeprom@30 {
+			eeprom@30 { /* SYZYGY DNA */
 				compatible = "atmel,24c02";
 				reg = <0x30>;
 				read-only;
@@ -105,9 +130,70 @@ EMIO[0] which is line 78.
 	};
 };
 
-&spi0 {
+&qspi {
+	flash@0 {
+		compatible = "issi,is25lp256", "jedec,spi-nor";
+		#address-cells = <1>;
+		#size-cells = <1>;
+		reg = <0x0>;
+		spi-max-frequency = <150000000>; /*Zynq UltraScale+ maximum FQSPICLK1 according to ds925 */
+	};
+};
 
-	gpiom1: gpio@1 {
+&mipi_csi2_rx_subsyst_0 {
+	ports {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		port@0 {
+			reg = <0>;
+
+			xlnx,video-format = <XVIP_VF_MONO_SENSOR>;
+			xlnx,video-width = <8>;
+			xlnx,cfa-pattern = "rggb";
+
+			csiss_out: endpoint {
+				remote-endpoint = <&vcap_csi_in>;
+			};
+		};
+		port@1 {
+			reg = <1>;
+
+			xlnx,video-format = <XVIP_VF_MONO_SENSOR>;
+			xlnx,video-width = <8>;
+			xlnx,cfa-pattern = "rggb";
+			csiss_in: endpoint {
+				data-lanes = <1 2>;
+				remote-endpoint = <&sensor_out>;
+			};
+		};
+	};
+};
+
+&amba_pl {
+	vcap_csi {
+		compatible = "xlnx,video";
+		dmas = <&axi_vdma_0 0>;
+		dma-names = "port0"; /*this has to be port0 for some reason*/
+
+		ports {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			port@0 {
+				reg = <0>;
+				direction = "input";
+
+				vcap_csi_in: endpoint {
+					remote-endpoint = <&csiss_out>;
+				};
+			};
+		};
+	};
+};
+
+&spi0 {
+	gpioexp: gpio@1 {
 		compatible = "microchip,mcp23s08";
 		gpio-controller;
 		#reset-cells = <1>;
@@ -117,7 +203,7 @@ EMIO[0] which is line 78.
 		microchip,spi-present-mask = <0x01>;
 		interrupt-controller;
 		#interrupt-cells = <0x2>;
-		reg = <1>;
+		reg = <1>; /*SS[1]*/
 		spi-max-frequency = <10000000>;
 	};
 	/*wilc_spi@0 {
@@ -129,7 +215,6 @@ EMIO[0] which is line 78.
 			chip_en-gpios = <&gpiom1 0 0>;
 			status = "okay";
 		};*/
-
 };
 
 /*&usb0 {
