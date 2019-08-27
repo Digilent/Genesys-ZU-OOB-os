@@ -49,6 +49,15 @@
 	status = "disabled";
 };*/
 
+&qspi {
+	u-boot,dm-pre-reloc;
+};
+
+&flash0 {
+	compatible = "is25lp256d", "jedec,spi-nor";
+	spi-max-frequency = <150000000>; /*Zynq UltraScale+ maximum FQSPICLK1 according to ds925 */
+};
+
 &dwc3_0 {
 	dr_mode = "host";
 	snps,usb3_lpm_capable;
