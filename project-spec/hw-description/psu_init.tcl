@@ -20,14 +20,14 @@ set psu_pll_init_data {
 		# PSU_CRL_APB_RPLL_CFG_LFHF                                                       0x3
 
 		# Lock circuit counter setting
-		# PSU_CRL_APB_RPLL_CFG_LOCK_CNT                                                   0x258
+		# PSU_CRL_APB_RPLL_CFG_LOCK_CNT                                                   0x2bc
 
 		# Lock circuit configuration settings for lock windowsize
 		# PSU_CRL_APB_RPLL_CFG_LOCK_DLY                                                   0x3f
 
 		# Helper data. Values are to be looked up in a table from Data Sheet
-		#(OFFSET, MASK, VALUE)      (0XFF5E0034, 0xFE7FEDEFU ,0x7E4B0C62U)  */
-    mask_write 0XFF5E0034 0xFE7FEDEF 0x7E4B0C62
+		#(OFFSET, MASK, VALUE)      (0XFF5E0034, 0xFE7FEDEFU ,0x7E578C62U)  */
+    mask_write 0XFF5E0034 0xFE7FEDEF 0x7E578C62
 		# : UPDATE FB_DIV
 		# Register : RPLL_CTRL @ 0XFF5E0030</p>
 
@@ -37,15 +37,15 @@ set psu_pll_init_data {
 		# PSU_CRL_APB_RPLL_CTRL_PRE_SRC                                                   0x0
 
 		# The integer portion of the feedback divider to the PLL
-		# PSU_CRL_APB_RPLL_CTRL_FBDIV                                                     0x50
+		# PSU_CRL_APB_RPLL_CTRL_FBDIV                                                     0x35
 
 		# This turns on the divide by 2 that is inside of the PLL. This does not c
     # hange the VCO frequency, just the output frequency
 		# PSU_CRL_APB_RPLL_CTRL_DIV2                                                      0x1
 
 		# PLL Basic Control
-		#(OFFSET, MASK, VALUE)      (0XFF5E0030, 0x00717F00U ,0x00015000U)  */
-    mask_write 0XFF5E0030 0x00717F00 0x00015000
+		#(OFFSET, MASK, VALUE)      (0XFF5E0030, 0x00717F00U ,0x00013500U)  */
+    mask_write 0XFF5E0030 0x00717F00 0x00013500
 		# : BY PASS PLL
 		# Register : RPLL_CTRL @ 0XFF5E0030</p>
 
@@ -99,12 +99,12 @@ set psu_pll_init_data {
 		# Register : RPLL_TO_FPD_CTRL @ 0XFF5E0048</p>
 
 		# Divisor value for this clock.
-		# PSU_CRL_APB_RPLL_TO_FPD_CTRL_DIVISOR0                                           0x3
+		# PSU_CRL_APB_RPLL_TO_FPD_CTRL_DIVISOR0                                           0x2
 
 		# Control for a clock that will be generated in the LPD, but used in the F
     # PD as a clock source for the peripheral clock muxes.
-		#(OFFSET, MASK, VALUE)      (0XFF5E0048, 0x00003F00U ,0x00000300U)  */
-    mask_write 0XFF5E0048 0x00003F00 0x00000300
+		#(OFFSET, MASK, VALUE)      (0XFF5E0048, 0x00003F00U ,0x00000200U)  */
+    mask_write 0XFF5E0048 0x00003F00 0x00000200
 		# : RPLL FRAC CFG
 		# : SYSMON CLOCK PRESET TO RPLL AGAIN TO AVOID GLITCH WHEN NEXT IOPLL WILL BE PUT IN BYPASS MODE
 		# Register : AMS_REF_CTRL @ 0XFF5E0108</p>
@@ -652,16 +652,16 @@ set psu_clock_init_data {
 		# PSU_CRL_APB_SDIO1_REF_CTRL_DIVISOR1                                             0x1
 
 		# 6 bit divider
-		# PSU_CRL_APB_SDIO1_REF_CTRL_DIVISOR0                                             0x6
+		# PSU_CRL_APB_SDIO1_REF_CTRL_DIVISOR0                                             0x8
 
 		# 000 = IOPLL; 010 = RPLL; 011 = VPLL; (This signal may only be toggled af
     # ter 4 cycles of the old clock and 4 cycles of the new clock. This is not
     #  usually an issue, but designers must be aware.)
-		# PSU_CRL_APB_SDIO1_REF_CTRL_SRCSEL                                               0x2
+		# PSU_CRL_APB_SDIO1_REF_CTRL_SRCSEL                                               0x0
 
 		# This register controls this reference clock
-		#(OFFSET, MASK, VALUE)      (0XFF5E0070, 0x013F3F07U ,0x01010602U)  */
-    mask_write 0XFF5E0070 0x013F3F07 0x01010602
+		#(OFFSET, MASK, VALUE)      (0XFF5E0070, 0x013F3F07U ,0x01010800U)  */
+    mask_write 0XFF5E0070 0x013F3F07 0x01010800
 		# Register : SDIO_CLK_CTRL @ 0XFF18030C</p>
 
 		# MIO pad selection for sdio1_rx_clk (feedback clock from the PAD) 0: MIO
@@ -737,7 +737,7 @@ set psu_clock_init_data {
 		# PSU_CRL_APB_SPI0_REF_CTRL_DIVISOR1                                              0x1
 
 		# 6 bit divider
-		# PSU_CRL_APB_SPI0_REF_CTRL_DIVISOR0                                              0x6
+		# PSU_CRL_APB_SPI0_REF_CTRL_DIVISOR0                                              0x4
 
 		# 000 = IOPLL; 010 = RPLL; 011 = DPLL; (This signal may only be toggled af
     # ter 4 cycles of the old clock and 4 cycles of the new clock. This is not
@@ -745,8 +745,8 @@ set psu_clock_init_data {
 		# PSU_CRL_APB_SPI0_REF_CTRL_SRCSEL                                                0x2
 
 		# This register controls this reference clock
-		#(OFFSET, MASK, VALUE)      (0XFF5E007C, 0x013F3F07U ,0x01010602U)  */
-    mask_write 0XFF5E007C 0x013F3F07 0x01010602
+		#(OFFSET, MASK, VALUE)      (0XFF5E007C, 0x013F3F07U ,0x01010402U)  */
+    mask_write 0XFF5E007C 0x013F3F07 0x01010402
 		# Register : CPU_R5_CTRL @ 0XFF5E0090</p>
 
 		# Turing this off will shut down the OCM, some parts of the APM, and preve
@@ -771,16 +771,16 @@ set psu_clock_init_data {
 		# PSU_CRL_APB_IOU_SWITCH_CTRL_CLKACT                                              0x1
 
 		# 6 bit divider
-		# PSU_CRL_APB_IOU_SWITCH_CTRL_DIVISOR0                                            0x6
+		# PSU_CRL_APB_IOU_SWITCH_CTRL_DIVISOR0                                            0x3
 
 		# 000 = RPLL; 010 = IOPLL; 011 = DPLL; (This signal may only be toggled af
     # ter 4 cycles of the old clock and 4 cycles of the new clock. This is not
     #  usually an issue, but designers must be aware.)
-		# PSU_CRL_APB_IOU_SWITCH_CTRL_SRCSEL                                              0x2
+		# PSU_CRL_APB_IOU_SWITCH_CTRL_SRCSEL                                              0x0
 
 		# This register controls this reference clock
-		#(OFFSET, MASK, VALUE)      (0XFF5E009C, 0x01003F07U ,0x01000602U)  */
-    mask_write 0XFF5E009C 0x01003F07 0x01000602
+		#(OFFSET, MASK, VALUE)      (0XFF5E009C, 0x01003F07U ,0x01000300U)  */
+    mask_write 0XFF5E009C 0x01003F07 0x01000300
 		# Register : PCAP_CTRL @ 0XFF5E00A4</p>
 
 		# Clock active signal. Switch to 0 to disable the clock
@@ -889,35 +889,16 @@ set psu_clock_init_data {
 		# PSU_CRL_APB_PL1_REF_CTRL_DIVISOR1                                               0x1
 
 		# 6 bit divider
-		# PSU_CRL_APB_PL1_REF_CTRL_DIVISOR0                                               0xc
+		# PSU_CRL_APB_PL1_REF_CTRL_DIVISOR0                                               0x6
 
 		# 000 = IOPLL; 010 = RPLL; 011 = DPLL; (This signal may only be toggled af
     # ter 4 cycles of the old clock and 4 cycles of the new clock. This is not
     #  usually an issue, but designers must be aware.)
-		# PSU_CRL_APB_PL1_REF_CTRL_SRCSEL                                                 0x2
+		# PSU_CRL_APB_PL1_REF_CTRL_SRCSEL                                                 0x0
 
 		# This register controls this reference clock
-		#(OFFSET, MASK, VALUE)      (0XFF5E00C4, 0x013F3F07U ,0x01010C02U)  */
-    mask_write 0XFF5E00C4 0x013F3F07 0x01010C02
-		# Register : PL2_REF_CTRL @ 0XFF5E00C8</p>
-
-		# Clock active signal. Switch to 0 to disable the clock
-		# PSU_CRL_APB_PL2_REF_CTRL_CLKACT                                                 0x1
-
-		# 6 bit divider
-		# PSU_CRL_APB_PL2_REF_CTRL_DIVISOR1                                               0x1
-
-		# 6 bit divider
-		# PSU_CRL_APB_PL2_REF_CTRL_DIVISOR0                                               0x6
-
-		# 000 = IOPLL; 010 = RPLL; 011 = DPLL; (This signal may only be toggled af
-    # ter 4 cycles of the old clock and 4 cycles of the new clock. This is not
-    #  usually an issue, but designers must be aware.)
-		# PSU_CRL_APB_PL2_REF_CTRL_SRCSEL                                                 0x2
-
-		# This register controls this reference clock
-		#(OFFSET, MASK, VALUE)      (0XFF5E00C8, 0x013F3F07U ,0x01010602U)  */
-    mask_write 0XFF5E00C8 0x013F3F07 0x01010602
+		#(OFFSET, MASK, VALUE)      (0XFF5E00C4, 0x013F3F07U ,0x01010600U)  */
+    mask_write 0XFF5E00C4 0x013F3F07 0x01010600
 		# Register : AMS_REF_CTRL @ 0XFF5E0108</p>
 
 		# 6 bit divider
@@ -950,19 +931,19 @@ set psu_clock_init_data {
 		# Register : TIMESTAMP_REF_CTRL @ 0XFF5E0128</p>
 
 		# 6 bit divider
-		# PSU_CRL_APB_TIMESTAMP_REF_CTRL_DIVISOR0                                         0xf
+		# PSU_CRL_APB_TIMESTAMP_REF_CTRL_DIVISOR0                                         1
 
 		# 1XX = pss_ref_clk; 000 = IOPLL; 010 = RPLL; 011 = DPLL; (This signal may
     #  only be toggled after 4 cycles of the old clock and 4 cycles of the new
     #  clock. This is not usually an issue, but designers must be aware.)
-		# PSU_CRL_APB_TIMESTAMP_REF_CTRL_SRCSEL                                           0x0
+		# PSU_CRL_APB_TIMESTAMP_REF_CTRL_SRCSEL                                           4
 
 		# Clock active signal. Switch to 0 to disable the clock
-		# PSU_CRL_APB_TIMESTAMP_REF_CTRL_CLKACT                                           0x1
+		# PSU_CRL_APB_TIMESTAMP_REF_CTRL_CLKACT                                           1
 
 		# This register controls this reference clock
-		#(OFFSET, MASK, VALUE)      (0XFF5E0128, 0x01003F07U ,0x01000F00U)  */
-    mask_write 0XFF5E0128 0x01003F07 0x01000F00
+		#(OFFSET, MASK, VALUE)      (0XFF5E0128, 0x01003F07U ,0x01000104U)  */
+    mask_write 0XFF5E0128 0x01003F07 0x01000104
 		# Register : PCIE_REF_CTRL @ 0XFD1A00B4</p>
 
 		# 000 = IOPLL_TO_FPD; 010 = RPLL_TO_FPD; 011 = DPLL; (This signal may only
@@ -2854,7 +2835,7 @@ set psu_ddr_init_data {
     # : 5 The selected HIF address bit is determined by adding the internal ba
     # se to the value of this field. If set to 15, this column address bit is
     # set to 0.
-		# PSU_DDRC_ADDRMAP2_ADDRMAP_COL_B5                                                0x0
+		# PSU_DDRC_ADDRMAP2_ADDRMAP_COL_B5                                                0x1
 
 		# - Full bus width mode: Selects the HIF address bit used as column addres
     # s bit 4. - Half bus width mode: Selects the HIF address bit used as colu
@@ -2863,7 +2844,7 @@ set psu_ddr_init_data {
     #  4 The selected HIF address bit is determined by adding the internal bas
     # e to the value of this field. If set to 15, this column address bit is s
     # et to 0.
-		# PSU_DDRC_ADDRMAP2_ADDRMAP_COL_B4                                                0x0
+		# PSU_DDRC_ADDRMAP2_ADDRMAP_COL_B4                                                0x1
 
 		# - Full bus width mode: Selects the HIF address bit used as column addres
     # s bit 3. - Half bus width mode: Selects the HIF address bit used as colu
@@ -2873,7 +2854,7 @@ set psu_ddr_init_data {
     #  value of this field. Note, if UMCTL2_INCL_ARB=1 and MEMC_BURST_LENGTH=1
     # 6, it is required to program this to 0, hence register does not exist in
     #  this case.
-		# PSU_DDRC_ADDRMAP2_ADDRMAP_COL_B3                                                0x0
+		# PSU_DDRC_ADDRMAP2_ADDRMAP_COL_B3                                                0x1
 
 		# - Full bus width mode: Selects the HIF address bit used as column addres
     # s bit 2. - Half bus width mode: Selects the HIF address bit used as colu
@@ -2885,8 +2866,8 @@ set psu_ddr_init_data {
 		# PSU_DDRC_ADDRMAP2_ADDRMAP_COL_B2                                                0x0
 
 		# Address Map Register 2
-		#(OFFSET, MASK, VALUE)      (0XFD070208, 0x0F0F0F0FU ,0x00000000U)  */
-    mask_write 0XFD070208 0x0F0F0F0F 0x00000000
+		#(OFFSET, MASK, VALUE)      (0XFD070208, 0x0F0F0F0FU ,0x01010100U)  */
+    mask_write 0XFD070208 0x0F0F0F0F 0x01010100
 		# Register : ADDRMAP3 @ 0XFD07020C</p>
 
 		# - Full bus width mode: Selects the HIF address bit used as column addres
@@ -2900,7 +2881,7 @@ set psu_ddr_init_data {
     # r indicating auto-precharge, and hence no source address bit can be mapp
     # ed to column address bit 10. In LPDDR2/LPDDR3, there is a dedicated bit
     # for auto-precharge in the CA bus and hence column bit 10 is used.
-		# PSU_DDRC_ADDRMAP3_ADDRMAP_COL_B9                                                0x0
+		# PSU_DDRC_ADDRMAP3_ADDRMAP_COL_B9                                                0x1
 
 		# - Full bus width mode: Selects the HIF address bit used as column addres
     # s bit 8. - Half bus width mode: Selects the HIF address bit used as colu
@@ -2913,7 +2894,7 @@ set psu_ddr_init_data {
     #  and hence no source address bit can be mapped to column address bit 10.
     #  In LPDDR2/LPDDR3, there is a dedicated bit for auto-precharge in the CA
     #  bus and hence column bit 10 is used.
-		# PSU_DDRC_ADDRMAP3_ADDRMAP_COL_B8                                                0x0
+		# PSU_DDRC_ADDRMAP3_ADDRMAP_COL_B8                                                0x1
 
 		# - Full bus width mode: Selects the HIF address bit used as column addres
     # s bit 7. - Half bus width mode: Selects the HIF address bit used as colu
@@ -2922,7 +2903,7 @@ set psu_ddr_init_data {
     #  7 The selected HIF address bit is determined by adding the internal bas
     # e to the value of this field. If set to 15, this column address bit is s
     # et to 0.
-		# PSU_DDRC_ADDRMAP3_ADDRMAP_COL_B7                                                0x0
+		# PSU_DDRC_ADDRMAP3_ADDRMAP_COL_B7                                                0x1
 
 		# - Full bus width mode: Selects the HIF address bit used as column addres
     # s bit 6. - Half bus width mode: Selects the HIF address bit used as colu
@@ -2931,11 +2912,11 @@ set psu_ddr_init_data {
     #  6 The selected HIF address bit is determined by adding the internal bas
     # e to the value of this field. If set to 15, this column address bit is s
     # et to 0.
-		# PSU_DDRC_ADDRMAP3_ADDRMAP_COL_B6                                                0x0
+		# PSU_DDRC_ADDRMAP3_ADDRMAP_COL_B6                                                0x1
 
 		# Address Map Register 3
-		#(OFFSET, MASK, VALUE)      (0XFD07020C, 0x0F0F0F0FU ,0x00000000U)  */
-    mask_write 0XFD07020C 0x0F0F0F0F 0x00000000
+		#(OFFSET, MASK, VALUE)      (0XFD07020C, 0x0F0F0F0FU ,0x01010101U)  */
+    mask_write 0XFD07020C 0x0F0F0F0F 0x01010101
 		# Register : ADDRMAP4 @ 0XFD070210</p>
 
 		# - Full bus width mode: Selects the HIF address bit used as column addres
@@ -3065,11 +3046,11 @@ set psu_ddr_init_data {
     # ge: 0 to 30 Internal Base: 2 The selected HIF address bit for each of th
     # e bank group address bits is determined by adding the internal base to t
     # he value of this field.
-		# PSU_DDRC_ADDRMAP8_ADDRMAP_BG_B0                                                 0x8
+		# PSU_DDRC_ADDRMAP8_ADDRMAP_BG_B0                                                 0x1
 
 		# Address Map Register 8
-		#(OFFSET, MASK, VALUE)      (0XFD070220, 0x00001F1FU ,0x00000808U)  */
-    mask_write 0XFD070220 0x00001F1F 0x00000808
+		#(OFFSET, MASK, VALUE)      (0XFD070220, 0x00001F1FU ,0x00000801U)  */
+    mask_write 0XFD070220 0x00001F1F 0x00000801
 		# Register : ADDRMAP9 @ 0XFD070224</p>
 
 		# Selects the HIF address bits used as row address bit 5. Valid Range: 0 t
@@ -12493,16 +12474,16 @@ set psu_mio_init_data {
 		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_0                                   0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_1                                   1
+		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_1                                   0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_2                                   1
+		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_2                                   0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_3                                   1
+		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_3                                   0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_4                                   1
+		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_4                                   0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
 		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_5                                   0
@@ -12514,62 +12495,62 @@ set psu_mio_init_data {
 		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_7                                   0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_8                                   1
+		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_8                                   0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_9                                   1
+		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_9                                   0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_10                                  1
+		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_10                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_11                                  1
+		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_11                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_12                                  1
+		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_12                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_13                                  1
+		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_13                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
 		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_14                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_15                                  1
+		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_15                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_16                                  1
+		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_16                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_17                                  1
+		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_17                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_18                                  1
+		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_18                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
 		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_19                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_20                                  1
+		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_20                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_21                                  1
+		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_21                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_22                                  1
+		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_22                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_23                                  1
+		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_23                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_24                                  1
+		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_24                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_25                                  1
+		# PSU_IOU_SLCR_BANK0_CTRL3_SCHMITT_CMOS_N_BIT_25                                  0
 
 		# Selects either Schmitt or CMOS input for MIO Bank 0 - control MIO[25:0]
-		#(OFFSET, MASK, VALUE)      (0XFF180140, 0x03FFFFFFU ,0x03F7BF1EU)  */
-    mask_write 0XFF180140 0x03FFFFFF 0x03F7BF1E
+		#(OFFSET, MASK, VALUE)      (0XFF180140, 0x03FFFFFFU ,0x00000000U)  */
+    mask_write 0XFF180140 0x03FFFFFF 0x00000000
 		# Register : bank0_ctrl4 @ 0XFF180144</p>
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
@@ -12771,16 +12752,16 @@ set psu_mio_init_data {
 		# PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_9                                 1
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_10                                1
+		# PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_10                                0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_11                                1
+		# PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_11                                0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
 		# PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_12                                1
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_13                                1
+		# PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_13                                0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
 		# PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_14                                1
@@ -12801,10 +12782,10 @@ set psu_mio_init_data {
 		# PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_19                                1
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_20                                1
+		# PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_20                                0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_21                                1
+		# PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_21                                0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
 		# PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_22                                1
@@ -12813,14 +12794,14 @@ set psu_mio_init_data {
 		# PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_23                                1
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_24                                1
+		# PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_24                                0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_25                                1
+		# PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_25                                0
 
 		# Slew rate control to MIO Bank 0 - control MIO[25:0]
-		#(OFFSET, MASK, VALUE)      (0XFF18014C, 0x03FFFFFFU ,0x03FBFF81U)  */
-    mask_write 0XFF18014C 0x03FFFFFF 0x03FBFF81
+		#(OFFSET, MASK, VALUE)      (0XFF18014C, 0x03FFFFFFU ,0x00CBD381U)  */
+    mask_write 0XFF18014C 0x03FFFFFF 0x00CBD381
 		# Register : bank1_ctrl0 @ 0XFF180154</p>
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
@@ -13008,68 +12989,68 @@ set psu_mio_init_data {
 		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_5                                   0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_6                                   1
+		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_6                                   0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_7                                   1
+		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_7                                   0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_8                                   1
+		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_8                                   0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_9                                   1
+		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_9                                   0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_10                                  1
+		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_10                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_11                                  1
+		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_11                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_12                                  1
+		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_12                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_13                                  1
+		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_13                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_14                                  1
+		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_14                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_15                                  1
+		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_15                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_16                                  1
+		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_16                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_17                                  1
+		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_17                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_18                                  1
+		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_18                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_19                                  1
+		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_19                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_20                                  1
+		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_20                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_21                                  1
+		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_21                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_22                                  1
+		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_22                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_23                                  1
+		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_23                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_24                                  1
+		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_24                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
 		# PSU_IOU_SLCR_BANK1_CTRL3_SCHMITT_CMOS_N_BIT_25                                  0
 
 		# Selects either Schmitt or CMOS input for MIO Bank 1 - control MIO[51:26]
-		#(OFFSET, MASK, VALUE)      (0XFF18015C, 0x03FFFFFFU ,0x01FFFFC0U)  */
-    mask_write 0XFF18015C 0x03FFFFFF 0x01FFFFC0
+		#(OFFSET, MASK, VALUE)      (0XFF18015C, 0x03FFFFFFU ,0x00000000U)  */
+    mask_write 0XFF18015C 0x03FFFFFF 0x00000000
 		# Register : bank1_ctrl4 @ 0XFF180160</p>
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
@@ -13241,22 +13222,22 @@ set psu_mio_init_data {
 		# Register : bank1_ctrl6 @ 0XFF180168</p>
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_0                                 1
+		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_0                                 0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_1                                 1
+		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_1                                 0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_2                                 1
+		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_2                                 0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_3                                 1
+		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_3                                 0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_4                                 1
+		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_4                                 0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_5                                 1
+		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_5                                 0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
 		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_6                                 0
@@ -13277,7 +13258,7 @@ set psu_mio_init_data {
 		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_11                                0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_12                                1
+		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_12                                0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
 		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_13                                0
@@ -13295,7 +13276,7 @@ set psu_mio_init_data {
 		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_17                                0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_18                                1
+		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_18                                0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
 		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_19                                0
@@ -13319,8 +13300,8 @@ set psu_mio_init_data {
 		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_25                                0
 
 		# Slew rate control to MIO Bank 1 - control MIO[51:26]
-		#(OFFSET, MASK, VALUE)      (0XFF180168, 0x03FFFFFFU ,0x0004103FU)  */
-    mask_write 0XFF180168 0x03FFFFFF 0x0004103F
+		#(OFFSET, MASK, VALUE)      (0XFF180168, 0x03FFFFFFU ,0x00000000U)  */
+    mask_write 0XFF180168 0x03FFFFFF 0x00000000
 		# Register : bank2_ctrl0 @ 0XFF180170</p>
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
@@ -13490,86 +13471,86 @@ set psu_mio_init_data {
 		# Register : bank2_ctrl3 @ 0XFF180178</p>
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
-		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_0                                   1
+		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_0                                   0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
-		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_1                                   1
+		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_1                                   0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
-		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_2                                   1
+		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_2                                   0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
-		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_3                                   1
+		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_3                                   0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
-		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_4                                   1
+		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_4                                   0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
-		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_5                                   1
+		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_5                                   0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
 		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_6                                   0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
-		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_7                                   1
+		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_7                                   0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
-		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_8                                   1
+		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_8                                   0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
-		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_9                                   1
+		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_9                                   0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
-		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_10                                  1
+		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_10                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
-		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_11                                  1
+		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_11                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
-		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_12                                  1
+		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_12                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
-		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_13                                  1
+		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_13                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
-		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_14                                  1
+		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_14                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
-		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_15                                  1
+		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_15                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
-		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_16                                  1
+		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_16                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
-		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_17                                  1
+		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_17                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
 		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_18                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
-		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_19                                  1
+		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_19                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
-		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_20                                  1
+		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_20                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
-		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_21                                  1
+		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_21                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
-		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_22                                  1
+		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_22                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
-		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_23                                  1
+		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_23                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
 		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_24                                  0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
-		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_25                                  1
+		# PSU_IOU_SLCR_BANK2_CTRL3_SCHMITT_CMOS_N_BIT_25                                  0
 
 		# Selects either Schmitt or CMOS input for MIO Bank 2 - control MIO[77:52]
-		#(OFFSET, MASK, VALUE)      (0XFF180178, 0x03FFFFFFU ,0x02FBFFBFU)  */
-    mask_write 0XFF180178 0x03FFFFFF 0x02FBFFBF
+		#(OFFSET, MASK, VALUE)      (0XFF180178, 0x03FFFFFFU ,0x00000000U)  */
+    mask_write 0XFF180178 0x03FFFFFF 0x00000000
 		# Register : bank2_ctrl4 @ 0XFF18017C</p>
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
@@ -14311,14 +14292,14 @@ set psu_peripherals_init_data {
 
 		# Frequency in number of ticks per second. Valid range from 10 MHz to 100
     # MHz.
-		# PSU_IOU_SCNTRS_BASE_FREQUENCY_ID_REGISTER_FREQ                                  0x5f5e100
+		# PSU_IOU_SCNTRS_BASE_FREQUENCY_ID_REGISTER_FREQ                                  0x1c9c380
 
 		# Program this register to match the clock frequency of the timestamp gene
     # rator, in ticks per second. For example, for a 50 MHz clock, program 0x0
     # 2FAF080. This register is not accessible to the read-only programming in
     # terface.
-		#(OFFSET, MASK, VALUE)      (0XFF260020, 0xFFFFFFFFU ,0x05F5E100U)  */
-    mask_write 0XFF260020 0xFFFFFFFF 0x05F5E100
+		#(OFFSET, MASK, VALUE)      (0XFF260020, 0xFFFFFFFFU ,0x01C9C380U)  */
+    mask_write 0XFF260020 0xFFFFFFFF 0x01C9C380
 		# Register : counter_control_register @ 0XFF260000</p>
 
 		# Enable 0: The counter is disabled and not incrementing. 1: The counter i
@@ -14331,50 +14312,6 @@ set psu_peripherals_init_data {
     mask_write 0XFF260000 0x00000001 0x00000001
 		# : TTC SRC SELECT
 		# : USB RESET
-		# : USB RESET WITH BOOT PIN MODE
-		# : BOOT PIN HIGH
-		# Register : BOOT_PIN_CTRL @ 0XFF5E0250</p>
-
-		# Value driven onto the mode pins, when out_en = 1
-		# PSU_CRL_APB_BOOT_PIN_CTRL_OUT_VAL                                               0X2
-
-		# When 0, the pins will be inputs from the board to the PS. When 1, the PS
-    #  will drive these pins
-		# PSU_CRL_APB_BOOT_PIN_CTRL_OUT_EN                                                0X2
-
-		# Used to control the mode pins after boot.
-		#(OFFSET, MASK, VALUE)      (0XFF5E0250, 0x00000F0FU ,0x00000202U)  */
-    mask_write 0XFF5E0250 0x00000F0F 0x00000202
-		# : ADD 1US DELAY
-    mask_delay 0x00000000 1
-		# : BOOT PIN LOW
-		# Register : BOOT_PIN_CTRL @ 0XFF5E0250</p>
-
-		# Value driven onto the mode pins, when out_en = 1
-		# PSU_CRL_APB_BOOT_PIN_CTRL_OUT_VAL                                               0X0
-
-		# When 0, the pins will be inputs from the board to the PS. When 1, the PS
-    #  will drive these pins
-		# PSU_CRL_APB_BOOT_PIN_CTRL_OUT_EN                                                0X2
-
-		# Used to control the mode pins after boot.
-		#(OFFSET, MASK, VALUE)      (0XFF5E0250, 0x00000F0FU ,0x00000002U)  */
-    mask_write 0XFF5E0250 0x00000F0F 0x00000002
-		# : ADD 5US DELAY
-    mask_delay 0x00000000 5
-		# : BOOT PIN HIGH
-		# Register : BOOT_PIN_CTRL @ 0XFF5E0250</p>
-
-		# Value driven onto the mode pins, when out_en = 1
-		# PSU_CRL_APB_BOOT_PIN_CTRL_OUT_VAL                                               0X2
-
-		# When 0, the pins will be inputs from the board to the PS. When 1, the PS
-    #  will drive these pins
-		# PSU_CRL_APB_BOOT_PIN_CTRL_OUT_EN                                                0X2
-
-		# Used to control the mode pins after boot.
-		#(OFFSET, MASK, VALUE)      (0XFF5E0250, 0x00000F0FU ,0x00000202U)  */
-    mask_write 0XFF5E0250 0x00000F0F 0x00000202
 		# : PCIE RESET
 		# : DIR MODE BANK 0
 		# Register : DIRM_0 @ 0XFF0A0204</p>
@@ -14491,43 +14428,7 @@ set psu_post_config_data {
 
 set psu_peripherals_powerdwn_data {
 		# : POWER DOWN REQUEST INTERRUPT ENABLE
-		# Register : REQ_PWRDWN_INT_EN @ 0XFFD80218</p>
-
-		# Power-down Request Interrupt Enable for GPU PP0
-		# PSU_PMU_GLOBAL_REQ_PWRDWN_INT_EN_PP0                                            1
-
-		# Power-down Request Interrupt Enable for GPU PP1
-		# PSU_PMU_GLOBAL_REQ_PWRDWN_INT_EN_PP1                                            1
-
-		# Power-down Request Interrupt Enable for ACPU2
-		# PSU_PMU_GLOBAL_REQ_PWRDWN_INT_EN_ACPU2                                          1
-
-		# Power-down Request Interrupt Enable for ACPU3
-		# PSU_PMU_GLOBAL_REQ_PWRDWN_INT_EN_ACPU3                                          1
-
-		# Power-down Request Interrupt Enable Register. Writing a 1 to this locati
-    # on will unmask the Interrupt.
-		#(OFFSET, MASK, VALUE)      (0XFFD80218, 0x0000003CU ,0x0000003CU)  */
-    mask_write 0XFFD80218 0x0000003C 0x0000003C
 		# : POWER DOWN TRIGGER
-		# Register : REQ_PWRDWN_TRIG @ 0XFFD80220</p>
-
-		# Power-down Request Trigger for GPU PP0
-		# PSU_PMU_GLOBAL_REQ_PWRDWN_TRIG_PP0                                              1
-
-		# Power-down Request Trigger for GPU PP1
-		# PSU_PMU_GLOBAL_REQ_PWRDWN_TRIG_PP1                                              1
-
-		# Power-down Request Trigger for ACPU2
-		# PSU_PMU_GLOBAL_REQ_PWRDWN_TRIG_ACPU2                                            1
-
-		# Power-down Request Trigger for ACPU3
-		# PSU_PMU_GLOBAL_REQ_PWRDWN_TRIG_ACPU3                                            1
-
-		# Power-down Request Trigger Register. Writing a 1 to this location will t
-    # rigger a power-down request to the PMU.
-		#(OFFSET, MASK, VALUE)      (0XFFD80220, 0x0000003CU ,0x0000003CU)  */
-    mask_write 0XFFD80220 0x0000003C 0x0000003C
 }
 
 set psu_lpd_xppu_data {
@@ -17516,6 +17417,34 @@ set psu_afi_config {
 		#(OFFSET, MASK, VALUE)      (0XFF5E023C, 0x00080000U ,0x00000000U)  */
     mask_write 0XFF5E023C 0x00080000 0x00000000
 		# : AFIFM INTERFACE WIDTH
+		# Register : afi_fs @ 0XFF419000</p>
+
+		# Select the 32/64/128-bit data width selection for the Slave 0 00: 32-bit
+    #  AXI data width (default) 01: 64-bit AXI data width 10: 128-bit AXI data
+    #  width 11: reserved
+		# PSU_LPD_SLCR_AFI_FS_DW_SS2_SEL                                                  0x0
+
+		# afi fs SLCR control register. Do not change the bits durin
+		#(OFFSET, MASK, VALUE)      (0XFF419000, 0x00000300U ,0x00000000U)  */
+    mask_write 0XFF419000 0x00000300 0x00000000
+		# Register : AFIFM_RDCTRL @ 0XFD380000</p>
+
+		# Configures the Read Channel Fabric interface width. 2'b11 : Reserved 2'b
+    # 10 : 32-bit Fabric 2'b01 : 64-bit enabled 2'b00 : 128-bit enabled
+		# PSU_AFIFM2_AFIFM_RDCTRL_FABRIC_WIDTH                                            0x0
+
+		# Read Channel Control Register
+		#(OFFSET, MASK, VALUE)      (0XFD380000, 0x00000003U ,0x00000000U)  */
+    mask_write 0XFD380000 0x00000003 0x00000000
+		# Register : AFIFM_WRCTRL @ 0XFD380014</p>
+
+		# Configures the Write Channel Fabric interface width. 2'b11 : Reserved 2'
+    # b10 : 32-bit Fabric 2'b01 : 64-bit enabled 2'b00 : 128-bit enabled
+		# PSU_AFIFM2_AFIFM_WRCTRL_FABRIC_WIDTH                                            0x0
+
+		# Write Channel Control Register
+		#(OFFSET, MASK, VALUE)      (0XFD380014, 0x00000003U ,0x00000000U)  */
+    mask_write 0XFD380014 0x00000003 0x00000000
 }
 
 set psu_ps_pl_reset_config_data {
