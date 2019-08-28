@@ -18,7 +18,7 @@
 	disable-wp;
 };
 
-/* 
+/*
 devicetree/bindings/net/macb.txt
 devicetree/bindings/net/ti,dp83867.txt
 devicetree/bindings/net/phy.txt
@@ -59,7 +59,7 @@ EMIO[0] which is line 78.
 			#address-cells = <1>;
 			#size-cells = <0>;
 			reg = <0>;
-		
+
 			pcam5c_a: sensor@3c {
 				compatible = "ovti,ov5640";
 				reg = <0x3c>;
@@ -249,4 +249,26 @@ EMIO[0] which is line 78.
 	 snps,dis_u3_susphy_quirk ;
 	 //resets = <&gpiom1 5>;
 	 dr_mode = "host";
+};
+
+&ams_pl {
+	xlnx,ext-channels {
+		#address-cells = <1>;
+		#size-cells = <0>;
+		channel@0 {
+			reg = <0>;
+		};
+		channel@5 {
+			reg = <5>;
+		};
+		channel@6 {
+			reg = <6>;
+		};
+		channel@7 {
+			reg = <7>;
+		};
+		channel@8 {
+			reg = <8>;
+		};
+	};
 };
