@@ -73,6 +73,28 @@
 	 dr_mode = "host";
 };
 
+&ams_pl {
+	xlnx,ext-channels {
+		#address-cells = <1>;
+		#size-cells = <0>;
+		channel@0 {
+			reg = <0>;
+		};
+		channel@5 {
+			reg = <5>;
+		};
+		channel@6 {
+			reg = <6>;
+		};
+		channel@7 {
+			reg = <7>;
+		};
+		channel@8 {
+			reg = <8>;
+		};
+	};
+};
+
 &gpio {
 	gpio-line-names =
 	"gpio0",
