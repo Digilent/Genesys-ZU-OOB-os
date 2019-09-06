@@ -74,3 +74,7 @@
 	 //resets = <&gpiom1 5>;
 	 dr_mode = "host";
 };
+
+&pwm_rgb_led {
+	compatible = "digilent,pwm-rgb-led";
+};

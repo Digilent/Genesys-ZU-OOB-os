@@ -4195,6 +4195,11 @@ CONFIG_imagefeature-hwcodecs=y
 # CONFIG_peekpoke is not set
 
 #
+# modules 
+#
+CONFIG_pwm-rgb-led=y
+
+#
 # user packages 
 #
 
