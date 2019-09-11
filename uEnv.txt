@@ -1,0 +1,6 @@
+bootdelay=0
+serverip=10.113.0.188
+tftp_boot=tftpboot 0x10000000 zuca-3eg/image.ub && bootm 0x10000000;
+tftp_fpga=tftpboot 0x10000000 zuca-3eg/system.bit && fpga load zu5 0x10000000 $filesize
+boot_tftp=run tftp_fpga && run tftp_boot
+uenvcmd=env print tftp_fpga && run boot_tftp;
