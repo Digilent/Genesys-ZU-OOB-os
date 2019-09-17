@@ -102,7 +102,7 @@ static int open_gpio_channel(int gpio_base)
 	sprintf(gpio_nchan_file, "%s/gpiochip%d/ngpio", GPIO_ROOT, gpio_base);
 	gpio_nchan_fd = open(gpio_nchan_file, O_RDONLY);
 	if (gpio_nchan_fd < 0) {
-		fprintf(stderr, "Failed to open %s: %s\n", gpio_nchan_file, strerror(errno)); 
+		fprintf(stderr, "Failed to open %s: %s\n", gpio_nchan_file, strerror(errno));
 		return -1;
 	}
 	read(gpio_nchan_fd, nchannel_str, sizeof(nchannel_str));
@@ -120,7 +120,7 @@ static int open_gpio_channel(int gpio_base)
 		return -1;
 	}
 
-	gpio_max = gpio_base + nchannel;	
+	gpio_max = gpio_base + nchannel;
 	for(c = gpio_base; c < gpio_max; c++) {
 		sprintf(channel_str, "%d", c);
 		write(export_fd, channel_str, (strlen(channel_str)+1));
@@ -147,7 +147,7 @@ static int close_gpio_channel(int gpio_base)
 	sprintf(gpio_nchan_file, "%s/gpiochip%d/ngpio", GPIO_ROOT, gpio_base);
 	gpio_nchan_fd = open(gpio_nchan_file, O_RDONLY);
 	if (gpio_nchan_fd < 0) {
-		fprintf(stderr, "Failed to open %s: %s\n", gpio_nchan_file, strerror(errno)); 
+		fprintf(stderr, "Failed to open %s: %s\n", gpio_nchan_file, strerror(errno));
 		return -1;
 	}
 	read(gpio_nchan_fd, nchannel_str, sizeof(nchannel_str));
@@ -165,7 +165,7 @@ static int close_gpio_channel(int gpio_base)
 		return -1;
 	}
 
-	gpio_max = gpio_base + nchannel;	
+	gpio_max = gpio_base + nchannel;
 	for(c = gpio_base; c < gpio_max; c++) {
 		sprintf(channel_str, "%d", c);
 		write(unexport_fd, channel_str, (strlen(channel_str)+1));
@@ -275,7 +275,7 @@ int main(int argc, char *argv[])
 	int i;
 
 	opterr = 0;
-	
+
 	while ((c = getopt(argc, argv, "g:io:ck")) != -1) {
 		switch (c) {
 			case 'g':
@@ -302,7 +302,7 @@ int main(int argc, char *argv[])
 				usage(argv[0]);
 			default:
 				usage(argv[0]);
-				
+
 		}
 	}
 

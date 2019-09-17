@@ -6,10 +6,10 @@
 
 / {
 	xclk_a: oscillator { /*12MHz oscillator on-board the Pcam 5C */
-     		compatible = "fixed-clock";
-     		#clock-cells = <1>;
-     		clock-frequency  = <12000000>;
-     		clock-output-names = "out";
+		compatible = "fixed-clock";
+		#clock-cells = <1>;
+		clock-frequency  = <12000000>;
+		clock-output-names = "out";
 	};
 };
 
@@ -52,7 +52,6 @@ EMIO[0] which is line 78.
 		#address-cells = <1>;
 		#size-cells = <0>;
 		reg = <0x70>;
-
 		reset-gpios = <&gpio 78 GPIO_ACTIVE_HIGH>;
 
 		i2c@0 {
@@ -78,49 +77,49 @@ EMIO[0] which is line 78.
 		};
 
 		i2c@1 {
-                        #address-cells = <1>;
-                        #size-cells = <0>;
-                        reg = <1>;
-                };
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <1>;
+		};
 		i2c@2 {
-                        #address-cells = <1>;
-                        #size-cells = <0>;
-                        reg = <2>;
-                };
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <2>;
+		};
 		i2c@3 {
-                        #address-cells = <1>;
-                        #size-cells = <0>;
-                        reg = <3>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <3>;
 			pmu@43 { /* IRPS5401 - IC81 */
 				#clock-cells = <0>;
 				compatible = "infineon,irps5401";
 				reg = <0x43>; /*PMBUS address*/
 			};
 			pmu@44 { /* IRPS5401 - IC83 */
-                                #clock-cells = <0>;
-                                compatible = "infineon,irps5401";
-                                reg = <0x44>; /*PMBUS address*/
-                        };
+				#clock-cells = <0>;
+				compatible = "infineon,irps5401";
+				reg = <0x44>; /*PMBUS address*/
+			};
 			pmu@45 { /* IRPS5401 - IC84 */
-                                #clock-cells = <0>;
-                                compatible = "infineon,irps5401";
-                                reg = <0x45>; /*PMBUS address*/
-                        };
-                };
+				#clock-cells = <0>;
+				compatible = "infineon,irps5401";
+				reg = <0x45>; /*PMBUS address*/
+			};
+		};
 		i2c@4 {
-                        #address-cells = <1>;
-                        #size-cells = <0>;
-                        reg = <4>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <4>;
 			eeprom@51 { /*FMC VITA 57.1 FRU*/
 				compatible = "atmel,24c02";
 				reg = <0x51>;
 				pagesize = <1>; /* varies between models, so use a safe value */
 			};
-                };
+		};
 		i2c@5 {
-                        #address-cells = <1>;
-                        #size-cells = <0>;
-                        reg = <5>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <5>;
 			/* not sure if we should bind the eeprom driver to the SYZYGY DNA */
 			eeprom@30 { /* SYZYGY DNA */
 				compatible = "atmel,24c02";
@@ -129,17 +128,17 @@ EMIO[0] which is line 78.
 				address-width = <16>;
 				size = <65536>; /*the whole 16-bit address range*/
 			};
-                };
+				};
 		i2c@6 {
-                        #address-cells = <1>;
-                        #size-cells = <0>;
-                        reg = <6>;
-                };
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <6>;
+		};
 		i2c@7 {
-                        #address-cells = <1>;
-                        #size-cells = <0>;
-                        reg = <7>;
-                };
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <7>;
+		};
 	};
 };
 
@@ -171,7 +170,6 @@ EMIO[0] which is line 78.
 		};
 		port@1 {
 			reg = <1>;
-
 			xlnx,video-format = <XVIP_VF_MONO_SENSOR>;
 			xlnx,video-width = <8>;
 			xlnx,cfa-pattern = "rggb";
@@ -188,15 +186,12 @@ EMIO[0] which is line 78.
 		compatible = "xlnx,video";
 		dmas = <&axi_vdma_0 0>;
 		dma-names = "port0"; /*this has to be port0 for some reason*/
-
 		ports {
 			#address-cells = <1>;
 			#size-cells = <0>;
-
 			port@0 {
 				reg = <0>;
 				direction = "input";
-
 				vcap_csi_in: endpoint {
 					remote-endpoint = <&csiss_out>;
 				};
@@ -220,14 +215,14 @@ EMIO[0] which is line 78.
 		spi-max-frequency = <10000000>;
 	};
 	/*wilc_spi@0 {
-			compatible = "microchip,wilc1000", "microchip,wilc3000";
-			spi-max-frequency = <48000000>;
-			reg = <0>;
-			irq-gpios = <&gpiom1 1 0>;
-			reset-gpios = <&gpiom1 2 0>;
-			chip_en-gpios = <&gpiom1 0 0>;
-			status = "okay";
-		};*/
+		compatible = "microchip,wilc1000", "microchip,wilc3000";
+		spi-max-frequency = <48000000>;
+		reg = <0>;
+		irq-gpios = <&gpiom1 1 0>;
+		reset-gpios = <&gpiom1 2 0>;
+		chip_en-gpios = <&gpiom1 0 0>;
+		status = "okay";
+	};*/
 };
 
 /*&usb0 {
@@ -245,10 +240,10 @@ EMIO[0] which is line 78.
 };
 
 &dwc3_1 {
-	 snps,dis_u2_susphy_quirk ;
-	 snps,dis_u3_susphy_quirk ;
-	 //resets = <&gpiom1 5>;
-	 dr_mode = "host";
+	snps,dis_u2_susphy_quirk ;
+	snps,dis_u3_susphy_quirk ;
+	//resets = <&gpiom1 5>;
+	dr_mode = "host";
 };
 
 &ams_pl {
