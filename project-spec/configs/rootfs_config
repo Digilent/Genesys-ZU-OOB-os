@@ -1559,7 +1559,7 @@ CONFIG_run-postinsts=y
 #
 # libgpiod
 #
-# CONFIG_libgpiod is not set
+CONFIG_libgpiod=y
 # CONFIG_libgpiod-dev is not set
 # CONFIG_libgpiod-dbg is not set
 
@@ -4191,7 +4191,7 @@ CONFIG_imagefeature-hwcodecs=y
 #
 # apps 
 #
-# CONFIG_gpio-demo is not set
+CONFIG_gpio-demo=y
 # CONFIG_peekpoke is not set
 CONFIG_zuca-test-suite=y
 
