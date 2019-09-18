@@ -1,0 +1,59 @@
+#!/bin/sh
+
+step=${1:-10};
+delay=${2:-1};
+full=${3:-255};
+out_file=${4:-"/sys/module/pwm_rgb_led/parameters/pwm_color_fill"};
+
+echo step: $step;
+echo delay: $delay;
+echo full: $full;
+echo control_file: $out_file;
+
+LE=""
+
+red_fill=0;
+green_fill=0;
+blue_fill=0;
+
+#echo "MAGENTA" > test_out;
+for magenta_fill in $(seq 0 $step $full); do
+	printf "0x%02x%02x%02x$LE" "$magenta_fill" "$green_fill" "$magenta_fill" > $out_file;
+	sleep $delay;
+done
+
+#echo "RED" > test_out;
+for red_fill in $(seq 0 $step $full); do
+	printf "0x%02x%02x%02x$LE" "$red_fill" "$green_fill" "$blue_fill" > $out_file;
+	sleep $delay;
+done
+red_fill=0;
+
+#echo "YELLOW" > test_out;
+for yellow_fill in $(seq 0 $step $full); do
+	printf "0x%02x%02x%02x$LE" "$yellow_fill" "$yellow_fill" "$blue_fill" > $out_file;
+	sleep $delay;
+done
+
+
+#echo "GREEN" >> test_out;
+for green_fill in $(seq 0 $step $full); do
+	printf "0x%02x%02x%02x$LE" "$red_fill" "$green_fill" "$blue_fill" > $out_file;
+	sleep $delay;
+done
+green_fill=0;
+
+#echo "CYAN" > test_out;
+for cyan_fill in $(seq 0 $step $full); do
+	printf "0x%02x%02x%02x$LE" "$red_fill" "$cyan_fill" "$cyan_fill" > $out_file;
+	sleep $delay;
+done
+
+#echo "BLUE" >> test_out
+for blue_fill in $(seq 0 $step $full); do
+	printf "0x%02x%02x%02x$LE" "$red_fill" "$green_fill" "$blue_fill" > $out_file;
+	sleep $delay;
+done
+blue_fill=0;
+
+printf "0x%02x%02x%02x$LE" "$red_fill" "$green_fill" "$blue_fill" > $out_file;

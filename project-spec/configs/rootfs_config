@@ -4193,6 +4193,7 @@ CONFIG_imagefeature-hwcodecs=y
 #
 # CONFIG_gpio-demo is not set
 # CONFIG_peekpoke is not set
+CONFIG_zuca-test-suite=y
 
 #
 # modules 
