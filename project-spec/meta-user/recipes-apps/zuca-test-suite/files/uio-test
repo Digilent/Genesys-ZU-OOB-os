@@ -1,5 +1,6 @@
 #!/bin/sh
 
+set -e
 #Usage info
 
 die(){
@@ -17,7 +18,7 @@ isNAN() {
 
 show_help (){
 cat << EOF
-Usage : ${0##*/} [-h] [-d delay] [-m max_fill] [-s step] [device_file]
+Usage : ${0##*/} [-h] [-t device_type] [-i index] [-d delay] [-m max_fill] [-s step] [device_file]
 	-h --help		Display this help and exit
 
 	-t --type		Type of uio to test:
@@ -83,7 +84,7 @@ while :; do
 		-i|--index)
 			if [ "$2" ]; then
 				index=$2
-				isNAN $index && die 'ERROR: "-i|--index" requires a number option argument.';
+				#isNAN $index && die 'ERROR: "-i|--index" requires a number option argument.';
 				shift
 			else
 				die 'ERROR: "-i|--index" requires a non-empty option argument.'
@@ -91,7 +92,7 @@ while :; do
 			;;
 		--index=?*)
 				index=${1#*=}
-				isNAN $index && die 'ERROR: "-i|--index" requires a number option argument.';
+				#isNAN $index && die 'ERROR: "-i|--index" requires a number option argument.';
 			;;
 		--index=)
 				die 'ERROR: "--index=" requires a non-empty option argument.'
@@ -210,20 +211,25 @@ case $dev_type in
 led)
 	echo Led
 	show_vars;
+	gpioset $(gpiofind led${index})=1;
+	sleep $delay;
+	gpioset $(gpiofind led${index})=0;
 	;;
 btn)
 	echo Button
 	show_vars;
+	gpiomon -n 1 -r -s $(gpiofind btn${index}) # return on press (rising edge)
 	;;
 sw)
 	echo Switch
 	show_vars;
+	gpiomon -n 1 -r -s $(gpiofind sw${index}) # return on press (rising edge)
 	;;
 rgb_led)
 	echo RGB Led
 	file=${file:-"/sys/module/pwm_rgb_led/parameters/pwm_color_fill"};
 	show_vars;
-	rgb_led_test
+	rgb_led_test;
 	;;
 *) die "ERROR: No such device \"${dev_type}\"";
 esac
