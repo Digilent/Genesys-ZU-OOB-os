@@ -74,15 +74,15 @@
 	 //resets = <&gpiom1 5>;
 	 dr_mode = "host";
 };
-&axi_gpio_btn{
+&axi_gpio_btn {
 	gpio-line-names = "btnR", "btnL", "btnD", "btnC", "btnU";
 };
 
-&axi_gpio_led{
+&axi_gpio_led {
 	gpio-line-names = "led1", "led2", "led3", "led4";
 };
 
-&axi_gpio_sw{
+&axi_gpio_sw {
 	gpio-line-names = "sw0", "sw1", "sw2", "sw3";
 };
 
