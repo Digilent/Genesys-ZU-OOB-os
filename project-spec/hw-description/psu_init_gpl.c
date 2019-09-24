@@ -1058,6 +1058,30 @@ unsigned long psu_clock_init_data(void)
 /*##################################################################### */
 
     /*
+    * Register : UART1_REF_CTRL @ 0XFF5E0078
+
+    * Clock active signal. Switch to 0 to disable the clock
+    *  PSU_CRL_APB_UART1_REF_CTRL_CLKACT                           0x1
+
+    * 6 bit divider
+    *  PSU_CRL_APB_UART1_REF_CTRL_DIVISOR1                         0x1
+
+    * 6 bit divider
+    *  PSU_CRL_APB_UART1_REF_CTRL_DIVISOR0                         0xf
+
+    * 000 = IOPLL; 010 = RPLL; 011 = DPLL; (This signal may only be toggled af
+    * ter 4 cycles of the old clock and 4 cycles of the new clock. This is not
+    *  usually an issue, but designers must be aware.)
+    *  PSU_CRL_APB_UART1_REF_CTRL_SRCSEL                           0x0
+
+    * This register controls this reference clock
+    * (OFFSET, MASK, VALUE)      (0XFF5E0078, 0x013F3F07U ,0x01010F00U)
+    */
+	PSU_Mask_Write(CRL_APB_UART1_REF_CTRL_OFFSET,
+		0x013F3F07U, 0x01010F00U);
+/*##################################################################### */
+
+    /*
     * Register : I2C0_REF_CTRL @ 0XFF5E0120
 
     * Clock active signal. Switch to 0 to disable the clock
@@ -16257,12 +16281,15 @@ unsigned long psu_peripherals_init_data(void)
     * Block level reset
     *  PSU_CRL_APB_RST_LPD_IOU2_UART0_RESET                        0
 
+    * Block level reset
+    *  PSU_CRL_APB_RST_LPD_IOU2_UART1_RESET                        0
+
     * Software control register for the IOU block. Each bit will cause a singl
     * erperipheral or part of the peripheral to be reset.
-    * (OFFSET, MASK, VALUE)      (0XFF5E0238, 0x00000002U ,0x00000000U)
+    * (OFFSET, MASK, VALUE)      (0XFF5E0238, 0x00000006U ,0x00000000U)
     */
 	PSU_Mask_Write(CRL_APB_RST_LPD_IOU2_OFFSET,
-		0x00000002U, 0x00000000U);
+		0x00000006U, 0x00000000U);
 /*##################################################################### */
 
     /*
@@ -16374,6 +16401,114 @@ unsigned long psu_peripherals_init_data(void)
     * (OFFSET, MASK, VALUE)      (0XFF000004, 0x000003FFU ,0x00000020U)
     */
 	PSU_Mask_Write(UART0_MODE_REG0_OFFSET, 0x000003FFU, 0x00000020U);
+/*##################################################################### */
+
+    /*
+    * Register : Baud_rate_divider_reg0 @ 0XFF010034
+
+    * Baud rate divider value: 0 - 3: ignored 4 - 255: Baud rate
+    *  PSU_UART1_BAUD_RATE_DIVIDER_REG0_BDIV                       0x6
+
+    * Baud Rate Divider Register
+    * (OFFSET, MASK, VALUE)      (0XFF010034, 0x000000FFU ,0x00000006U)
+    */
+	PSU_Mask_Write(UART1_BAUD_RATE_DIVIDER_REG0_OFFSET,
+		0x000000FFU, 0x00000006U);
+/*##################################################################### */
+
+    /*
+    * Register : Baud_rate_gen_reg0 @ 0XFF010018
+
+    * Baud Rate Clock Divisor Value: 0: Disables baud_sample 1: Clock divisor
+    * bypass (baud_sample = sel_clk) 2 - 65535: baud_sample
+    *  PSU_UART1_BAUD_RATE_GEN_REG0_CD                             0x7c
+
+    * Baud Rate Generator Register.
+    * (OFFSET, MASK, VALUE)      (0XFF010018, 0x0000FFFFU ,0x0000007CU)
+    */
+	PSU_Mask_Write(UART1_BAUD_RATE_GEN_REG0_OFFSET,
+		0x0000FFFFU, 0x0000007CU);
+/*##################################################################### */
+
+    /*
+    * Register : Control_reg0 @ 0XFF010000
+
+    * Stop transmitter break: 0: no affect 1: stop transmission of the break a
+    * fter a minimum of one character length and transmit a high level during
+    * 12 bit periods. It can be set regardless of the value of STTBRK.
+    *  PSU_UART1_CONTROL_REG0_STPBRK                               0x0
+
+    * Start transmitter break: 0: no affect 1: start to transmit a break after
+    *  the characters currently present in the FIFO and the transmit shift reg
+    * ister have been transmitted. It can only be set if STPBRK (Stop transmit
+    * ter break) is not high.
+    *  PSU_UART1_CONTROL_REG0_STTBRK                               0x0
+
+    * Restart receiver timeout counter: 1: receiver timeout counter is restart
+    * ed. This bit is self clearing once the restart has completed.
+    *  PSU_UART1_CONTROL_REG0_RSTTO                                0x0
+
+    * Transmit disable: 0: enable transmitter 1: disable transmitter
+    *  PSU_UART1_CONTROL_REG0_TXDIS                                0x0
+
+    * Transmit enable: 0: disable transmitter 1: enable transmitter, provided
+    * the TXDIS field is set to 0.
+    *  PSU_UART1_CONTROL_REG0_TXEN                                 0x1
+
+    * Receive disable: 0: enable 1: disable, regardless of the value of RXEN
+    *  PSU_UART1_CONTROL_REG0_RXDIS                                0x0
+
+    * Receive enable: 0: disable 1: enable When set to one, the receiver logic
+    *  is enabled, provided the RXDIS field is set to zero.
+    *  PSU_UART1_CONTROL_REG0_RXEN                                 0x1
+
+    * Software reset for Tx data path: 0: no affect 1: transmitter logic is re
+    * set and all pending transmitter data is discarded This bit is self clear
+    * ing once the reset has completed.
+    *  PSU_UART1_CONTROL_REG0_TXRES                                0x1
+
+    * Software reset for Rx data path: 0: no affect 1: receiver logic is reset
+    *  and all pending receiver data is discarded. This bit is self clearing o
+    * nce the reset has completed.
+    *  PSU_UART1_CONTROL_REG0_RXRES                                0x1
+
+    * UART Control Register
+    * (OFFSET, MASK, VALUE)      (0XFF010000, 0x000001FFU ,0x00000017U)
+    */
+	PSU_Mask_Write(UART1_CONTROL_REG0_OFFSET, 0x000001FFU, 0x00000017U);
+/*##################################################################### */
+
+    /*
+    * Register : mode_reg0 @ 0XFF010004
+
+    * Channel mode: Defines the mode of operation of the UART. 00: normal 01:
+    * automatic echo 10: local loopback 11: remote loopback
+    *  PSU_UART1_MODE_REG0_CHMODE                                  0x0
+
+    * Number of stop bits: Defines the number of stop bits to detect on receiv
+    * e and to generate on transmit. 00: 1 stop bit 01: 1.5 stop bits 10: 2 st
+    * op bits 11: reserved
+    *  PSU_UART1_MODE_REG0_NBSTOP                                  0x0
+
+    * Parity type select: Defines the expected parity to check on receive and
+    * the parity to generate on transmit. 000: even parity 001: odd parity 010
+    * : forced to 0 parity (space) 011: forced to 1 parity (mark) 1xx: no pari
+    * ty
+    *  PSU_UART1_MODE_REG0_PAR                                     0x4
+
+    * Character length select: Defines the number of bits in each character. 1
+    * 1: 6 bits 10: 7 bits 0x: 8 bits
+    *  PSU_UART1_MODE_REG0_CHRL                                    0x0
+
+    * Clock source select: This field defines whether a pre-scalar of 8 is app
+    * lied to the baud rate generator input clock. 0: clock source is uart_ref
+    * _clk 1: clock source is uart_ref_clk/8
+    *  PSU_UART1_MODE_REG0_CLKS                                    0x0
+
+    * UART Mode Register
+    * (OFFSET, MASK, VALUE)      (0XFF010004, 0x000003FFU ,0x00000020U)
+    */
+	PSU_Mask_Write(UART1_MODE_REG0_OFFSET, 0x000003FFU, 0x00000020U);
 /*##################################################################### */
 
     /*
