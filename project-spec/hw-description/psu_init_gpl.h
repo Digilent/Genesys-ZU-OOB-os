@@ -943,8 +943,6 @@
 #define CRL_APB_PL0_REF_CTRL_OFFSET                                                0XFF5E00C0
 #undef CRL_APB_PL1_REF_CTRL_OFFSET 
 #define CRL_APB_PL1_REF_CTRL_OFFSET                                                0XFF5E00C4
-#undef CRL_APB_PL2_REF_CTRL_OFFSET 
-#define CRL_APB_PL2_REF_CTRL_OFFSET                                                0XFF5E00C8
 #undef CRL_APB_AMS_REF_CTRL_OFFSET 
 #define CRL_APB_AMS_REF_CTRL_OFFSET                                                0XFF5E0108
 #undef CRL_APB_DLL_REF_CTRL_OFFSET 
@@ -1778,48 +1776,6 @@
 #define CRL_APB_PL1_REF_CTRL_SRCSEL_DEFVAL                     0x00052000
 #define CRL_APB_PL1_REF_CTRL_SRCSEL_SHIFT                      0
 #define CRL_APB_PL1_REF_CTRL_SRCSEL_MASK                       0x00000007U
-
-/*
-* Clock active signal. Switch to 0 to disable the clock
-*/
-#undef CRL_APB_PL2_REF_CTRL_CLKACT_DEFVAL 
-#undef CRL_APB_PL2_REF_CTRL_CLKACT_SHIFT 
-#undef CRL_APB_PL2_REF_CTRL_CLKACT_MASK 
-#define CRL_APB_PL2_REF_CTRL_CLKACT_DEFVAL                     0x00052000
-#define CRL_APB_PL2_REF_CTRL_CLKACT_SHIFT                      24
-#define CRL_APB_PL2_REF_CTRL_CLKACT_MASK                       0x01000000U
-
-/*
-* 6 bit divider
-*/
-#undef CRL_APB_PL2_REF_CTRL_DIVISOR1_DEFVAL 
-#undef CRL_APB_PL2_REF_CTRL_DIVISOR1_SHIFT 
-#undef CRL_APB_PL2_REF_CTRL_DIVISOR1_MASK 
-#define CRL_APB_PL2_REF_CTRL_DIVISOR1_DEFVAL                   0x00052000
-#define CRL_APB_PL2_REF_CTRL_DIVISOR1_SHIFT                    16
-#define CRL_APB_PL2_REF_CTRL_DIVISOR1_MASK                     0x003F0000U
-
-/*
-* 6 bit divider
-*/
-#undef CRL_APB_PL2_REF_CTRL_DIVISOR0_DEFVAL 
-#undef CRL_APB_PL2_REF_CTRL_DIVISOR0_SHIFT 
-#undef CRL_APB_PL2_REF_CTRL_DIVISOR0_MASK 
-#define CRL_APB_PL2_REF_CTRL_DIVISOR0_DEFVAL                   0x00052000
-#define CRL_APB_PL2_REF_CTRL_DIVISOR0_SHIFT                    8
-#define CRL_APB_PL2_REF_CTRL_DIVISOR0_MASK                     0x00003F00U
-
-/*
-* 000 = IOPLL; 010 = RPLL; 011 = DPLL; (This signal may only be toggled af
-    * ter 4 cycles of the old clock and 4 cycles of the new clock. This is not
-    *  usually an issue, but designers must be aware.)
-*/
-#undef CRL_APB_PL2_REF_CTRL_SRCSEL_DEFVAL 
-#undef CRL_APB_PL2_REF_CTRL_SRCSEL_SHIFT 
-#undef CRL_APB_PL2_REF_CTRL_SRCSEL_MASK 
-#define CRL_APB_PL2_REF_CTRL_SRCSEL_DEFVAL                     0x00052000
-#define CRL_APB_PL2_REF_CTRL_SRCSEL_SHIFT                      0
-#define CRL_APB_PL2_REF_CTRL_SRCSEL_MASK                       0x00000007U
 
 /*
 * 6 bit divider
@@ -33327,12 +33283,6 @@
 #define IOU_SCNTRS_BASE_FREQUENCY_ID_REGISTER_OFFSET                               0XFF260020
 #undef IOU_SCNTRS_COUNTER_CONTROL_REGISTER_OFFSET 
 #define IOU_SCNTRS_COUNTER_CONTROL_REGISTER_OFFSET                                 0XFF260000
-#undef CRL_APB_BOOT_PIN_CTRL_OFFSET 
-#define CRL_APB_BOOT_PIN_CTRL_OFFSET                                               0XFF5E0250
-#undef CRL_APB_BOOT_PIN_CTRL_OFFSET 
-#define CRL_APB_BOOT_PIN_CTRL_OFFSET                                               0XFF5E0250
-#undef CRL_APB_BOOT_PIN_CTRL_OFFSET 
-#define CRL_APB_BOOT_PIN_CTRL_OFFSET                                               0XFF5E0250
 #undef GPIO_DIRM_0_OFFSET 
 #define GPIO_DIRM_0_OFFSET                                                         0XFF0A0204
 #undef GPIO_OEN_0_OFFSET 
@@ -34155,69 +34105,6 @@
 #define IOU_SCNTRS_COUNTER_CONTROL_REGISTER_EN_MASK            0x00000001U
 
 /*
-* Value driven onto the mode pins, when out_en = 1
-*/
-#undef CRL_APB_BOOT_PIN_CTRL_OUT_VAL_DEFVAL 
-#undef CRL_APB_BOOT_PIN_CTRL_OUT_VAL_SHIFT 
-#undef CRL_APB_BOOT_PIN_CTRL_OUT_VAL_MASK 
-#define CRL_APB_BOOT_PIN_CTRL_OUT_VAL_DEFVAL                   0x00000000
-#define CRL_APB_BOOT_PIN_CTRL_OUT_VAL_SHIFT                    8
-#define CRL_APB_BOOT_PIN_CTRL_OUT_VAL_MASK                     0x00000F00U
-
-/*
-* When 0, the pins will be inputs from the board to the PS. When 1, the PS
-    *  will drive these pins
-*/
-#undef CRL_APB_BOOT_PIN_CTRL_OUT_EN_DEFVAL 
-#undef CRL_APB_BOOT_PIN_CTRL_OUT_EN_SHIFT 
-#undef CRL_APB_BOOT_PIN_CTRL_OUT_EN_MASK 
-#define CRL_APB_BOOT_PIN_CTRL_OUT_EN_DEFVAL                    0x00000000
-#define CRL_APB_BOOT_PIN_CTRL_OUT_EN_SHIFT                     0
-#define CRL_APB_BOOT_PIN_CTRL_OUT_EN_MASK                      0x0000000FU
-
-/*
-* Value driven onto the mode pins, when out_en = 1
-*/
-#undef CRL_APB_BOOT_PIN_CTRL_OUT_VAL_DEFVAL 
-#undef CRL_APB_BOOT_PIN_CTRL_OUT_VAL_SHIFT 
-#undef CRL_APB_BOOT_PIN_CTRL_OUT_VAL_MASK 
-#define CRL_APB_BOOT_PIN_CTRL_OUT_VAL_DEFVAL                   0x00000000
-#define CRL_APB_BOOT_PIN_CTRL_OUT_VAL_SHIFT                    8
-#define CRL_APB_BOOT_PIN_CTRL_OUT_VAL_MASK                     0x00000F00U
-
-/*
-* When 0, the pins will be inputs from the board to the PS. When 1, the PS
-    *  will drive these pins
-*/
-#undef CRL_APB_BOOT_PIN_CTRL_OUT_EN_DEFVAL 
-#undef CRL_APB_BOOT_PIN_CTRL_OUT_EN_SHIFT 
-#undef CRL_APB_BOOT_PIN_CTRL_OUT_EN_MASK 
-#define CRL_APB_BOOT_PIN_CTRL_OUT_EN_DEFVAL                    0x00000000
-#define CRL_APB_BOOT_PIN_CTRL_OUT_EN_SHIFT                     0
-#define CRL_APB_BOOT_PIN_CTRL_OUT_EN_MASK                      0x0000000FU
-
-/*
-* Value driven onto the mode pins, when out_en = 1
-*/
-#undef CRL_APB_BOOT_PIN_CTRL_OUT_VAL_DEFVAL 
-#undef CRL_APB_BOOT_PIN_CTRL_OUT_VAL_SHIFT 
-#undef CRL_APB_BOOT_PIN_CTRL_OUT_VAL_MASK 
-#define CRL_APB_BOOT_PIN_CTRL_OUT_VAL_DEFVAL                   0x00000000
-#define CRL_APB_BOOT_PIN_CTRL_OUT_VAL_SHIFT                    8
-#define CRL_APB_BOOT_PIN_CTRL_OUT_VAL_MASK                     0x00000F00U
-
-/*
-* When 0, the pins will be inputs from the board to the PS. When 1, the PS
-    *  will drive these pins
-*/
-#undef CRL_APB_BOOT_PIN_CTRL_OUT_EN_DEFVAL 
-#undef CRL_APB_BOOT_PIN_CTRL_OUT_EN_SHIFT 
-#undef CRL_APB_BOOT_PIN_CTRL_OUT_EN_MASK 
-#define CRL_APB_BOOT_PIN_CTRL_OUT_EN_DEFVAL                    0x00000000
-#define CRL_APB_BOOT_PIN_CTRL_OUT_EN_SHIFT                     0
-#define CRL_APB_BOOT_PIN_CTRL_OUT_EN_MASK                      0x0000000FU
-
-/*
 * Direction mode 0: input 1: output Each bit configures the corresponding
     * pin within the 32-bit bank
 */
@@ -34335,90 +34222,6 @@
 #define GPIO_MASK_DATA_0_LSW_DATA_0_LSW_DEFVAL                 0x00000000
 #define GPIO_MASK_DATA_0_LSW_DATA_0_LSW_SHIFT                  0
 #define GPIO_MASK_DATA_0_LSW_DATA_0_LSW_MASK                   0x0000FFFFU
-#undef PMU_GLOBAL_REQ_PWRDWN_INT_EN_OFFSET 
-#define PMU_GLOBAL_REQ_PWRDWN_INT_EN_OFFSET                                        0XFFD80218
-#undef PMU_GLOBAL_REQ_PWRDWN_TRIG_OFFSET 
-#define PMU_GLOBAL_REQ_PWRDWN_TRIG_OFFSET                                          0XFFD80220
-
-/*
-* Power-down Request Interrupt Enable for GPU PP0
-*/
-#undef PMU_GLOBAL_REQ_PWRDWN_INT_EN_PP0_DEFVAL 
-#undef PMU_GLOBAL_REQ_PWRDWN_INT_EN_PP0_SHIFT 
-#undef PMU_GLOBAL_REQ_PWRDWN_INT_EN_PP0_MASK 
-#define PMU_GLOBAL_REQ_PWRDWN_INT_EN_PP0_DEFVAL                0x00000000
-#define PMU_GLOBAL_REQ_PWRDWN_INT_EN_PP0_SHIFT                 4
-#define PMU_GLOBAL_REQ_PWRDWN_INT_EN_PP0_MASK                  0x00000010U
-
-/*
-* Power-down Request Interrupt Enable for GPU PP1
-*/
-#undef PMU_GLOBAL_REQ_PWRDWN_INT_EN_PP1_DEFVAL 
-#undef PMU_GLOBAL_REQ_PWRDWN_INT_EN_PP1_SHIFT 
-#undef PMU_GLOBAL_REQ_PWRDWN_INT_EN_PP1_MASK 
-#define PMU_GLOBAL_REQ_PWRDWN_INT_EN_PP1_DEFVAL                0x00000000
-#define PMU_GLOBAL_REQ_PWRDWN_INT_EN_PP1_SHIFT                 5
-#define PMU_GLOBAL_REQ_PWRDWN_INT_EN_PP1_MASK                  0x00000020U
-
-/*
-* Power-down Request Interrupt Enable for ACPU2
-*/
-#undef PMU_GLOBAL_REQ_PWRDWN_INT_EN_ACPU2_DEFVAL 
-#undef PMU_GLOBAL_REQ_PWRDWN_INT_EN_ACPU2_SHIFT 
-#undef PMU_GLOBAL_REQ_PWRDWN_INT_EN_ACPU2_MASK 
-#define PMU_GLOBAL_REQ_PWRDWN_INT_EN_ACPU2_DEFVAL              0x00000000
-#define PMU_GLOBAL_REQ_PWRDWN_INT_EN_ACPU2_SHIFT               2
-#define PMU_GLOBAL_REQ_PWRDWN_INT_EN_ACPU2_MASK                0x00000004U
-
-/*
-* Power-down Request Interrupt Enable for ACPU3
-*/
-#undef PMU_GLOBAL_REQ_PWRDWN_INT_EN_ACPU3_DEFVAL 
-#undef PMU_GLOBAL_REQ_PWRDWN_INT_EN_ACPU3_SHIFT 
-#undef PMU_GLOBAL_REQ_PWRDWN_INT_EN_ACPU3_MASK 
-#define PMU_GLOBAL_REQ_PWRDWN_INT_EN_ACPU3_DEFVAL              0x00000000
-#define PMU_GLOBAL_REQ_PWRDWN_INT_EN_ACPU3_SHIFT               3
-#define PMU_GLOBAL_REQ_PWRDWN_INT_EN_ACPU3_MASK                0x00000008U
-
-/*
-* Power-down Request Trigger for GPU PP0
-*/
-#undef PMU_GLOBAL_REQ_PWRDWN_TRIG_PP0_DEFVAL 
-#undef PMU_GLOBAL_REQ_PWRDWN_TRIG_PP0_SHIFT 
-#undef PMU_GLOBAL_REQ_PWRDWN_TRIG_PP0_MASK 
-#define PMU_GLOBAL_REQ_PWRDWN_TRIG_PP0_DEFVAL                  0x00000000
-#define PMU_GLOBAL_REQ_PWRDWN_TRIG_PP0_SHIFT                   4
-#define PMU_GLOBAL_REQ_PWRDWN_TRIG_PP0_MASK                    0x00000010U
-
-/*
-* Power-down Request Trigger for GPU PP1
-*/
-#undef PMU_GLOBAL_REQ_PWRDWN_TRIG_PP1_DEFVAL 
-#undef PMU_GLOBAL_REQ_PWRDWN_TRIG_PP1_SHIFT 
-#undef PMU_GLOBAL_REQ_PWRDWN_TRIG_PP1_MASK 
-#define PMU_GLOBAL_REQ_PWRDWN_TRIG_PP1_DEFVAL                  0x00000000
-#define PMU_GLOBAL_REQ_PWRDWN_TRIG_PP1_SHIFT                   5
-#define PMU_GLOBAL_REQ_PWRDWN_TRIG_PP1_MASK                    0x00000020U
-
-/*
-* Power-down Request Trigger for ACPU2
-*/
-#undef PMU_GLOBAL_REQ_PWRDWN_TRIG_ACPU2_DEFVAL 
-#undef PMU_GLOBAL_REQ_PWRDWN_TRIG_ACPU2_SHIFT 
-#undef PMU_GLOBAL_REQ_PWRDWN_TRIG_ACPU2_MASK 
-#define PMU_GLOBAL_REQ_PWRDWN_TRIG_ACPU2_DEFVAL                0x00000000
-#define PMU_GLOBAL_REQ_PWRDWN_TRIG_ACPU2_SHIFT                 2
-#define PMU_GLOBAL_REQ_PWRDWN_TRIG_ACPU2_MASK                  0x00000004U
-
-/*
-* Power-down Request Trigger for ACPU3
-*/
-#undef PMU_GLOBAL_REQ_PWRDWN_TRIG_ACPU3_DEFVAL 
-#undef PMU_GLOBAL_REQ_PWRDWN_TRIG_ACPU3_SHIFT 
-#undef PMU_GLOBAL_REQ_PWRDWN_TRIG_ACPU3_MASK 
-#define PMU_GLOBAL_REQ_PWRDWN_TRIG_ACPU3_DEFVAL                0x00000000
-#define PMU_GLOBAL_REQ_PWRDWN_TRIG_ACPU3_SHIFT                 3
-#define PMU_GLOBAL_REQ_PWRDWN_TRIG_ACPU3_MASK                  0x00000008U
 #undef FPD_SLCR_SECURE_SLCR_DPDMA_OFFSET 
 #define FPD_SLCR_SECURE_SLCR_DPDMA_OFFSET                                          0XFD690040
 #undef FPD_SLCR_SECURE_SLCR_PCIE_OFFSET 
@@ -35203,15 +35006,15 @@
 #define SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_LCL_SEL_MASK       0x00000080U
 
 /*
-* Bit 3 of lane 1 ref clock mux one hot sel. Set to 1 to select lane 3 sli
+* Bit 0 of lane 1 ref clock mux one hot sel. Set to 1 to select lane 0 sli
     * cer output from ref clock network
 */
-#undef SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_SEL_3_DEFVAL 
-#undef SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_SEL_3_SHIFT 
-#undef SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_SEL_3_MASK 
-#define SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_SEL_3_DEFVAL       0x00000080
-#define SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_SEL_3_SHIFT        3
-#define SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_SEL_3_MASK         0x00000008U
+#undef SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_SEL_0_DEFVAL 
+#undef SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_SEL_0_SHIFT 
+#undef SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_SEL_0_MASK 
+#define SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_SEL_0_DEFVAL       0x00000080
+#define SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_SEL_0_SHIFT        0
+#define SERDES_L0_L1_REF_CLK_SEL_L1_REF_CLK_SEL_0_MASK         0x00000001U
 
 /*
 * Sel of lane 2 ref clock local mux. Set to 1 to select lane 1 slicer outp
@@ -38328,6 +38131,12 @@
 #define CRF_APB_RST_FPD_TOP_OFFSET                                                 0XFD1A0100
 #undef CRL_APB_RST_LPD_TOP_OFFSET 
 #define CRL_APB_RST_LPD_TOP_OFFSET                                                 0XFF5E023C
+#undef LPD_SLCR_AFI_FS_OFFSET 
+#define LPD_SLCR_AFI_FS_OFFSET                                                     0XFF419000
+#undef AFIFM2_AFIFM_RDCTRL_OFFSET 
+#define AFIFM2_AFIFM_RDCTRL_OFFSET                                                 0XFD380000
+#undef AFIFM2_AFIFM_WRCTRL_OFFSET 
+#define AFIFM2_AFIFM_WRCTRL_OFFSET                                                 0XFD380014
 
 /*
 * AF_FM0 block level reset
@@ -38398,6 +38207,40 @@
 #define CRL_APB_RST_LPD_TOP_AFI_FM6_RESET_DEFVAL               0x00188FDF
 #define CRL_APB_RST_LPD_TOP_AFI_FM6_RESET_SHIFT                19
 #define CRL_APB_RST_LPD_TOP_AFI_FM6_RESET_MASK                 0x00080000U
+
+/*
+* Select the 32/64/128-bit data width selection for the Slave 0 00: 32-bit
+    *  AXI data width (default) 01: 64-bit AXI data width 10: 128-bit AXI data
+    *  width 11: reserved
+*/
+#undef LPD_SLCR_AFI_FS_DW_SS2_SEL_DEFVAL 
+#undef LPD_SLCR_AFI_FS_DW_SS2_SEL_SHIFT 
+#undef LPD_SLCR_AFI_FS_DW_SS2_SEL_MASK 
+#define LPD_SLCR_AFI_FS_DW_SS2_SEL_DEFVAL                      0x00000200
+#define LPD_SLCR_AFI_FS_DW_SS2_SEL_SHIFT                       8
+#define LPD_SLCR_AFI_FS_DW_SS2_SEL_MASK                        0x00000300U
+
+/*
+* Configures the Read Channel Fabric interface width. 2'b11 : Reserved 2'b
+    * 10 : 32-bit Fabric 2'b01 : 64-bit enabled 2'b00 : 128-bit enabled
+*/
+#undef AFIFM2_AFIFM_RDCTRL_FABRIC_WIDTH_DEFVAL 
+#undef AFIFM2_AFIFM_RDCTRL_FABRIC_WIDTH_SHIFT 
+#undef AFIFM2_AFIFM_RDCTRL_FABRIC_WIDTH_MASK 
+#define AFIFM2_AFIFM_RDCTRL_FABRIC_WIDTH_DEFVAL                0x000003B0
+#define AFIFM2_AFIFM_RDCTRL_FABRIC_WIDTH_SHIFT                 0
+#define AFIFM2_AFIFM_RDCTRL_FABRIC_WIDTH_MASK                  0x00000003U
+
+/*
+* Configures the Write Channel Fabric interface width. 2'b11 : Reserved 2'
+    * b10 : 32-bit Fabric 2'b01 : 64-bit enabled 2'b00 : 128-bit enabled
+*/
+#undef AFIFM2_AFIFM_WRCTRL_FABRIC_WIDTH_DEFVAL 
+#undef AFIFM2_AFIFM_WRCTRL_FABRIC_WIDTH_SHIFT 
+#undef AFIFM2_AFIFM_WRCTRL_FABRIC_WIDTH_MASK 
+#define AFIFM2_AFIFM_WRCTRL_FABRIC_WIDTH_DEFVAL                0x000003B0
+#define AFIFM2_AFIFM_WRCTRL_FABRIC_WIDTH_SHIFT                 0
+#define AFIFM2_AFIFM_WRCTRL_FABRIC_WIDTH_MASK                  0x00000003U
 #undef GPIO_MASK_DATA_5_MSW_OFFSET 
 #define GPIO_MASK_DATA_5_MSW_OFFSET                                                0XFF0A002C
 #undef GPIO_DIRM_5_OFFSET 
