@@ -2330,7 +2330,7 @@ CONFIG_libgpiod=y
 #
 # coreutils 
 #
-# CONFIG_coreutils is not set
+CONFIG_coreutils=y
 # CONFIG_coreutils-dbg is not set
 # CONFIG_coreutils-dev is not set
 
