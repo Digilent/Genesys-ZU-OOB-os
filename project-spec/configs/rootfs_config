@@ -759,7 +759,7 @@ CONFIG_openssh-sftp-server=y
 #
 # hdparm 
 #
-# CONFIG_hdparm is not set
+CONFIG_hdparm=y
 # CONFIG_hdparm-dev is not set
 # CONFIG_wiper is not set
 # CONFIG_hdparm-dbg is not set
