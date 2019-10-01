@@ -339,7 +339,7 @@ CONFIG_mtd-utils=y
 #
 # usbutils 
 #
-# CONFIG_usbutils is not set
+CONFIG_usbutils=y
 # CONFIG_usbutils-dev is not set
 # CONFIG_usbutils-dbg is not set
 
@@ -1764,14 +1764,14 @@ CONFIG_libgpiod=y
 #
 # libusb-compat 
 #
-# CONFIG_libusb-compat is not set
+CONFIG_libusb-compat=y
 # CONFIG_libusb-compat-dbg is not set
 # CONFIG_libusb-compat-dev is not set
 
 #
 # libusb1 
 #
-# CONFIG_libusb1 is not set
+CONFIG_libusb1=y
 # CONFIG_libusb1-dev is not set
 # CONFIG_libusb1-dbg is not set
 
