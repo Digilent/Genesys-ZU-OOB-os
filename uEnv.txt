@@ -47,10 +47,6 @@ tftp_boot=tftpboot ${clobstart} ${tbd}/image.ub && bootm ${clobstart};
 # Same as default but override allowing bootargs also discard ramdisk
 tftp_r_boot=tftpboot ${clobstart} ${tbd}/image.ub && bootm $clobstart:kernel@1 - $clobstart:fdt@system-top.dtb $bootargs;
 
-
-
-
-
 # AVAILABLE BOOT COMMANDS
 
 # Load bitstream from mmc then boot default
@@ -65,5 +61,13 @@ boot_tftp=run tftp_fpga && run tftp_boot
 # Load bitstream from tftp then boot image.ub from tftp then use sd rootfs instead of initramfs
 boot_tftp_r=run tftp_fpga && run tftp_r_boot
 
+# BOOTMENU
+bootmenu_0=Boot 1. MMC rootfs=run boot_mmc_r
+bootmenu_1=Boot 2. MMC initramfs=run boot_mmc
+bootmenu_2=Boot 3. TFTP initramfs=run boot_tftp
+bootmenu_3=Boot 4. TFTP rootfs=run boot_tftp_r
+bootmenu_4=Reset board=reset
+bootmenu_5=U-Boot boot order=boot
+
 #Command to run after loading uEnv.txt from mmc
-uenvcmd=run boot_mmc_r
+uenvcmd=mmc rescan; bootmenu 20
