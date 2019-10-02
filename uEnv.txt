@@ -1,6 +1,69 @@
-bootdelay=0
-serverip=10.113.0.188
-tftp_boot=tftpboot 0x10000000 zuca-3eg/image.ub && bootm 0x10000000;
-tftp_fpga=tftpboot 0x10000000 zuca-3eg/system.bit && fpga load zu5 0x10000000 $filesize
+#VARIABLES
+
+# files to deploy: BOOT.BIN, image.ub, system.bit, uEnv.txt(this file)
+
+# FPGA device name
+fdn=zu3eg
+bitstream_file=system.bit
+
+# TFTP board directory
+tbd=zuca-3eg
+#Kernel command line: use mmc second partition as rootfs [Do not surround with double quotes]
+bootargs=earlycon console=ttyPS0,115200 clk_ignore_unused root=/dev/mmcblk0p2 rw rootwait;
+## Manual commands
+# load mmc 0:1 ${clobstart} image.ub
+# env set bootargs "earlycon console=ttyPS0,115200 clk_ignore_unused root=/dev/mmcblk0p2 rw rootwait";
+# bootm $clobstart:kernel@1 - $clobstart:fdt@system-top.dtb $bootargs
+
+
+#MMC
+# Load bitstream(system.bit) in FPGA. Usable to override bitstream included in BOOT.bin
+mmc_fpga=load mmc 0:1 ${clobstart} $bitstream_file && fpga load $fdn ${clobstart} $filesize;
+
+# Default without any customizations as built by petalinux
+mmc_boot=load mmc 0:1 ${clobstart} image.ub && bootm ${clobstart};
+
+# Same as default but explicit
+mmc_x_boot_clean=load mmc 0:1 ${clobstart} image.ub && bootm $clobstart:kernel@1 $clobstart:ramdisk@1 $clobstart:fdt@system-top.dtb
+
+# Same as default but explicit allowing bootargs override
+mmc_x_boot=load mmc 0:1 ${clobstart} image.ub && bootm $clobstart:kernel@1 $clobstart:ramdisk@1 $clobstart:fdt@system-top.dtb $bootargs;
+
+# Same as default but override allowing bootargs also discard ramdisk
+mmc_r_boot=load mmc 0:1 ${clobstart} image.ub && bootm $clobstart:kernel@1 - $clobstart:fdt@system-top.dtb $bootargs;
+
+
+
+
+#TFTP
+serverip=10.113.0.91
+
+# Load bitstream(system.bit) in FPGA from TFTP. Usable to override bitstream included in BOOT.bin
+tftp_fpga=tftpboot ${clobstart} ${tbd}/$bitstream_file && fpga load ${fdn} ${clobstart} $filesize
+
+# Default without any customizations as built by petalinux
+tftp_boot=tftpboot ${clobstart} ${tbd}/image.ub && bootm ${clobstart};
+
+# Same as default but override allowing bootargs also discard ramdisk
+tftp_r_boot=tftpboot ${clobstart} ${tbd}/image.ub && bootm $clobstart:kernel@1 - $clobstart:fdt@system-top.dtb $bootargs;
+
+
+
+
+
+# AVAILABLE BOOT COMMANDS
+
+# Load bitstream from mmc then boot default
+boot_mmc=run mmc_fpga && run mmc_boot
+
+# Load bitstream from mmc then boot default use sd rootfs instead of initramfs
+boot_mmc_r=run mmc_fpga && run mmc_r_boot
+
+# Load bitstream from tftp then boot image.ub from tftp
 boot_tftp=run tftp_fpga && run tftp_boot
-uenvcmd=env print tftp_fpga && run boot_tftp;
+
+# Load bitstream from tftp then boot image.ub from tftp then use sd rootfs instead of initramfs
+boot_tftp_r=run tftp_fpga && run tftp_r_boot
+
+#Command to run after loading uEnv.txt from mmc
+uenvcmd=run boot_mmc_r
