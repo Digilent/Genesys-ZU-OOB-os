@@ -21,7 +21,7 @@ btn() {
 }
 
 debug() {
-	echo debug: "$1"
+	echo debug: "$1" > /dev/ttyPS0
 }
 
 test1(){
