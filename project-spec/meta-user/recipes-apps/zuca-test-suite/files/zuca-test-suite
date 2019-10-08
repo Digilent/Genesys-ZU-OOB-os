@@ -5,9 +5,22 @@ bt_serial=/dev/ttyPS1
 stty -F $bt_serial 115200 cs8 -cstopb -parenb -echo
 
 led(){
-	uio-test -t led -
+	uio-test -t led -i $1
 }
-debug(){
+
+timeout_test(){
+	sleep $1;
+	kill $2;
+}
+
+btn() {
+	uio-test -t btn -i C&
+	test_pid=$!
+	timeout_test 10 $test_pid &
+	wait $test_pid
+}
+
+debug() {
 	echo debug: "$1"
 }
 
@@ -35,7 +48,6 @@ sysmon(){
 
 run_command () {
 	cmd=$1
-	#echo "$cmd you mean" > $bt_serial;
 	$cmd;
 	rc=$?
 	[ $rc -eq 0 ] && echo PASS > $bt_serial || echo FAIL > $bt_serial;
