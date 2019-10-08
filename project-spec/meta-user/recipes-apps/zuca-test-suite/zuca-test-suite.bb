@@ -12,9 +12,16 @@ SRC_URI = "file://zuca-test-suite \
 	file://sysmon \
 	file://usb-bist \
 	file://usb-reset \
+	file://zuca-init \
 	"
 
+inherit update-rc.d
+
 S = "${WORKDIR}"
+
+inherit update-rc.d
+INITSCRIPT_NAME = "zuca-init"
+INITSCRIPT_PARAMS = "start 99 S ."
 
 do_install() {
 	install -d ${D}/${bindir}
@@ -23,4 +30,10 @@ do_install() {
 	install -m 0755 ${S}/sysmon ${D}/${bindir}
 	install -m 0755 ${S}/usb-bist ${D}/${bindir}
 	install -m 0755 ${S}/usb-reset ${D}/${bindir}
+
+	#config
+	install -d ${D}${sysconfdir}/init.d
+	install -m 0755 ${S}/zuca-init ${D}${sysconfdir}/init.d/zuca-init
 }
+
+FILES_${PN} += "${sysconfdir}/*"

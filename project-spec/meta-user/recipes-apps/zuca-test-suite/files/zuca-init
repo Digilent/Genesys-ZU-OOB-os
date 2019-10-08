@@ -1,0 +1,33 @@
+#!/bin/sh
+SERVICE=/usr/bin/zuca-test-suite
+start()
+{
+	echo " Starting zuca-test-suite"
+	start-stop-daemon -S -o --background -x $SERVICE
+}
+
+stop ()
+{
+	echo " Stoping zuca-test-suite"
+	start-stop-daemon -K -x $SERVICE
+}
+
+restart()
+{
+	stop
+	start
+}
+
+[ -e $SERVICE ] || exit 1
+	case "$1" in
+		start)
+			start; ;;
+		stop)
+			stop; ;;
+		restart)
+			restart; ;;
+		*)
+			echo "Usage: $0 {start|stop|restart}"
+			exit 1
+	esac
+exit $?
