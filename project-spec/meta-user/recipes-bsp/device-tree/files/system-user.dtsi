@@ -19,8 +19,7 @@
 };
 
 &spi0 {
-
-	gpiom1: gpio@1 {
+	gpioexp: gpio@1 {
 		compatible = "microchip,mcp23s08";
 		gpio-controller;
 		#reset-cells = <1>;
@@ -33,16 +32,15 @@
 		reg = <1>;
 		spi-max-frequency = <10000000>;
 	};
-	/*wilc_spi@0 {
-			compatible = "microchip,wilc1000", "microchip,wilc3000";
-			spi-max-frequency = <48000000>;
-			reg = <0>;
-			irq-gpios = <&gpiom1 1 0>;
-			reset-gpios = <&gpiom1 2 0>;
-			chip_en-gpios = <&gpiom1 0 0>;
-			status = "okay";
-		};*/
-
+	wilc_spi@0 {
+		compatible = "microchip,wilc1000", "microchip,wilc3000";
+		spi-max-frequency = <48000000>;
+		reg = <0>;
+		irq-gpios = <&gpioexp 1 0>;
+		reset-gpios = <&gpioexp 2 0>;
+		chip_en-gpios = <&gpioexp 0 0>;
+		status = "okay";
+	};
 };
 
 /*&usb0 {
