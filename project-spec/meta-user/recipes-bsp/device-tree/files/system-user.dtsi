@@ -242,7 +242,7 @@ EMIO[0] which is line 78.
 	dr_mode = "host";
 	snps,usb3_lpm_capable;
 	phy-names = "usb3-phy";
-	phys = <&lane1 4 0 3 100000000>;
+	phys = <&lane1 4 0 0 100000000>;
 	snps,dis_u2_susphy_quirk ;
 	snps,dis_u3_susphy_quirk ;
 	maximum-speed = "super-speed";
