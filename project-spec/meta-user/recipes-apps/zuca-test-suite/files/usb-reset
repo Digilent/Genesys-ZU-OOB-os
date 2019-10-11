@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [[ $EUID != 0 ]] ; then
+  echo This must be run as root!
+  exit 1
+fi
+
+USB_DRIVERS_PATH="/sys/bus/usb/drivers/usb"
+
+if ! cd $USB_DRIVERS_PATH ; then
+  echo Weird error. Failed to change directory to $USB_DRIVERS_PATH
+  exit 1
+fi
+
+echo Resetting devices from $USB_DRIVERS_PATH...
+
+for i in ?-? ; do
+  echo "$i"
+  echo -n "$i" > unbind
+  echo -n "$i" > bind
+done
