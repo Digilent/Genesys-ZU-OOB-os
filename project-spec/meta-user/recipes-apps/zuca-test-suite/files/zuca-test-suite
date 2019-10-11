@@ -2,15 +2,19 @@
 
 #bt_serial=$1
 bt_serial=/dev/ttyPS1
+bt_serial_log=/dev/ttyPS0
+
+2>$bt_serial_log #redirect stderr
+
 stty -F $bt_serial 115200 cs8 -cstopb -parenb -echo
 
 led(){
-	uio-test -t led -i $1
+	uio-test -t led -i $1 > $bt_serial_log
 }
 
 timeout_test(){
-	sleep $1;
-	kill $2;
+	sleep $1 > $bt_serial_log
+	kill $2 > bt_serial_log;
 }
 
 btn() {
@@ -48,11 +52,24 @@ sysmon(){
 
 run_command () {
 	cmd=$1
+	cmd=$(echo -e -n $cmd | sed 's/\r$//')
 	$cmd;
 	rc=$?
-	[ $rc -eq 0 ] && echo PASS > $bt_serial || echo FAIL > $bt_serial;
-	[ $rc -eq 0 ] && debug "$cmd sucessful run" || debug "Command '$cmd' is not implemented! code:$rc";
-
+	debug "code:$rc";
+	case $rc in
+		0)
+			echo PASS > $bt_serial
+			debug "$cmd ok";
+			;;
+		127)
+			echo FAIL > $bt_serial;
+			debug "Command '$cmd' is not implemented!";
+			;;
+		*)
+			echo FAIL > $bt_serial;
+			debug "Command '$cmd' unknown issue:$rc";
+			;;
+	esac
 }
-
+echo RUNNING > $bt_serial_log
 while read command; do run_command "$command"; done < $bt_serial;
