@@ -9,12 +9,16 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 SRC_URI = "file://zuca-test-suite \
 	file://uio-test \
+	file://usb-bist \
+	file://usb-reset \
 	"
 
 S = "${WORKDIR}"
 
 do_install() {
-	     install -d ${D}/${bindir}
-	     install -m 0755 ${S}/zuca-test-suite ${D}/${bindir}
-	     install -m 0755 ${S}/uio-test ${D}/${bindir}
+	install -d ${D}/${bindir}
+	install -m 0755 ${S}/zuca-test-suite ${D}/${bindir}
+	install -m 0755 ${S}/uio-test ${D}/${bindir}
+	install -m 0755 ${S}/usb-bist ${D}/${bindir}
+	install -m 0755 ${S}/usb-reset ${D}/${bindir}
 }

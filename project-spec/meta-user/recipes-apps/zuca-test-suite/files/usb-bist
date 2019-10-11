@@ -1,0 +1,198 @@
+#!/bin/sh
+
+# Run this script as root
+
+# For more information regarding USB on Linux: www.linux-usb.org/FAQ.html
+# For more information regarding USB Classes: https://en.wikipedia.ort/wiki/USB
+
+# How to call this script?
+# Call this script with only one parameter: usb-bist <port_number>
+# <port_number> between 1 and 5
+# 1 - port 1(up) of USB 2.0 stacked connector
+# 2 - port 2(down) of USB 2.0 stacked connector
+# 3 - pcie connector interface 0 and 1
+# 4 - Type-C connector USB 2.0
+# 5 - Type-C connector USB 3.0
+
+# This script is used to test the USB ports on Genesys ZU.
+# The validation steps are the following:
+# 1. Verify that the devices appears under the right topology
+# 2. Verify that the devices have the correct bInterfaceClass
+# 3. Verify that the port to which the devices are connected have the corrent speed
+
+# Return value: 0 for success; 1 for failure
+
+# Reset all USB devices. We perform this operation because is some circumstances
+# a USB 3.0 device may be connected to USB 2.0 bus. In such a case the test will
+# fail. By resetting all USB devices we force the system to re-enumerate all
+# devices.
+usb-reset
+
+# We need a delay here to establish a correct connection with all USB devices.
+sleep 2
+
+ARGS=1 # Script requires 1 argument
+MASS_STORAGE_DEVICE="08"
+WIRELESS_CONTROLLER="e0"
+
+USB_DEVICES_PATH="/sys/bus/usb/devices/"
+# Bus 3 root hub -> embedded microchip hub -> port 1
+USB_BUS_3_PORT_1="3-1.1"
+# Bus 3 root hub -> embedded microchip hub -> port 2
+USB_BUS_3_PORT_2="3-1.2"
+# Bus 3 root hub -> embedded microchip hub -> port 3 (miniPCIe)
+USB_BUS_3_PORT_3="3-1.3"
+# Bus 1 root hub -> port 1 (Type-C USB 2.0)
+USB_BUS_1_PORT_1="1-1"
+# Bus 2 root hub -> port 1 (Type-C USB 3.0)
+USB_BUS_2_PORT_1="2-1"
+# Bus 3 root hub -> embedded microchip hub -> port 1 -> USB interface 0
+USB_BUS_3_PORT_1_INTERFACE="3-1.1:1.0"
+# Bus 3 root hub -> embedded microchip hub -> port 2 -> USB interface 0
+USB_BUS_3_PORT_2_INTERFACE="3-1.2:1.0"
+# Bus 3 root hub -> embedded microchip hub -> port 3 -> USB interface 0
+USB_BUS_3_PORT_3_INTERFACE_0="3-1.3:1.0"
+# Bus 3 root hub -> embedded microchip hub -> port 3 -> USB interface 1
+USB_BUS_3_PORT_3_INTERFACE_1="3-1.3:1.1"
+# Bus 1 root hub -> port 1 (Type-C USB 2.0) -> USB interface 0
+USB_BUS_1_PORT_1_INTERFACE="1-1:1.0"
+# Bus 2 root hub -> port 1 (Type-C USB 3.0) -> USB interface 0
+USB_BUS_2_PORT_1_INTERFACE="2-1:1.0"
+
+if [ $# -ne "$ARGS" ]; then
+	echo "Wrong number of arguments!"
+	exit 4
+fi
+
+case "$1" in
+	1)
+		# Verify if there is any device connected to bus 3 root hub -> hub -> port 1
+		if [ -d "${USB_DEVICES_PATH}${USB_BUS_3_PORT_1_INTERFACE}" ]; then
+			usb_2_port_1_device_class=$(<"${USB_DEVICES_PATH}${USB_BUS_3_PORT_1_INTERFACE}/bInterfaceClass")
+			if [ "$usb_2_port_1_device_class" != "$MASS_STORAGE_DEVICE" ]; then
+				echo "The USB device connected to bus 3 root hub -> embedded hub -> port 1 is not a Mass Storage device!"
+				echo "We detect a ${usb_2_port_1_device_class} class"
+				exit 2
+			fi
+
+			usb_2_port_1_device_speed=$(<"${USB_DEVICES_PATH}${USB_BUS_3_PORT_1}/speed")
+			if [ "$usb_2_port_1_device_speed" != "480" ]; then
+				echo "The USB device connected to bus 3 root hub -> embedded hub -> port 1 has wrong speed configuration!"
+				echo "We detect ${usb_2_port_1_device_speed} speed"
+				exit 3
+			fi
+		else
+			echo "No device connected to bus 3 root hub -> embedded hub -> port 1"
+			exit 1
+		fi
+		;;
+	2)
+		# Verify if there is any device connected to bus 3 root hub -> hub -> port 2
+		if [ -d "${USB_DEVICES_PATH}${USB_BUS_3_PORT_2_INTERFACE}" ]; then
+			usb_2_port_2_device_class=$(<"${USB_DEVICES_PATH}${USB_BUS_3_PORT_2_INTERFACE}/bInterfaceClass")
+			if [ "$usb_2_port_2_device_class" != "$MASS_STORAGE_DEVICE" ]; then
+				echo "The USB device connected to bus 3 root hub -> embedded hub -> port 2 is not a Mass Storage device!"
+				echo "We detect a ${usb_2_port_2_device_class} class"
+				exit 2
+			fi
+
+			usb_2_port_2_device_speed=$(<"${USB_DEVICES_PATH}${USB_BUS_3_PORT_2}/speed")
+			if [ "$usb_2_port_2_device_speed" != "480" ]; then
+				echo "The USB device connected to bus 3 root hub -> embedded hub -> port 2 has wrong speed configuration!"
+				echo "We detect ${usb_2_port_2_device_speed} speed"
+				exit 3
+			fi
+		else
+			echo "No device connected to bus 3 root hub -> embedded hub -> port 2"
+			exit 1
+		fi
+		;;
+	3)
+		# Verify if there is any device connected to bus 3 root hub -> hub -> port 3 -> Interface 0
+		if [ -d "${USB_DEVICES_PATH}${USB_BUS_3_PORT_3_INTERFACE_0}" ]; then
+			usb_2_port_3_if_0_device_class=$(<"${USB_DEVICES_PATH}${USB_BUS_3_PORT_3_INTERFACE_0}/bInterfaceClass")
+			if [ "$usb_2_port_3_if_0_device_class" != "$WIRELESS_CONTROLLER" ]; then
+				echo "The USB device connected to bus 3 root hub -> embedded hub -> port 3 interface 0 is not a Wireless Controller device!"
+				echo "We detect a ${usb_2_port_3_if_0_device_class} class"
+				exit 2
+			fi
+
+			usb_2_port_3_if_0_device_speed=$(<"${USB_DEVICES_PATH}${USB_BUS_3_PORT_3}/speed")
+			if [ "$usb_2_port_3_if_0_device_speed" != "12" ]; then
+				echo "The USB device connected to bus 3 root hub -> embedded hub -> port 3 interface 0 has wrong speed configuration!"
+				echo "We detect ${usb_2_port_3_if_0_device_speed} speed"
+				exit 3
+			fi
+		else
+			echo "No device connected to bus 3 root hub -> embedded hub -> port 3 -> interface 0"
+			exit 1
+		fi
+
+		# Verify if there is any device connected to bus 3 root hub -> hub -> port 3 -> Interface 1
+		if [ -d "${USB_DEVICES_PATH}${USB_BUS_3_PORT_3_INTERFACE_1}" ]; then
+			usb_2_port_3_if_1_device_class=$(<"${USB_DEVICES_PATH}${USB_BUS_3_PORT_3_INTERFACE_1}/bInterfaceClass")
+			if [ "$usb_2_port_3_if_1_device_class" != "$WIRELESS_CONTROLLER" ]; then
+				echo "The USB device connected to bus 3 root hub -> embedded hub -> port 3 interface 1 is not a Wireless Controller device!"
+				echo "We detect a ${usb_2_port_3_if_1_device_class} class"
+				exit 2
+			fi
+
+			usb_2_port_3_if_1_device_speed=$(<"${USB_DEVICES_PATH}${USB_BUS_3_PORT_3}/speed")
+			if [ "$usb_2_port_3_if_1_device_speed" != "12" ]; then
+				echo "The USB device connected to bus 3 root hub -> embedded hub -> port 3 interface 1 has wrong speed configuration!"
+				echo "We detect ${usb_2_port_3_if_1_device_speed} speed"
+				exit 3
+			fi
+		else
+			echo "No device connected to bus 3 root hub -> embedded hub -> port 3 -> interface 1"
+			exit 1
+		fi
+		;;
+	4)
+		# We want to test if there is a USB 2.0 stick in Type-C Connector
+		if [ -d "${USB_DEVICES_PATH}${USB_BUS_1_PORT_1_INTERFACE}" ]; then
+			usbc_2_port_1_device_class=$(<"${USB_DEVICES_PATH}${USB_BUS_1_PORT_1_INTERFACE}/bInterfaceClass")
+			if [ "$usbc_2_port_1_device_class" != "$MASS_STORAGE_DEVICE" ]; then
+				echo "The USB device connected to bus 1 root hub -> port 1 is not a Mass Storage device!"
+				echo "We detect a ${usbc_2_port_1_device_class} class"
+				exit 2
+			fi
+
+			usbc_2_port_1_device_speed=$(<"${USB_DEVICES_PATH}${USB_BUS_1_PORT_1}/speed")
+			if [ "$usbc_2_port_1_device_speed" != "480" ]; then
+				echo "The USB device connected to bus 1 root hub -> port 1 has wrong speed configuration!"
+				echo "We detect ${usbc_2_port_1_device_speed} speed"
+				exit 3
+			fi
+		else
+			echo "No device connecte to bus 1 root hub -> port 1"
+			exit 1
+		fi
+		;;
+	5)
+		# We want to test if there is a USB 3.0 stick in Type-C Connector
+		if [ -d "${USB_DEVICES_PATH}${USB_BUS_2_PORT_1_INTERFACE}" ]; then
+			usbc_3_port_1_device_class=$(<"${USB_DEVICES_PATH}${USB_BUS_2_PORT_1_INTERFACE}/bInterfaceClass")
+			if [ "$usbc_3_port_1_device_class" != "$MASS_STORAGE_DEVICE" ]; then
+				echo "The USB device connected to bus 2 root hub -> port 1 is not a Mass Storage device!"
+				echo "We detect a ${usbc_3_port_1_device_class} class"
+				exit 2
+			fi
+
+			usbc_3_port_1_device_speed=$(<"${USB_DEVICES_PATH}${USB_BUS_2_PORT_1}/speed")
+			if [ "$usbc_3_port_1_device_speed" != "5000" ]; then
+				echo "The USB device connected to bus 2 root hub -> port 1 has wrong speed configuration!"
+				echo "We detect ${usbc_3_port_1_device_speed} speed"
+				exit 3
+			fi
+		else
+			echo "No device connecte to bus 2 root hub -> port 1"
+			exit 1
+		fi
+		;;
+	*)
+		echo "Wrong option!"
+		exit 4
+esac
+
+exit 0
