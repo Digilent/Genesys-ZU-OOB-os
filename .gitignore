@@ -9,4 +9,5 @@ pre-built/linux/
 *.jou
 *.log
 project-spec/meta-plnx-generated/
+project-spec/pyshtables.py
 /components/plnx_workspace
