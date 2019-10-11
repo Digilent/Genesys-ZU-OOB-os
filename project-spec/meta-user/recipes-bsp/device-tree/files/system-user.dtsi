@@ -456,18 +456,18 @@ EMIO[0] which is line 78.
 
 };
 
-&axi_gpio_btn {
+&uio_axi_gpio_btn {
 	gpio-line-names = "btnR", "btnL", "btnD", "btnC", "btnU";
 };
 
-&axi_gpio_led {
+&uio_axi_gpio_led {
 	gpio-line-names = "led1", "led2", "led3", "led4";
 };
 
-&axi_gpio_sw {
+&uio_axi_gpio_sw {
 	gpio-line-names = "sw0", "sw1", "sw2", "sw3";
 };
 
-&pwm_rgb_led {
+&uio_pwm_rgb_led {
 	compatible = "digilent,pwm-rgb-led";
 };
