@@ -5,12 +5,6 @@
 #include <dt-bindings/net/ti-dp83867.h>
 
 / {
-	xclk_a: oscillator { /*12MHz oscillator on-board the Pcam 5C */
-		compatible = "fixed-clock";
-		#clock-cells = <1>;
-		clock-frequency  = <12000000>;
-		clock-output-names = "out";
-	};
 };
 
 &sdhci1 {
@@ -53,29 +47,11 @@ EMIO[0] which is line 78.
 		#size-cells = <0>;
 		reg = <0x70>;
 		reset-gpios = <&gpio 78 GPIO_ACTIVE_HIGH>;
-
 		i2c@0 {
 			#address-cells = <1>;
 			#size-cells = <0>;
 			reg = <0>;
-
-			pcam5c_a: sensor@3c {
-				compatible = "ovti,ov5640";
-				reg = <0x3c>;
-				clocks = <&xclk_a 0>;
-				clock-names = "xclk";
-				reset-gpios = <&gpio 79 GPIO_ACTIVE_LOW>;
-				port@0 {
-					reg = <0>;
-					sensor_out: endpoint {
-						remote-endpoint = <&csiss_in>;
-						clock-lanes = <0>;
-						data-lanes = <1 2>;
-					};
-				};
-			};
 		};
-
 		i2c@1 {
 			#address-cells = <1>;
 			#size-cells = <0>;
@@ -152,52 +128,8 @@ EMIO[0] which is line 78.
 	};
 };
 
-&mipi_csi2_rx_subsyst_0 {
-	ports {
-		#address-cells = <1>;
-		#size-cells = <0>;
-
-		port@0 {
-			reg = <0>;
-
-			xlnx,video-format = <XVIP_VF_MONO_SENSOR>;
-			xlnx,video-width = <8>;
-			xlnx,cfa-pattern = "rggb";
-
-			csiss_out: endpoint {
-				remote-endpoint = <&vcap_csi_in>;
-			};
-		};
-		port@1 {
-			reg = <1>;
-			xlnx,video-format = <XVIP_VF_MONO_SENSOR>;
-			xlnx,video-width = <8>;
-			xlnx,cfa-pattern = "rggb";
-			csiss_in: endpoint {
-				data-lanes = <1 2>;
-				remote-endpoint = <&sensor_out>;
-			};
-		};
-	};
-};
 
 &amba_pl {
-	vcap_csi {
-		compatible = "xlnx,video";
-		dmas = <&axi_vdma_0 0>;
-		dma-names = "port0"; /*this has to be port0 for some reason*/
-		ports {
-			#address-cells = <1>;
-			#size-cells = <0>;
-			port@0 {
-				reg = <0>;
-				direction = "input";
-				vcap_csi_in: endpoint {
-					remote-endpoint = <&csiss_out>;
-				};
-			};
-		};
-	};
 };
 
 &spi0 {
