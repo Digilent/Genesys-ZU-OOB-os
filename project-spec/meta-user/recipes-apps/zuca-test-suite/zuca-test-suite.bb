@@ -26,7 +26,7 @@ do_install() {
 	install -d ${D}/${bindir}
 	install -m 0755 ${S}/zuca-test-suite ${D}/${bindir}
 	install -m 0755 ${S}/uio-test ${D}/${bindir}
-	install -m 0755 ${S}/usb-test ${D}/${bindir}
+	install -m 0755 ${S}/usb-bist ${D}/${bindir}
 	install -m 0755 ${S}/usb-reset ${D}/${bindir}
 
 	#config
