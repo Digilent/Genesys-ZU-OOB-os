@@ -107,7 +107,7 @@ calc()
 	else
 		offset=0
 	fi
-	echo "$raw * $scale + $offset" | bc;
+	echo "($offset + $raw) * $scale" | bc;
 	rc=$?
 	[ $rc -eq 0 ] && exit 0 || exit $rc
 }
