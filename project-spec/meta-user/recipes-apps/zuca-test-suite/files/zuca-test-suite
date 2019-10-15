@@ -36,6 +36,20 @@ running(){
 	debug "running";
 }
 
+sysmon(){
+	debug "bist:sysmon";
+	vccvpvn=$(command sysmon -v vccvpvn -- /sys/bus/iio/devices/iio\:device0);
+	rc=$?
+	#sysmon will return the voltage in mV across pins VP and VN
+	#the test fixture will generate a voltage of 520.5 mV nominal
+	if [[ $rc -eq 0 && $(bc <<< "$vccvpvn < 543 && $vccvpvn > 498") -eq 1 ]]; then
+		echo PASS > $bt_serial
+	else
+		debug "rc:$rc, vccvpvn:$vccvpvn" 
+		echo FAIL > $bt_serial
+	fi;
+}
+
 run_command () {
 	cmd=$1
 	cmd=$(echo -e -n $cmd | sed 's/\r$//')
