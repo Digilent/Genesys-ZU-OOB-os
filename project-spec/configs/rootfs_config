@@ -52,7 +52,7 @@ CONFIG_system-zynqmp=y
 #
 # bc 
 #
-# CONFIG_bc is not set
+CONFIG_bc=y
 # CONFIG_bc-dev is not set
 # CONFIG_bc-dbg is not set
 

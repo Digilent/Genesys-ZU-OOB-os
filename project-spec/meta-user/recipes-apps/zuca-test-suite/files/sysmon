@@ -1,0 +1,135 @@
+#!/bin/sh
+
+# Run this script as root
+
+die(){
+        printf '%s\n' "$1" >&2
+        exit 1
+}
+
+show_help (){
+cat << EOF
+Usage : ${0##*/} [-h] [[-t|-v] channel] [--] iio_device 
+        -h --help               Display this help and exit,
+
+	-t|-v channel	        The SYSMON channel to read. Accepts voltage (-v) or
+				temperature (-t) channels as exposed in sysfs io
+				without the in_(temp|voltage) prefix and (raw|
+				scale|offset) suffix, like so:
+                                        "vccvpvn" for dedicated channel,
+					"pl_temp" for PL-side temperature sensor,
+
+	iio_device		Sysfs iio device file (ex. /sys/bus/iio/devices/iio\:device0).
+EOF
+}
+
+show_vars(){
+        echo measurement: $measurement;
+        echo
+        echo channel: $channel;
+        echo prefix: $prefix;
+        echo
+        echo raw: $raw;
+        echo scale: $scale;
+        echo offset: $offset;
+}
+
+measurement=
+channel=
+
+if [ ! "$(which bc)" ]; then
+	die 'ERROR: this script requires bc to be installed'
+fi
+
+while :; do
+        case $1 in
+                -h|-\?|--help)
+                        show_help
+                        exit
+                        ;;
+		-t|-v)
+			[[ $1 = "-t" ]] && measurement="temperature" || measurement="voltage"
+			if [[ "$2" && $2 != "--" ]]; then
+                                channel=$2
+                                shift
+                        else
+                                die 'ERROR: "-t|-v" requires a non-empty channel argument.'
+                        fi
+                        ;;
+		--) # End of all option
+                        shift
+                        break
+                        ;;
+		*) #Default case: No more options, so brake the loop.
+                        break
+	esac
+	shift
+done
+
+if [ -z $measurement ]; then
+	show_help
+	die 'ERROR: either -t or -v must be specified'
+fi
+
+if [ "$1" ]; then
+	device=$1
+	shift
+else
+	show_help
+	die 'ERROR: iio_device must be specified'
+fi
+
+#There should be no more arguments
+if [ "$1" ]; then
+	show_help
+	die 'ERROR: Too many arguments'
+fi
+
+#See if device path exists
+if [[ ! -d $device ]]; then
+	die 'ERROR: iio device '${device}' does not exist'
+fi
+
+calc()
+{
+	prefix=$1
+	raw=${prefix}raw
+        scale=${prefix}scale
+        offset=${prefix}offset
+	raw=$(cat $raw)
+	if [ -f ${scale} ]; then
+		scale=$(cat $scale)
+	else
+		scale=1
+	fi
+	if [ -f ${offset} ]; then
+		offset=$(cat $offset)
+	else
+		offset=0
+	fi
+	echo "$raw * $scale + $offset" | bc;
+	rc=$?
+	[ $rc -eq 0 ] && exit 0 || exit $rc
+}
+
+
+case "$measurement" in
+	temperature)
+		prefix="in_temp*_${channel}_"
+		;;
+	voltage)
+		prefix="in_voltage*_${channel}_"
+		;;
+esac
+
+prefix=${device}/${prefix}
+for f in ${prefix}raw; do
+	if [ -f "$f" ]; then
+		calc ${prefix}
+	fi
+done
+
+show_vars
+
+die 'Could not find measurement in iio device'
+
