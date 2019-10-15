@@ -98,7 +98,7 @@ calc()
         offset=${prefix}offset
 	raw=$(cat $raw)
 	if [ -f ${scale} ]; then
-		scale=$(cat $scale)
+		scale=$(cat $scale);
 	else
 		scale=1
 	fi
@@ -125,7 +125,8 @@ esac
 prefix=${device}/${prefix}
 for f in ${prefix}raw; do
 	if [ -f "$f" ]; then
-		calc ${prefix}
+		calc ${f%raw}
+		break
 	fi
 done
 
