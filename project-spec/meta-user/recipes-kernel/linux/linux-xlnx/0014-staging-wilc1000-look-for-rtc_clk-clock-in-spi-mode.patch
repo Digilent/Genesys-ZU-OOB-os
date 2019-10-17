@@ -1,0 +1,58 @@
+From d0f6255df81a1869c98dbf06838ccb186dbd7d96 Mon Sep 17 00:00:00 2001
+From: Adham Abozaeid <adham.abozaeid@microchip.com>
+Date: Mon, 16 Sep 2019 12:25:23 -0700
+Subject: [PATCH 14/17] staging: wilc1000: look for rtc_clk clock in spi mode
+
+If rtc_clk is provided from DT, use it and enable it.
+This is optional.
+The signal may be hardcoded and no need to be requested,
+but if DT provides it, use it.
+
+Signed-off-by: Adham Abozaeid <adham.abozaeid@microchip.com>
+---
+ drivers/staging/wilc/wilc_spi.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/drivers/staging/wilc/wilc_spi.c b/drivers/staging/wilc/wilc_spi.c
+index f324180e1e2d..70cc84d222af 100644
+--- a/drivers/staging/wilc/wilc_spi.c
++++ b/drivers/staging/wilc/wilc_spi.c
+@@ -4,11 +4,13 @@
+  * All rights reserved.
+  */
+ 
++#include <linux/clk.h>
+ #include <linux/spi/spi.h>
+ #include <linux/module.h>
+ 
+ #include "wilc_wfi_netdevice.h"
+ #include "wilc_wfi_cfgoperations.h"
++#include "wilc_netdev.h"
+ 
+ struct wilc_spi {
+ 	int crc_off;
+@@ -135,6 +137,11 @@ static int wilc_bus_probe(struct spi_device *spi)
+ 	wilc->bus_data = spi_priv;
+ 	wilc->dt_dev = &spi->dev;
+ 
++	wilc->rtc_clk = devm_clk_get(&spi->dev, "rtc_clk");
++	if (PTR_ERR_OR_ZERO(wilc->rtc_clk) == -EPROBE_DEFER)
++		return -EPROBE_DEFER;
++	else if (!IS_ERR(wilc->rtc_clk))
++		clk_prepare_enable(wilc->rtc_clk);
+ 
+ 	if (!init_power) {
+ 		wilc_wlan_power_on_sequence(wilc);
+@@ -151,6 +158,9 @@ static int wilc_bus_remove(struct spi_device *spi)
+ {
+ 	struct wilc *wilc = spi_get_drvdata(spi);
+ 
++	if (!IS_ERR(wilc->rtc_clk))
++		clk_disable_unprepare(wilc->rtc_clk);
++
+ 	wilc_netdev_cleanup(wilc);
+ 	wilc_bt_deinit();
+ 	return 0;
+-- 
+2.23.0
+

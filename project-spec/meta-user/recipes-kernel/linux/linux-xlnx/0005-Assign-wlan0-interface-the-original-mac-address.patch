@@ -1,0 +1,42 @@
+From a992982a336588b4424d759325f1a784e817420b Mon Sep 17 00:00:00 2001
+From: Adham Abozaeid <adham.abozaeid@microchip.com>
+Date: Tue, 27 Aug 2019 11:04:33 -0700
+Subject: [PATCH 05/17] Assign wlan0 interface the original mac address
+
+Adding the interfaces dynamically caused a regression causing wlan0
+interface to be assigned the locally administrated mac address.
+Since the interfaces are now added dynamically, and users can rename
+them as they like, WILC will use the original mac address for the
+interface that opens first, and the locally administrated address for
+the other.
+
+Fixes #63
+
+Signed-off-by: Adham Abozaeid <adham.abozaeid@microchip.com>
+---
+ drivers/staging/wilc/wilc_hif.h | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/staging/wilc/wilc_hif.h b/drivers/staging/wilc/wilc_hif.h
+index 3c542d792047..905f56261a96 100644
+--- a/drivers/staging/wilc/wilc_hif.h
++++ b/drivers/staging/wilc/wilc_hif.h
+@@ -19,13 +19,10 @@ enum {
+ };
+ 
+ enum {
+-	WILC_P2P_IFC = 0x00,
+-	WILC_WLAN_IFC = 0x01,
++	WILC_WLAN_IFC = 0x00,
++	WILC_P2P_IFC = 0x01,
+ };
+ 
+-#define IFC_0 "wlan0"
+-#define IFC_1 "p2p0"
+-
+ #define WILC_MAX_NUM_STA			9
+ #define WILC_MAX_NUM_SCANNED_CH			14
+ #define WILC_MAX_NUM_PROBED_SSID		10
+-- 
+2.23.0
+

@@ -1,0 +1,43 @@
+From 4a35c615b0f1d1a5c033d95c3a3cc5c95b5a824c Mon Sep 17 00:00:00 2001
+From: Adham Abozaeid <adham.abozaeid@microchip.com>
+Date: Mon, 16 Sep 2019 12:14:21 -0700
+Subject: [PATCH 13/17] staging: wilc1000: fix PTR_ERR_OR_ZERO implicit
+ declaration for kernel<3.12
+
+Fixes: f6f386c3e3a119c05ff93035b34300b7ae864d37 (staging: wilc1000: look for rtc_clk clock)
+Signed-off-by: Adham Abozaeid <adham.abozaeid@microchip.com>
+---
+ drivers/staging/wilc/wilc_netdev.h | 4 ++++
+ drivers/staging/wilc/wilc_sdio.c   | 1 +
+ 2 files changed, 5 insertions(+)
+
+diff --git a/drivers/staging/wilc/wilc_netdev.h b/drivers/staging/wilc/wilc_netdev.h
+index e87f6f4d55d2..f260fac6edf7 100644
+--- a/drivers/staging/wilc/wilc_netdev.h
++++ b/drivers/staging/wilc/wilc_netdev.h
+@@ -43,6 +43,10 @@ static inline bool ether_addr_equal_unaligned(const u8 *addr1, const u8 *addr2)
+ }
+ #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(3, 14, 0) */
+ 
++#if KERNEL_VERSION(3, 12, 0) > LINUX_VERSION_CODE
++#define PTR_ERR_OR_ZERO(ptr) PTR_RET(ptr)
++#endif
++
+ int wilc_bt_power_up(struct wilc *wilc, int source);
+ int wilc_bt_power_down(struct wilc *wilc, int source);
+ void wilc_wfi_monitor_rx(struct net_device *mon_dev, u8 *buff, u32 size);
+diff --git a/drivers/staging/wilc/wilc_sdio.c b/drivers/staging/wilc/wilc_sdio.c
+index d16ec8b24ce6..67f1c72ee9c8 100644
+--- a/drivers/staging/wilc/wilc_sdio.c
++++ b/drivers/staging/wilc/wilc_sdio.c
+@@ -14,6 +14,7 @@
+ #include "wilc_wfi_netdevice.h"
+ #include "wilc_wlan.h"
+ #include "wilc_wfi_cfgoperations.h"
++#include "wilc_netdev.h"
+ 
+ enum sdio_host_lock {
+ 	WILC_SDIO_HOST_NO_TAKEN = 0,
+-- 
+2.23.0
+

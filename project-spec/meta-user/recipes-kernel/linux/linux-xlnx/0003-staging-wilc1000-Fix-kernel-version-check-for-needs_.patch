@@ -1,0 +1,45 @@
+From 9f07f6c7b9257669017881178455c44ddb73684a Mon Sep 17 00:00:00 2001
+From: Adham Abozaeid <adham.abozaeid@microchip.com>
+Date: Fri, 9 Aug 2019 10:35:42 -0700
+Subject: [PATCH 03/17] staging: wilc1000: Fix kernel version check for
+ needs_free_netdev
+
+net_device.needs_free_netdev was add in kernel 4.11.9
+
+closes: #65
+
+Signed-off-by: Adham Abozaeid <adham.abozaeid@microchip.com>
+---
+ drivers/staging/wilc/wilc_mon.c    | 2 +-
+ drivers/staging/wilc/wilc_netdev.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/staging/wilc/wilc_mon.c b/drivers/staging/wilc/wilc_mon.c
+index 8de764b3a459..07dac6b56b4c 100644
+--- a/drivers/staging/wilc/wilc_mon.c
++++ b/drivers/staging/wilc/wilc_mon.c
+@@ -296,7 +296,7 @@ struct net_device *wilc_wfi_init_mon_interface(struct wilc *wl,
+ 	strncpy(wl->monitor_dev->name, name, IFNAMSIZ);
+ 	wl->monitor_dev->name[IFNAMSIZ - 1] = 0;
+ 	wl->monitor_dev->netdev_ops = &wilc_wfi_netdev_ops;
+-#if KERNEL_VERSION(4, 15, 0) <= LINUX_VERSION_CODE
++#if KERNEL_VERSION(4, 11, 9) <= LINUX_VERSION_CODE
+ 	wl->monitor_dev->needs_free_netdev = true;
+ #else
+ 	wl->monitor_dev->destructor = free_netdev;
+diff --git a/drivers/staging/wilc/wilc_netdev.c b/drivers/staging/wilc/wilc_netdev.c
+index cb6139cb5bb1..ebafa8a131f5 100644
+--- a/drivers/staging/wilc/wilc_netdev.c
++++ b/drivers/staging/wilc/wilc_netdev.c
+@@ -1378,7 +1378,7 @@ struct wilc_vif *wilc_netdev_ifc_init(struct wilc *wl, const char *name,
+ 		free_netdev(ndev);
+ 		return ERR_PTR(-EFAULT);
+ 	}
+-#if KERNEL_VERSION(4, 15, 0) <= LINUX_VERSION_CODE
++#if KERNEL_VERSION(4, 11, 9) <= LINUX_VERSION_CODE
+ 	ndev->needs_free_netdev = true;
+ #else
+ 	ndev->destructor = free_netdev;
+-- 
+2.23.0
+
