@@ -1,0 +1,107 @@
+From 82eca9de9c296b2ace0c9ca71bec46b73f77350d Mon Sep 17 00:00:00 2001
+From: Adham Abozaeid <adham.abozaeid@microchip.com>
+Date: Fri, 9 Aug 2019 10:39:05 -0700
+Subject: [PATCH 04/17] staging: wilc1000 return linux err codes from
+ wilc_wlan_stop
+
+return -EIO in case of bus errors in wilc_wlan_stop, 0 otherwise
+
+Signed-off-by: Adham Abozaeid <adham.abozaeid@microchip.com>
+---
+ drivers/staging/wilc/wilc_netdev.c |  2 +-
+ drivers/staging/wilc/wilc_wlan.c   | 24 ++++++++++++++++++------
+ 2 files changed, 19 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/staging/wilc/wilc_netdev.c b/drivers/staging/wilc/wilc_netdev.c
+index ebafa8a131f5..750c95e4b482 100644
+--- a/drivers/staging/wilc/wilc_netdev.c
++++ b/drivers/staging/wilc/wilc_netdev.c
+@@ -848,7 +848,7 @@ static void wilc_wlan_deinitialize(struct net_device *dev)
+ 		deinit_irq(dev);
+ 
+ 		ret = wilc_wlan_stop(wl, vif);
+-		if (ret == 0)
++		if (ret != 0)
+ 			PRINT_ER(dev, "failed in wlan_stop\n");
+ 
+ 		PRINT_INFO(vif->ndev, INIT_DBG, "Deinitializing WILC Wlan\n");
+diff --git a/drivers/staging/wilc/wilc_wlan.c b/drivers/staging/wilc/wilc_wlan.c
+index e19e9b1842c3..b8640e79412a 100644
+--- a/drivers/staging/wilc/wilc_wlan.c
++++ b/drivers/staging/wilc/wilc_wlan.c
+@@ -1568,7 +1568,7 @@ int wilc_wlan_stop(struct wilc *wilc, struct wilc_vif *vif)
+ 	if (!ret) {
+ 		PRINT_ER(vif->ndev, "Error while reading reg\n");
+ 		release_bus(wilc, WILC_BUS_RELEASE_ALLOW_SLEEP, DEV_WIFI);
+-		return ret;
++		return -EIO;
+ 	}
+ 
+ 	reg &= ~BIT(0);
+@@ -1576,7 +1576,7 @@ int wilc_wlan_stop(struct wilc *wilc, struct wilc_vif *vif)
+ 	if (!ret) {
+ 		PRINT_ER(vif->ndev, "Error while writing reg\n");
+ 		release_bus(wilc, WILC_BUS_RELEASE_ALLOW_SLEEP, DEV_WIFI);
+-		return ret;
++		return -EIO;
+ 	}
+ 
+ 	/* Configure the power sequencer to ignore WIFI sleep signal on making
+@@ -1586,7 +1586,7 @@ int wilc_wlan_stop(struct wilc *wilc, struct wilc_vif *vif)
+ 	if (!ret) {
+ 		PRINT_ER(vif->ndev, "Error while reading reg\n");
+ 		release_bus(wilc, WILC_BUS_RELEASE_ALLOW_SLEEP, DEV_WIFI);
+-		return ret;
++		return -EIO;
+ 	}
+ 
+ 	reg &= ~BIT(28);
+@@ -1594,13 +1594,14 @@ int wilc_wlan_stop(struct wilc *wilc, struct wilc_vif *vif)
+ 	if (!ret) {
+ 		PRINT_ER(vif->ndev, "Error while writing reg\n");
+ 		release_bus(wilc, WILC_BUS_RELEASE_ALLOW_SLEEP, DEV_WIFI);
+-		return ret;
++		return -EIO;
+ 	}
+ 
+ 	ret = wilc->hif_func->hif_read_reg(wilc, WILC_GP_REG_0, &reg);
+ 	if (!ret) {
+ 		PRINT_ER(vif->ndev, "Error while reading reg\n");
+ 		release_bus(wilc, WILC_BUS_RELEASE_ALLOW_SLEEP, DEV_WIFI);
++		return -EIO;
+ 	}
+ 
+ 	ret = wilc->hif_func->hif_write_reg(wilc, WILC_GP_REG_0,
+@@ -1608,16 +1609,27 @@ int wilc_wlan_stop(struct wilc *wilc, struct wilc_vif *vif)
+ 	if (!ret) {
+ 		PRINT_ER(vif->ndev, "Error while writing reg\n");
+ 		release_bus(wilc, WILC_BUS_RELEASE_ALLOW_SLEEP, DEV_WIFI);
++		return -EIO;
+ 	}
+ 
+-	wilc->hif_func->hif_read_reg(wilc, WILC_FW_HOST_COMM, &reg);
++	ret = wilc->hif_func->hif_read_reg(wilc, WILC_FW_HOST_COMM, &reg);
++	if (!ret) {
++		PRINT_ER(vif->ndev, "Error while reading reg\n");
++		release_bus(wilc, WILC_BUS_RELEASE_ALLOW_SLEEP, DEV_WIFI);
++		return -EIO;
++	}
+ 	reg = BIT(0);
+ 
+ 	ret = wilc->hif_func->hif_write_reg(wilc, WILC_FW_HOST_COMM, reg);
++	if (!ret) {
++		PRINT_ER(vif->ndev, "Error while writing reg\n");
++		release_bus(wilc, WILC_BUS_RELEASE_ALLOW_SLEEP, DEV_WIFI);
++		return -EIO;
++	}
+ 
+ 	release_bus(wilc, WILC_BUS_RELEASE_ALLOW_SLEEP, DEV_WIFI);
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ void wilc_wlan_cleanup(struct net_device *dev)
+-- 
+2.23.0
+

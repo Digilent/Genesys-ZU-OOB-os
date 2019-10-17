@@ -1,0 +1,41 @@
+From 02a9906fd6300594f7375d5679a0ba7f97ee65e1 Mon Sep 17 00:00:00 2001
+From: Adham Abozaeid <adham.abozaeid@microchip.com>
+Date: Tue, 27 Aug 2019 11:46:23 -0700
+Subject: [PATCH 07/17] staging: wilc1000: Reduce verbosity of non critical
+ logs
+
+Signed-off-by: Adham Abozaeid <adham.abozaeid@microchip.com>
+---
+ drivers/staging/wilc/wilc_netdev.c            | 2 +-
+ drivers/staging/wilc/wilc_wfi_cfgoperations.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/staging/wilc/wilc_netdev.c b/drivers/staging/wilc/wilc_netdev.c
+index ae5790b939e2..e216ba7b1f58 100644
+--- a/drivers/staging/wilc/wilc_netdev.c
++++ b/drivers/staging/wilc/wilc_netdev.c
+@@ -58,7 +58,7 @@ static int debug_thread(void *arg)
+ 
+ 		if (!debug_running)
+ 			continue;
+-		PRINT_INFO(wl->vif[0]->ndev, GENERIC_DBG,
++		PRINT_D(wl->vif[0]->ndev, GENERIC_DBG,
+ 			   "*** Debug Thread Running ***\n");
+ 		if (cfg_packet_timeout < 5)
+ 			continue;
+diff --git a/drivers/staging/wilc/wilc_wfi_cfgoperations.c b/drivers/staging/wilc/wilc_wfi_cfgoperations.c
+index d1fa393fc46f..878b0a4e3fa3 100644
+--- a/drivers/staging/wilc/wilc_wfi_cfgoperations.c
++++ b/drivers/staging/wilc/wilc_wfi_cfgoperations.c
+@@ -1626,7 +1626,7 @@ void wilc_mgmt_frame_register(struct wiphy *wiphy, struct wireless_dev *wdev,
+ 	if (!frame_type)
+ 		return;
+ 
+-	PRINT_INFO(vif->ndev, GENERIC_DBG,
++	PRINT_D(vif->ndev, GENERIC_DBG,
+ 		   "Frame registering Frame Type: %x: Boolean: %d\n",
+ 		   frame_type, reg);
+ 	switch (frame_type) {
+-- 
+2.23.0
+

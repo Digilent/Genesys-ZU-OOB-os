@@ -1,0 +1,76 @@
+From 6f759bd304e1f13c6087b13fcf0fd5c31d940dea Mon Sep 17 00:00:00 2001
+From: Adham Abozaeid <adham.abozaeid@microchip.com>
+Date: Mon, 16 Sep 2019 10:35:55 -0700
+Subject: [PATCH 11/17] staging: dt-bindings: wilc1000: add optional rtc_clk
+ property
+
+Add bindings for optional rtc clock pin.
+
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Acked-by: Ajay Singh <ajay.kathat@microchip.com>
+Link: https://lore.kernel.org/r/1568037993-4646-1-git-send-email-eugen.hristev@microchip.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Adham Abozaeid <adham.abozaeid@microchip.com>
+---
+ drivers/staging/wilc/microchip,wilc1000,sdio.txt |  8 +++++++-
+ drivers/staging/wilc/microchip,wilc1000,spi.txt  | 10 +++++++++-
+ 2 files changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/staging/wilc/microchip,wilc1000,sdio.txt b/drivers/staging/wilc/microchip,wilc1000,sdio.txt
+index 028c64017c9b..8dc88bca2a83 100644
+--- a/drivers/staging/wilc/microchip,wilc1000,sdio.txt
++++ b/drivers/staging/wilc/microchip,wilc1000,sdio.txt
+@@ -12,7 +12,9 @@ Required properties:
+ 
+ Optional:
+ - bus-width	:	Number of data lines wired up the slot. Default 1 bit.
+-
++- rtc_clk	:	Clock connected on the rtc clock line. Must be assigned
++			a frequency with assigned-clocks property, and must be
++			connected to a clock provider.
+ 
+ Examples:
+ mmc1: mmc@fc000000 {
+@@ -28,6 +30,10 @@ mmc1: mmc@fc000000 {
+ 			irq-gpios = <&pioC 27 0>;
+ 			reset-gpios = <&pioB 28 0>;
+ 			chip_en-gpios = <&pioC 30 0>;
++			clocks = <&pck1>;
++			clock-names = "rtc_clk";
++			assigned-clocks = <&pck1>;
++			assigned-clock-rates = <32768>;
+ 			status = "okay";
+ 			reg = <0>;
+ 			bus-width = <4>;
+diff --git a/drivers/staging/wilc/microchip,wilc1000,spi.txt b/drivers/staging/wilc/microchip,wilc1000,spi.txt
+index 2e2a9306c1e8..dfc01f4aaaa2 100644
+--- a/drivers/staging/wilc/microchip,wilc1000,spi.txt
++++ b/drivers/staging/wilc/microchip,wilc1000,spi.txt
+@@ -9,8 +9,12 @@ Required properties:
+ - reg			: Chip select address of device
+ - irq-gpios		: Connect to a host IRQ
+ - reset-gpios		: Reset module GPIO
+-- chip_en-gpios:    	: Chip enable GPIO
++- chip_en-gpios:	: Chip enable GPIO
+ 
++Optional:
++- rtc_clk	:	Clock connected on the rtc clock line. Must be assigned
++			a frequency with assigned-clocks property, and must be
++			connected to a clock provider.
+ 
+ Examples:
+ 
+@@ -25,6 +29,10 @@ spi1: spi@fc018000 {
+ 			irq-gpios = <&pioC 27 0>;
+ 			reset-gpios = <&pioB 28 0>;
+ 			chip_en-gpios = <&pioC 30 0>;
++			clocks = <&pck1>;
++			clock-names = "rtc_clk";
++			assigned-clocks = <&pck1>;
++			assigned-clock-rates = <32768>;
+ 			status = "okay";
+ 		};
+ };
+-- 
+2.23.0
+

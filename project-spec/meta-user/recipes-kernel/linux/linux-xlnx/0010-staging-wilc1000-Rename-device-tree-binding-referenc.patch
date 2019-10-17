@@ -1,0 +1,26 @@
+From 1acf5b77e3c34b1f809ddfd11ddc241f28ea3189 Mon Sep 17 00:00:00 2001
+From: Adham Abozaeid <adham.abozaeid@microchip.com>
+Date: Mon, 16 Sep 2019 10:28:35 -0700
+Subject: [PATCH 10/17] staging: wilc1000: Rename device tree binding reference
+
+Match the driver name wilc1000 instead of wilc
+
+Signed-off-by: Adham Abozaeid <adham.abozaeid@microchip.com>
+---
+ .../wilc/{microchip,wilc,sdio.txt => microchip,wilc1000,sdio.txt} | 0
+ .../wilc/{microchip,wilc,spi.txt => microchip,wilc1000,spi.txt}   | 0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+ rename drivers/staging/wilc/{microchip,wilc,sdio.txt => microchip,wilc1000,sdio.txt} (100%)
+ rename drivers/staging/wilc/{microchip,wilc,spi.txt => microchip,wilc1000,spi.txt} (100%)
+
+diff --git a/drivers/staging/wilc/microchip,wilc,sdio.txt b/drivers/staging/wilc/microchip,wilc1000,sdio.txt
+similarity index 100%
+rename from drivers/staging/wilc/microchip,wilc,sdio.txt
+rename to drivers/staging/wilc/microchip,wilc1000,sdio.txt
+diff --git a/drivers/staging/wilc/microchip,wilc,spi.txt b/drivers/staging/wilc/microchip,wilc1000,spi.txt
+similarity index 100%
+rename from drivers/staging/wilc/microchip,wilc,spi.txt
+rename to drivers/staging/wilc/microchip,wilc1000,spi.txt
+-- 
+2.23.0
+

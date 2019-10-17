@@ -1,0 +1,53 @@
+From 91e67d84ac53522ca702cecb3fbf300459a2e563 Mon Sep 17 00:00:00 2001
+From: Adham Abozaeid <adham.abozaeid@microchip.com>
+Date: Fri, 4 Oct 2019 14:17:58 -0700
+Subject: [PATCH 17/17] staging: wilc1000: don't use wdev while setting tx
+ power
+
+WILC doesn't support per-vif tx power, and hence, wdev will always be
+null in calls to set_tx_power.
+Instead, wiphy should be used to execute the operation
+
+Signed-off-by: Adham Abozaeid <adham.abozaeid@microchip.com>
+---
+ drivers/staging/wilc/wilc_wfi_cfgoperations.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/staging/wilc/wilc_wfi_cfgoperations.c b/drivers/staging/wilc/wilc_wfi_cfgoperations.c
+index a1efa4b39dd1..55ea89a15b52 100644
+--- a/drivers/staging/wilc/wilc_wfi_cfgoperations.c
++++ b/drivers/staging/wilc/wilc_wfi_cfgoperations.c
+@@ -2184,8 +2184,20 @@ static int set_tx_power(struct wiphy *wiphy, struct wireless_dev *wdev,
+ 			enum nl80211_tx_power_setting type, int mbm)
+ {
+ 	int ret;
++	int srcu_idx;
+ 	s32 tx_power = MBM_TO_DBM(mbm);
+-	struct wilc_vif *vif = netdev_priv(wdev->netdev);
++	struct wilc *wl = wiphy_priv(wiphy);
++	struct wilc_vif *vif;
++
++	if (!wl->initialized)
++		return -EIO;
++
++	srcu_idx = srcu_read_lock(&wl->srcu);
++	vif = wilc_get_wl_to_vif(wl);
++	if (IS_ERR(vif)) {
++		srcu_read_unlock(&wl->srcu, srcu_idx);
++		return -EINVAL;
++	}
+ 
+ 	PRINT_INFO(vif->ndev, CFG80211_DBG, "Setting tx power %d\n", tx_power);
+ 	if (tx_power < 0)
+@@ -2196,6 +2208,8 @@ static int set_tx_power(struct wiphy *wiphy, struct wireless_dev *wdev,
+ 	if (ret)
+ 		PRINT_ER(vif->ndev, "Failed to set tx power\n");
+ 
++	srcu_read_unlock(&wl->srcu, srcu_idx);
++
+ 	return ret;
+ }
+ 
+-- 
+2.23.0
+
