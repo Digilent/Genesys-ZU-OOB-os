@@ -1,0 +1,68 @@
+From d5e16f6783facf6a2504f3b77df44dd657e879a5 Mon Sep 17 00:00:00 2001
+From: Ionel Badisor <ionel.badisor@digilent.ro>
+Date: Thu, 17 Oct 2019 16:07:51 +0300
+Subject: [PATCH 18/18] staging: wilc: Turn down verbosity
+
+---
+ drivers/staging/wilc/Makefile                 | 2 +-
+ drivers/staging/wilc/wilc_debugfs.c           | 8 +++++---
+ drivers/staging/wilc/wilc_wfi_cfgoperations.c | 4 ++++
+ 3 files changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/staging/wilc/Makefile b/drivers/staging/wilc/Makefile
+index 7eb8cf09bfa2..5891dfc6d35b 100644
+--- a/drivers/staging/wilc/Makefile
++++ b/drivers/staging/wilc/Makefile
+@@ -1,5 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
+-ccflags-y += -I$(src)/ -DWILC_ASIC_A0 -DWILC_DEBUGFS
++ccflags-y += -I$(src)/ -DWILC_ASIC_A0
+ 
+ wilc-objs := wilc_wfi_cfgoperations.o wilc_netdev.o wilc_mon.o \
+ 			wilc_hif.o wilc_wlan_cfg.o wilc_debugfs.o \
+diff --git a/drivers/staging/wilc/wilc_debugfs.c b/drivers/staging/wilc/wilc_debugfs.c
+index 791d93360b77..96336d87590e 100644
+--- a/drivers/staging/wilc/wilc_debugfs.c
++++ b/drivers/staging/wilc/wilc_debugfs.c
+@@ -9,9 +9,11 @@
+ 
+ #include "wilc_debugfs.h"
+ 
+-atomic_t WILC_DEBUG_REGION = ATOMIC_INIT(INIT_DBG | GENERIC_DBG |
+-					 CFG80211_DBG | HOSTAPD_DBG |
+-					 PWRDEV_DBG);
++//atomic_t WILC_DEBUG_REGION = ATOMIC_INIT(INIT_DBG | GENERIC_DBG |
++//					 CFG80211_DBG | HOSTAPD_DBG |
++//					 PWRDEV_DBG);
++
++atomic_t WILC_DEBUG_REGION = ATOMIC_INIT(0);
+ 
+ #if defined(WILC_DEBUGFS)
+ static struct dentry *wilc_dir;
+diff --git a/drivers/staging/wilc/wilc_wfi_cfgoperations.c b/drivers/staging/wilc/wilc_wfi_cfgoperations.c
+index 55ea89a15b52..dae87f375bdc 100644
+--- a/drivers/staging/wilc/wilc_wfi_cfgoperations.c
++++ b/drivers/staging/wilc/wilc_wfi_cfgoperations.c
+@@ -2358,7 +2358,9 @@ int wilc_cfg80211_init(struct wilc **wilc, struct device *dev, int io_type,
+ 	if (ret)
+ 		goto free_wl;
+ 
++#ifdef WILC_DEBUGFS
+ 	wilc_debugfs_init();
++#endif
+ 	*wilc = wl;
+ 	wl->io_type = io_type;
+ 	wl->hif_func = ops;
+@@ -2386,7 +2388,9 @@ int wilc_cfg80211_init(struct wilc **wilc, struct device *dev, int io_type,
+ free_wq:
+ 	destroy_workqueue(wl->hif_workqueue);
+ free_debug_fs:
++#ifdef WILC_DEBUGFS
+ 	wilc_debugfs_remove();
++#endif
+ 	cfg_deinit(wl);
+ free_wl:
+ 	wlan_deinit_locks(wl);
+-- 
+2.23.0
+

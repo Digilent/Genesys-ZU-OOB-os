@@ -31,6 +31,7 @@ SRC_URI += "file://0001-Remove-wilc1000.patch \
 	file://0015-staging-wilc1000-use-RCU-list-to-maintain-vif-interf.patch \
 	file://0016-staging-wilc1000-fix-debug-thread-recovery.patch \
 	file://0017-staging-wilc1000-don-t-use-wdev-while-setting-tx-pow.patch \
+	file://0018-staging-wilc-Turn-down-verbosity.patch \
 	"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
