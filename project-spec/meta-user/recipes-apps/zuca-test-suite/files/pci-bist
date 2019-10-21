@@ -1,0 +1,43 @@
+#!/bin/sh
+
+# For more information about pci ids consult: https://pci-ids.ucw.cz/
+
+# This test is used to test the PCIe port on Genesys ZU.
+# To test the PCIe connector, a WPEQ-261ACN(BT) Wireless Network Adapter is used
+# The validation steps are the following:
+# 1. Verify that there is a pci device connected on pci bus 1
+# 2. Verify that the connected device is produced by the expected vendor
+# 3. Vefiry that the connected device is the expected one.
+
+# Return value: 0 for success; 1 for failure
+
+VENDOR="0x168c" # Qualcomm Atheros
+PRODUCT="0x003e" # QCA6174 802.11ac Wireless Network Adapter
+
+PCI_DEVICES_PATH="/sys/bus/pci/devices/"
+# The following pattern is used to define a pci device:
+# PCI_domain:bus_number:device_number.device_function
+PCI_DEVICE="0000:01:00.0"
+
+# Verify if there is any PCI device connecte to the PCI bus 1
+if [ -d "${PCI_DEVICES_PATH}${PCI_DEVICE}" ]; then
+  pci_device_vendor=`cat "${PCI_DEVICES_PATH}${PCI_DEVICE}/vendor"`
+  if [ "$pci_device_vendor" != "$VENDOR" ]; then
+    echo "Wrong vendor found!"
+    echo "$pci_device_vendor"
+    exit 1
+  else
+    pci_device_product=`cat "${PCI_DEVICES_PATH}${PCI_DEVICE}/device"`
+    if [ "$pci_device_product" != "$PRODUCT" ]; then
+      echo "Wrong product detected!"
+      echo "$pci_device_product"
+      exit 1
+    fi
+  fi
+else
+  echo "No PCI device detected!"
+  exit 1
+fi
+
+echo "PCI test succeeded"
+exit 0
