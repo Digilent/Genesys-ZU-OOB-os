@@ -8,8 +8,12 @@
 };
 
 &sdhci1 {
-	sd-uhs-sdr104;
 	disable-wp;
+	xlnx,itap-delay-sd-hsd = <0x29>;
+	xlnx,itap-delay-sd-ddr50 = <0x32>;
+	xlnx,itap-delay-sdr25 = <0x2A>;
+	xlnx,itap-delay-sdr50 = <0x1E>;
+	xlnx,itap-delay-sdr104 = <0x0B>; //although auto-tuned, tuning fails on some cards if not set
 };
 
 /*
