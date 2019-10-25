@@ -5,3 +5,4 @@ SRC_URI += "file://0001-Rmeove-i2c-mux-code.patch \
 			"
 YAML_COMPILER_FLAGS_append = " -DUHS_MODE_ENABLE"
 YAML_COMPILER_FLAGS_append = " -DFSBL_DEBUG_INFO"
+YAML_COMPILER_FLAGS_append = " -DXFSBL_PERF"
