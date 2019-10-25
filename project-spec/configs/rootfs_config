@@ -3696,15 +3696,15 @@ CONFIG_hellopm=y
 #
 # libdrm 
 #
-# CONFIG_libdrm is not set
-# CONFIG_libdrm-tests is not set
-# CONFIG_libdrm-drivers is not set
+CONFIG_libdrm=y
+CONFIG_libdrm-tests=y
+CONFIG_libdrm-drivers=y
 # CONFIG_libdrm-amdgpu is not set
 # CONFIG_libdrm-nouveau is not set
 # CONFIG_libdrm-dev is not set
 # CONFIG_libdrm-freedreno is not set
 # CONFIG_libdrm-radeon is not set
-# CONFIG_libdrm-kms is not set
+CONFIG_libdrm-kms=y
 # CONFIG_libdrm-dbg is not set
 # CONFIG_libdrm-omap is not set
 
@@ -3929,7 +3929,7 @@ CONFIG_hellopm=y
 #
 # mesa-demos 
 #
-# CONFIG_mesa-demos is not set
+CONFIG_mesa-demos=y
 # CONFIG_mesa-demos-dbg is not set
 # CONFIG_mesa-demos-dev is not set
 
