@@ -1,0 +1,12 @@
+diff --git a/drivers/mmc/Makefile b/drivers/mmc/Makefile
+index 7892c468f0..80405bf84a 100644
+--- a/drivers/mmc/Makefile
++++ b/drivers/mmc/Makefile
+@@ -3,6 +3,7 @@
+ # (C) Copyright 2006
+ # Wolfgang Denk, DENX Software Engineering, wd@denx.de.
+ 
++ccflags-y = -O0 -g3 -fno-inline -DDEBUG -DCONFIG_LOGLEVEL=8
+ obj-y += mmc.o
+ obj-$(CONFIG_$(SPL_)DM_MMC) += mmc-uclass.o
+ obj-$(CONFIG_$(SPL_)MMC_WRITE) += mmc_write.o
