@@ -1,20 +1,19 @@
 #!/bin/sh
 
-#bt_serial=$1
-bt_serial=/dev/ttyPS1
-bt_serial_log=/dev/ttyPS0
 
-2>$bt_serial_log #redirect stderr
+######## TESTS BEGIN ##################
 
-stty -F $bt_serial 115200 cs8 -cstopb -parenb -echo
-
-led(){
-	uio-test -t led -i $1 > $bt_serial_log
+running(){
+	log "running";
 }
 
-timeout_test(){
-	sleep $1 > $bt_serial_log
-	kill $2 > bt_serial_log;
+led(){
+	uio-test -t led -i $1 1>/dev/null 2>$bt_serial_log;
+	RET_INFO="led,$1";
+}
+
+rgb_led() {
+	uio-test -t rgb_led -d 0.1 -m 10 -s 1 1> /dev/null 2>$bt_serial_log;
 }
 
 btn() {
@@ -24,20 +23,13 @@ btn() {
 	wait $test_pid
 }
 
-debug() {
-	echo debug: "$1" > /dev/ttyPS0
-}
-
 test1(){
-	debug "test1";
+	log "test1";
 }
 
-running(){
-	debug "running";
-}
 
 sysmon(){
-	debug "bist:sysmon";
+	log "bist:sysmon";
 	vccvpvn=$(command sysmon -v vccvpvn -- /sys/bus/iio/devices/iio\:device0);
 	rc=$?
 	#sysmon will return the voltage in mV across pins VP and VN
@@ -45,31 +37,120 @@ sysmon(){
 	if [[ $rc -eq 0 && $(bc <<< "$vccvpvn < 543 && $vccvpvn > 498") -eq 1 ]]; then
 		echo PASS > $bt_serial
 	else
-		debug "rc:$rc, vccvpvn:$vccvpvn" 
+		log "rc:$rc, vccvpvn:$vccvpvn"
 		echo FAIL > $bt_serial
 	fi;
 }
 
+######## TESTS END ####################
+
+
+######### TEST ENGINE BEGIN ###########
+bt_serial=/dev/ttyPS1
+stty -F $bt_serial 115200 raw cs8 -cstopb -parenb -echo
+
+bt_serial_log=/dev/ttyPS0
+2>$bt_serial_log #redirect stderr
+
+sif="$IFS"; #save concatenation character
+
+RET_INFO=""; #this variable is te appended info to fail/pass return
+
+function trap_ctrlc(){
+	echo ctrl + c traped;
+	for job in $(jobs -p); do #stop all background jobs for this tool
+		echo kill $job && kill "$job"
+	done
+	IFS="$sif" #restore concatenation character
+	exit 0;
+}
+
+trap "trap_ctrlc" 2;
+
+#timeout_test(){
+#	sleep $1 > $bt_serial_log
+#	kill $2 > bt_serial_log;
+#}
+
+
+log() {
+	echo bt_log: "$1" > $bt_serial_log
+}
+echoerr() {
+	echo "$@" 1>&2;
+}
+
+pass(){
+	if [ -z "$RET_INFO" ]; then
+		echo -e "PASS\r" > $bt_serial
+	else
+		echo -e "PASS,$RET_INFO\r" > $bt_serial
+	fi
+	RET_INFO=""
+}
+
+fail(){
+	if [ -z "$RET_INFO" ]; then
+		echo -e "FAIL\r" > $bt_serial
+	else
+		echo -e "FAIL,${RET_INFO}\r" > $bt_serial
+	fi
+	RET_INFO=""
+}
+
+
+
 run_command () {
-	cmd=$1
-	cmd=$(echo -e -n $cmd | sed 's/\r$//')
-	$cmd;
+	cmda=( $@ );
+	IFS=" ";
+	cmd=${cmda[*]};
+	cmd=${cmd//[$'\r\n']} #remove \r\n
+	#echo "HEX|RX:" > $bt_serial_log
+	#echo -n $cmd | hexdump -C > $bt_serial_log
+	$cmd > $bt_serial_log
 	rc=$?
-	debug "code:$rc";
+	log "code: $rc";
 	case $rc in
 		0)
-			echo PASS > $bt_serial
-			debug "$cmd ok";
+			pass;
+			log "$cmd ok";
+			;;
+		1)
+			RET_INFO="generic,$rc";
+			fail generic;
+			log "Command '$cmd' return generic fail error";
 			;;
 		127)
-			echo FAIL > $bt_serial;
-			debug "Command '$cmd' is not implemented!";
+			RET_INFO="command not implemented,$rc";
+			fail;
+			log "Command '$cmd' is not implemented!";
 			;;
 		*)
-			echo FAIL > $bt_serial;
-			debug "Command '$cmd' unknown issue:$rc";
+			RET_INFO="unknown issue,for command: $cmd,$rc";
+			fail
+			log "Command '$cmd' unknown issue:$rc";
 			;;
 	esac
 }
-echo RUNNING > $bt_serial_log
-while read command; do run_command "$command"; done < $bt_serial;
+
+rx_req(){
+	reqa=( $@ );
+	IFS=" "
+	req=${reqa[*]};
+	#echo "HEX|RX:" > $bt_serial_log
+	#echo -n $req | hexdump -C > $bt_serial_log
+	echo RX: $req > $bt_serial_log
+	run_command $req
+	#tx_rsp; #uncomment to always pass
+}
+
+tx_rsp(){
+	pass;
+}
+
+echo BT SERVER IS RUNNING > $bt_serial_log
+
+#loop to process requests
+while read request; do rx_req $request; done < $bt_serial;
+
+######### TEST ENGINE END #############
