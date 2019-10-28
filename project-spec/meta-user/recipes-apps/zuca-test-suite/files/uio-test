@@ -132,7 +132,7 @@ while :; do
 		-m|--max-fill)
 			if [ "$2" ]; then
 					full=$2
-					isNAT $full && die 'ERROR: "-m|--max-fill" requires a number option argument.';
+					isNAN $full && die 'ERROR: "-m|--max-fill" requires a number option argument.';
 				shift
 			else
 				die 'ERROR: "-m|--max-fill" requires a non-empty option argument.'
