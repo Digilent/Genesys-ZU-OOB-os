@@ -1,0 +1,45 @@
+#!/bin/sh
+
+#Stop the script if error encountered
+set -e
+
+#used for verbose
+_V=0;
+log()
+{
+  if [[ $_V -eq 1 ]]; then
+    echo "$@"
+  fi
+}
+
+show_help ()
+{
+cat << EOF
+Usage : ${0##*/} [-h] [-i] [-l] [-v]
+	-h --help		  Display this help and exit
+
+  -v --verbose  Run action with verbose logs
+EOF
+}
+
+while :; do
+  case $1 in
+		-h|-\?|--help)
+			show_help
+			exit
+			;;
+    -v|--verbose)
+      _V=1
+      ;;
+    *)#Default case: No more options, so brake the loop.
+      break
+  esac
+  shift
+done
+
+encoder_id_parse=$(modetest -M xlnx)
+log "$encoder_id_parse"
+encoder_id_1=${encoder_id_parse##*encoders}
+encoder_id_2=${encoder_id_1:1:2}
+##echo "$encoder_id_2"
+modetest -M xlnx -s $encoder_id_2:1920x1080@RG16 
