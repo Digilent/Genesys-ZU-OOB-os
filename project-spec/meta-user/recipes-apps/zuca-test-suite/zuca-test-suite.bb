@@ -12,6 +12,7 @@ SRC_URI = "file://zuca-test-suite \
 	file://sysmon \
 	file://usb-bist \
 	file://usb-reset \
+	file://DP-bist \
 	file://zuca-init \
 	"
 
@@ -30,6 +31,7 @@ do_install() {
 	install -m 0755 ${S}/sysmon ${D}/${bindir}
 	install -m 0755 ${S}/usb-bist ${D}/${bindir}
 	install -m 0755 ${S}/usb-reset ${D}/${bindir}
+	install -m 0755 ${S}/DP-bist ${D}/${bindir}
 
 	#config
 	install -d ${D}${sysconfdir}/init.d
