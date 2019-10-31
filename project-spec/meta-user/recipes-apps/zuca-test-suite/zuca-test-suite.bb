@@ -10,6 +10,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 SRC_URI = "file://zuca-test-suite \
 	file://uio-test \
 	file://sysmon \
+	file://sim-bist \
 	file://usb-bist \
 	file://usb-reset \
 	file://DP-bist \
@@ -29,6 +30,7 @@ do_install() {
 	install -m 0755 ${S}/zuca-test-suite ${D}/${bindir}
 	install -m 0755 ${S}/uio-test ${D}/${bindir}
 	install -m 0755 ${S}/sysmon ${D}/${bindir}
+	install -m 0755 ${S}/sim-bist ${D}/${bindir}
 	install -m 0755 ${S}/usb-bist ${D}/${bindir}
 	install -m 0755 ${S}/usb-reset ${D}/${bindir}
 	install -m 0755 ${S}/DP-bist ${D}/${bindir}

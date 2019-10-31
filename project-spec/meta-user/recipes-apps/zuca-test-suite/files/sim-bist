@@ -1,0 +1,66 @@
+#!/bin/sh
+
+#Stop the script if error encountered
+set -e
+
+#used for verbose
+_V=0;
+log()
+{
+  if [[ $_V -eq 1 ]]; then
+    echo "$@"
+  fi
+}
+
+show_help ()
+{
+cat << EOF
+Usage : ${0##*/} [-h] [-i] [-l] [-v]
+	-h --help		  Display this help and exit
+
+	-i --info		  Information regarding the Modem
+
+  -v --verbose  Run action with verbose logs
+EOF
+}
+
+modem_info()
+{
+  var=$(gammu identify)
+  echo "$var"
+}
+
+get_tty=$(dmesg | grep ".3: Qualcomm USB modem converter now attached to")
+tty_name=${get_tty: -7}
+
+printf '[gammu] \ndevice =/dev/%s \nconnection = at\n' "$tty_name" >> ~/.gammurc
+
+while :; do
+  case $1 in
+		-h|-\?|--help)
+			show_help
+			exit
+			;;
+    -i|--info)
+      modem_info
+      exit
+      ;;
+    -v|--verbose)
+      _V=1
+      ;;
+    *)#Default case: No more options, so brake the loop.
+      break
+  esac
+  shift
+done
+
+modem=$(gammu identify)
+#verbose
+log "$modem"
+
+if echo "$modem" | grep -q SIM; then
+  exit 1;
+else
+  echo "ERROR no SIM found"
+  exit 0;
+fi
