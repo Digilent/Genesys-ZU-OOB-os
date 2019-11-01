@@ -12,6 +12,7 @@ SRC_URI += "file://user_2019-07-10-11-42-00.cfg \
             file://user_2019-08-09-09-23-00.cfg \
             file://user_2019-08-15-16-24-00.cfg \
             file://user_2019-08-19-15-47-00.cfg \
+            file://user_2019-11-01-12-02-00.cfg \
             "
 
 SRC_URI += "file://0001-Remove-wilc1000.patch \
