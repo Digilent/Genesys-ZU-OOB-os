@@ -1,7 +1,7 @@
 From 00537427585935d7eb762da628e9940a3d7564fc Mon Sep 17 00:00:00 2001
 From: Ionel Badisor <ionel.badisor@digilent.ro>
 Date: Wed, 7 Aug 2019 15:50:58 +0300
-Subject: [PATCH 2/3] Exclude fsbl code to make it fit.
+Subject: [PATCH 2/4] Exclude fsbl code to make it fit.
 
 ---
  lib/sw_apps/zynqmp_fsbl/src/xfsbl_config.h | 14 +++++++-------
@@ -51,5 +51,5 @@ index ecf479511..89efa84d7 100644
  
  #if FSBL_NAND_EXCLUDE_VAL
 -- 
-2.23.0
+2.17.1
 
