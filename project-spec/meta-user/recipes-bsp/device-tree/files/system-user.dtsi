@@ -130,7 +130,7 @@ EMIO[0] which is line 78.
 		#reset-cells = <1>;
 		#gpio-cells = <2>;
 		interrupt-parent = <&gpio>;
-		interrupts = <25 8>;
+		interrupts = <25 IRQ_TYPE_LEVEL_LOW>;
 		microchip,spi-present-mask = <0x01>;
 		interrupt-controller;
 		#interrupt-cells = <0x2>;
