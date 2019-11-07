@@ -9,7 +9,7 @@ test_running(){
 }
 
 test_uio_bench() {
-	echo ":TEST UIO >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
+	echo "TEST UIO >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
 	ledN=4
 	for i in `seq -s " " 0 $ledN`; do
 		tx_req led $i;
@@ -19,6 +19,22 @@ test_uio_bench() {
 	tx_req led 0;
 
 	echo "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<:TEST UIO"
+	echo;
+}
+
+test_rtc_set(){
+	echo "TEST RTC SET>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
+	ts=`date +%s`
+	tx_req rtc-test $ts write
+	echo "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<:TEST RTC SET"
+	echo;
+}
+
+test_rtc(){
+	echo "TEST RTC >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
+	ts=`date +%s`
+	tx_req rtc-test $ts
+	echo "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< TEST RTC";
 	echo;
 }
 ################### TEST CALLS END ############################
@@ -79,15 +95,35 @@ rx_rsp(){
 		rm $lock_file;
 	fi
 }
-
+waituser(){
+	ret=0;
+	read -r -p "$1 [Y/n]" response
+	case "$response" in
+		[nN])
+			ret=1;
+		;;
+		*)
+			ret=0;
+		;;
+	esac
+	return $ret
+}
 
 stty -F $zuca_serial 115200 raw cs8 -cstopb -parenb -echo
 while read -r response; do rx_rsp $response; done < $zuca_serial &
 echo BT-RUNNING;
 
 #TEST SET BEGIN
-test_running;
-test_uio_bench;
+#test_running;
+#test_uio_bench;
+test_rtc_set;
+waituser "Board power cycling is required. This includes removing power cord.   Ready ?";
+if [ $? -eq 0 ]; then
+	test_rtc;
+else
+	echo "rtc test skipped";
+fi
+
 #TEST SET END
 
 #echo;echo MANUAL MODE:; while read request; do tx_req "$request"; done;
