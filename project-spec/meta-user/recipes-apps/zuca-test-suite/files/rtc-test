@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -e
+
+aprox=20
+ref=$1
+if [ "$2" ]; then
+	date -s "$(date --date='@'$1'')"
+	hwclock -w;
+else
+	sse=$(date "+%s")
+	low=$(($ref - $aprox))
+	high=$(($ref + $aprox))
+	if (( sse >= low && sse <= high )); then
+		echo OK $ref $low $high : $sse
+		exit 0;
+	else
+		echo FAIL $ref $low $high : $sse
+		exit 1;
+	fi
+fi
