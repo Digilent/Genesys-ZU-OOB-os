@@ -1,73 +1,175 @@
+# Files to deploy on SD card: BOOT.BIN, image.ub, system.bit, system.dtb uEnv.txt(this file)
+
 #VARIABLES
 
-# files to deploy: BOOT.BIN, image.ub, system.bit, uEnv.txt(this file)
-
-# FPGA device name
+## FPGA device name
 fdn=zu3eg
-bitstream_file=system.bit
+# setenv fdn zu3eg
 
-# TFTP board directory
+## TFTP board directory
 tbd=zuca-3eg
+# setenv tbd zuca-3eg
+
+## Load addresses
+bit_addr=0x100000
+# setenv bit_addr 0x100000
+dtb_addr=0x140000
+# setenv dtb_addr 0x140000
+img_addr=0x10000000
+# setenv img_addr 0x10000000
+
+## File names
+bit_name=system.bit
+# setenv bit_name system.bit
+dtb_name=system.dtb
+# setenv dtb_name system.dtb
+img_name=image.ub
+# setenv img_name image.ub
+
+## MAC details
+mac_addr=0x13ffff0
+# setenv mac_addr 0x13ffff0
+mac_qspi_addr=0x1FFF000
+# setenv mac_qspi_addr 0x1FFF000
+mac_length=0x6
+# setenv mac_length 0x6
+mac_dtb_path=/amba/ethernet@ff0b0000
+# setenv mac_dtb_path /amba/ethernet@ff0b0000
+mac_dtb_prop='local-mac-address'
+# setenv mac_dtb_prop 'local-mac-address'
+
+## MMC
+## Load bitstream(system.bit) in FPGA. Usable to override bitstream included in BOOT.bin
+mmc_fpga=load mmc 0:1 ${bit_addr} ${bit_name} && fpga load ${fdn} ${bit_addr} $filesize;
+# load mmc 0:1 ${bit_addr} ${bit_name} && fpga load $fdn ${bit_addr} $filesize;
+
+## Load device tree
+mmc_fdt=load mmc 0:1 ${dtb_addr} ${dtb_name}
+# setenv mmc_fdt load mmc 0:1 ${dtb_addr} ${dtb_name}
+# load mmc 0:1 ${dtb_addr} ${dtb_name}
+
+## Default without any customizations as built by petalinux
+mmc_boot=load mmc 0:1 ${img_addr} image.ub && bootm ${img_addr};
+# load mmc 0:1 ${img_addr} image.ub;
+
+
+
+
+## Same as default but explicit
+mmc_x_boot_clean=load mmc 0:1 ${img_addr} image.ub && bootm $img_addr:kernel@1 $img_addr:ramdisk@1 $img_addr:fdt@system-top.dtb
+# setenv mmc_x_boot_clean load mmc 0:1 ${img_addr} image.ub && bootm $img_addr:kernel@1 $img_addr:ramdisk@1 $img_addr:fdt@system-top.dtb
+
+## Same as default but explicit allowing bootargs override
+mmc_x_boot=load mmc 0:1 ${img_addr} image.ub && bootm $img_addr:kernel@1 $img_addr:ramdisk@1 $img_addr:fdt@system-top.dtb $bootargs;
+# setenv mmc_x_boot load mmc 0:1 ${img_addr} image.ub && bootm $img_addr:kernel@1 $img_addr:ramdisk@1 $img_addr:fdt@system-top.dtb $bootargs;
+
+## Same as default but override allowing bootargs also discard ramdisk
+mmc_r_boot=load mmc 0:1 ${img_addr} image.ub && bootm $img_addr:kernel@1 - $img_addr:fdt@system-top.dtb $bootargs;
+# setenv mmc_r_boot load mmc 0:1 ${img_addr} image.ub && bootm $img_addr:kernel@1 - $img_addr:fdt@system-top.dtb $bootargs;
+
+
+## TFTP
+serverip=10.113.0.91
+# setenv serverip 10.113.0.91
+
+## Load bitstream(system.bit) in FPGA from TFTP. Usable to override bitstream included in BOOT.bin
+tftp_fpga=tftpboot ${bit_addr} ${tbd}/$bitstream_file && fpga load ${fdn} ${bit_addr} $filesize
+# setenv tftp_fpga tftpboot ${bit_addr} ${tbd}/$bitstream_file && fpga load ${fdn} ${bit_addr} $filesize
+
+## Default without any customizations as built by petalinux
+tftp_boot=tftpboot ${img_addr} ${tbd}/image.ub && bootm ${img_addr};
+# setenv tftp_boot tftpboot ${img_addr} ${tbd}/image.ub && bootm ${img_addr};
+
+## Same as default but override allowing bootargs also discard ramdisk
+tftp_r_boot=tftpboot ${img_addr} ${tbd}/image.ub && bootm $img_addr:kernel@1 - $img_addr:fdt@system-top.dtb $bootargs;
+# setenv tftp_r_boot tftpboot ${img_addr} ${tbd}/image.ub && bootm $img_addr:kernel@1 - $img_addr:fdt@system-top.dtb $bootargs;
+
+
+## Set device tree base addres for edit
+fdt_init=fdt addr ${dtb_addr}
+# setenv fdt_init 'fdt addr ${dtb_addr}'
+# fdt addr ${dtb_addr};
+
+## Detect QSPI flash
+qspi_detect=sf probe
+# setenv qspi_detect 'sf probe'
+# sf probe
+
+## Read MAC addres from QSPI
+mac_read_qspi_data=sf read ${mac_addr} ${mac_qspi_addr} ${mac_length}
+# setenv mac_read_qspi_data 'sf read ${mac_addr} ${mac_qspi_addr} ${mac_length}'
+# sf read ${mac_addr} ${mac_qspi_addr} ${mac_length};
+
+## Find and set addres for MAC device tree node
+mac_read_dtb_addr=fdt get addr mac_dtb_addr ${mac_dtb_path} ${mac_dtb_prop}
+# setenv mac_read_dtb_addr 'fdt get addr mac_dtb_addr ${mac_dtb_path} ${mac_dtb_prop}'
+# fdt get addr mac_dtb_addr ${mac_dtb_path} ${mac_dtb_prop}
+
+## Overwrite mac address in device tree
+mac_write_dtb=cp.b ${mac_addr} ${mac_dtb_addr} ${mac_length}
+# setenv mac_write_dtb 'cp.b ${mac_addr} ${mac_dtb_addr} ${mac_length}'
+# cp.b ${mac_addr} ${mac_dtb_addr} ${mac_length};
+
+mac_load=run mac_read_qspi_data && run mac_read_dtb_addr && run mac_write_dtb
+# setenv mac_load 'run mac_read_qspi_data && run mac_read_dtb_addr && run mac_write_dtb'
+
 #Kernel command line: use mmc second partition as rootfs [Do not surround with double quotes]
 bootargs=earlycon console=ttyPS0,115200 clk_ignore_unused root=/dev/mmcblk0p2 rw rootwait;
+
 ## Manual commands
-# load mmc 0:1 ${clobstart} image.ub
+# load mmc 0:1 ${img_addr} image.ub
 # env set bootargs "earlycon console=ttyPS0,115200 clk_ignore_unused root=/dev/mmcblk0p2 rw rootwait";
-# bootm $clobstart:kernel@1 - $clobstart:fdt@system-top.dtb $bootargs
+# bootm $img_addr:kernel@1 - $img_addr:fdt@system-top.dtb $bootargs
 
+## AVAILABLE BOOT COMMANDS
 
-#MMC
-# Load bitstream(system.bit) in FPGA. Usable to override bitstream included in BOOT.bin
-mmc_fpga=load mmc 0:1 ${clobstart} $bitstream_file && fpga load $fdn ${clobstart} $filesize;
-
-# Default without any customizations as built by petalinux
-mmc_boot=load mmc 0:1 ${clobstart} image.ub && bootm ${clobstart};
-
-# Same as default but explicit
-mmc_x_boot_clean=load mmc 0:1 ${clobstart} image.ub && bootm $clobstart:kernel@1 $clobstart:ramdisk@1 $clobstart:fdt@system-top.dtb
-
-# Same as default but explicit allowing bootargs override
-mmc_x_boot=load mmc 0:1 ${clobstart} image.ub && bootm $clobstart:kernel@1 $clobstart:ramdisk@1 $clobstart:fdt@system-top.dtb $bootargs;
-
-# Same as default but override allowing bootargs also discard ramdisk
-mmc_r_boot=load mmc 0:1 ${clobstart} image.ub && bootm $clobstart:kernel@1 - $clobstart:fdt@system-top.dtb $bootargs;
-
-
-
-
-#TFTP
-serverip=10.113.0.91
-
-# Load bitstream(system.bit) in FPGA from TFTP. Usable to override bitstream included in BOOT.bin
-tftp_fpga=tftpboot ${clobstart} ${tbd}/$bitstream_file && fpga load ${fdn} ${clobstart} $filesize
-
-# Default without any customizations as built by petalinux
-tftp_boot=tftpboot ${clobstart} ${tbd}/image.ub && bootm ${clobstart};
-
-# Same as default but override allowing bootargs also discard ramdisk
-tftp_r_boot=tftpboot ${clobstart} ${tbd}/image.ub && bootm $clobstart:kernel@1 - $clobstart:fdt@system-top.dtb $bootargs;
-
-# AVAILABLE BOOT COMMANDS
-
-# Load bitstream from mmc then boot default
+## Load bitstream from mmc then boot default
 boot_mmc=run mmc_fpga && run mmc_boot
 
-# Load bitstream from mmc then boot default use sd rootfs instead of initramfs
+## Load bitstream from mmc then boot default use sd rootfs instead of initramfs
 boot_mmc_r=run mmc_fpga && run mmc_r_boot
 
-# Load bitstream from tftp then boot image.ub from tftp
+## Load bitstream from tftp then boot image.ub from tftp
 boot_tftp=run tftp_fpga && run tftp_boot
 
-# Load bitstream from tftp then boot image.ub from tftp then use sd rootfs instead of initramfs
+## Load bitstream from tftp then boot image.ub from tftp then use sd rootfs instead of initramfs
 boot_tftp_r=run tftp_fpga && run tftp_r_boot
 
-# BOOTMENU
-bootmenu_0=Boot 1. MMC rootfs=run boot_mmc_r
-bootmenu_1=Boot 2. MMC initramfs=run boot_mmc
+## BOOTMENU
+bootmenu_0=Boot 1. MMC initramfs=run boot_mmc
+bootmenu_1=Boot 2. MMC rootfs=run boot_mmc_r
 bootmenu_2=Boot 3. TFTP initramfs=run boot_tftp
 bootmenu_3=Boot 4. TFTP rootfs=run boot_tftp_r
 bootmenu_4=Reset board=reset
 bootmenu_5=U-Boot boot order=boot
 
+## SET bootp args
+#mmc_set_boot_env_default=setenv kern_addr '${img_addr}':kernel@1 && setenv ramd_addr '${img_addr}':ramdisk@1 && setenv dtb_addr '${img_addr}':fdt@system-top.dtb && setenv boot_args '${bootargs}'
+mmc_set_boot_env_default=setenv kern_addr ${img_addr}:kernel@1 && setenv ramd_addr ${img_addr}:ramdisk@1 && setenv boot_args ${bootargs}
+# setenv mmc_set_boot_env_default setenv kern_addr ${img_addr}:kernel@1 && setenv ramd_addr ${img_addr}:ramdisk@1 && setenv boot_args ${bootargs}
+
+## Custom boot
+mmc_boot_custom=load mmc 0:1 '${img_addr}' '${img_name}' && run mmc_set_boot_env_default && bootm '${kern_addr}' '${ramd_addr}' '${dtb_addr}' '${boot_args}'
+# setenv mmc_boot_custom 'load mmc 0:1 ${img_addr} ${img_name} && run mmc_set_boot_env_default && bootm '${kern_addr}' '$'{ramd_addr}' '${dtb_addr}' '${boot_args}''
+
 #Command to run after loading uEnv.txt from mmc
-uenvcmd=mmc rescan; bootmenu 20
+#uenvcmd=run mmc_fpga && run mmc_fdt && run fdt_init && run qspi_detect && run mac_load & mmc_boot_custom
+
+## BOOTM manual run
+# run uenvboot
+# run mmc_fpga
+# load mmc 0:1 ${img_addr} ${img_name}
+# sf probe
+# bootm start $img_addr
+# bootm loados
+# bootm ramdisk
+# bootm fdt
+# bootm prep
+# fdt list $mac_dtb_path $mac_dtb_prop
+# run mac_load
+# fdt list $mac_dtb_path $mac_dtb_prop
+# bootm go
+
+
+uenvcmd=run mmc_fpga && load mmc 0:1 ${img_addr} ${img_name} && sf probe && bootm start $img_addr && bootm loados && bootm ramdisk && bootm fdt && bootm prep && run mac_load && bootm go
+
