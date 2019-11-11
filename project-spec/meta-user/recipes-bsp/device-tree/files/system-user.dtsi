@@ -27,7 +27,7 @@ devicetree/bindings/net/phy.txt
 	phy-mode = "rgmii-id";
 	phy0: phy@15 {
 		reg = <0x0F>;
-		reset-gpios = <&gpio 43 GPIO_ACTIVE_LOW>; //changes to 44 in rev B
+		reset-gpios = <&gpio 44 GPIO_ACTIVE_LOW>;
 		reset-assert-us = <1>;
 		reset_deassert-us = <200>;
 		interrupt-parent = <&gpio>;
