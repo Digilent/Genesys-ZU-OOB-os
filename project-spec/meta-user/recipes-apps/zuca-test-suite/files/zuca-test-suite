@@ -34,11 +34,12 @@ sysmon(){
 	rc=$?
 	#sysmon will return the voltage in mV across pins VP and VN
 	#the test fixture will generate a voltage of 520.5 mV nominal
-	if [[ $rc -eq 0 && $(bc <<< "$vccvpvn < 543 && $vccvpvn > 498") -eq 1 ]]; then
-		echo PASS > $bt_serial
-	else
-		log "rc:$rc, vccvpvn:$vccvpvn"
-		echo FAIL > $bt_serial
+	if [[ $rc -eq 0 ]]; then
+		log "vccvpvn:$vccvpvn";
+		if [[ $(bc <<< "$vccvpvn < 543 && $vccvpvn > 498") -eq 0 ]]; then
+			RET_INFO="vccvpvn:$vccvpvn";
+			return 1;
+		fi;
 	fi;
 }
 
@@ -116,7 +117,7 @@ run_command () {
 			log "$cmd ok";
 			;;
 		1)
-			RET_INFO="generic,$rc";
+			#RET_INFO="generic,$rc";
 			fail generic;
 			log "Command '$cmd' return generic fail error";
 			;;
