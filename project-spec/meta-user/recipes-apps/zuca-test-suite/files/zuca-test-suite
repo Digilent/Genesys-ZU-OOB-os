@@ -106,7 +106,7 @@ run_command () {
 	IFS=" ";
 	cmd=${cmda[*]};
 	cmd=${cmd//[$'\r\n']} #remove \r\n
-	cmd=${cmd//[,]/ ]} #replace coma with space
+	cmd=${cmd//[,]/ } #replace coma with space
 	#echo "HEX|RX:" > $bt_serial_log
 	#echo -n $cmd | hexdump -C > $bt_serial_log
 	$cmd > $bt_serial_log
