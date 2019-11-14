@@ -23,13 +23,14 @@ if [ $1 = "wlan0" ] && [ $# -ne "$ARGS_WIFI" ]; then
   exit 1
 fi
 
+# Bringing wlan0 down sometimes causes CPU stall with WILC 15.3.1
 # Set the testing interface down
-ip link set "$1" down
-echo "We set $1 down."
-if [ "$?" != 0 ]; then
-  echo "<ip link set $1 down> command failed!"
-  exit 2
-fi
+#ip link set "$1" down
+#echo "We set $1 down."
+#if [ "$?" != 0 ]; then
+#  echo "<ip link set $1 down> command failed!"
+#  exit 2
+#fi
 
 # Set the testing interface up
 ip link set "$1" up
@@ -40,16 +41,16 @@ if [ "$?" != 0 ]; then
 fi
 
 if [ $1 = "wlan0" ]; then
-  ./wifi_bist.sh "$2" "$3"
+  wifi-bist "$2" "$3"
   if [ "$?" != 0 ]; then
     echo "WPA configuration script failed!"
     exit 1
   fi
 fi
 
-dhclient -1 -v $1
+udhcpc -i $1 -n -q
 if [ "$?" != 0 ]; then
-  echo "<dhclient $1> command failed!"
+  echo "<udhcpc -i $1 -n -q> command failed!"
   exit 6
 else
   echo "Host configuration DONE"

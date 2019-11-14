@@ -6,7 +6,7 @@
 
 # How to call this script?
 # Call this script with two parameters: wifi ssid and password:
-# wifi_bist <ssid> <password>
+# wifi-bist <ssid> <password>
 
 # Make sure that wpa_supplicant does not start automatically after boot.
 # If it starts automatically without a configuration file we cannot reconfigure
@@ -31,7 +31,7 @@
 # 8 - Ping failed
 
 ARGS=2
-FILE="/etc/wpa_supplicant_dig.conf"
+FILE="/etc/wpa_supplicant.conf"
 
 if [ $# -ne "$ARGS" ]; then
 	echo "Wrong number of arguments!"
@@ -40,7 +40,8 @@ fi
 
 # Check if there is a wpa_supplicant daemon already running. If there is another
 # one we do not start a new one.
-pgrep wpa_supplicant > /dev/null
+# regex in grep patttern voids grep showing up in results
+ps | grep [w]pa_supplicant > /dev/null
 if [ "$?" = 1 ]; then
   wpa_supplicant -B -i wlan0 -c $FILE -D nl80211
   if [ "$?" != 0 ]; then
