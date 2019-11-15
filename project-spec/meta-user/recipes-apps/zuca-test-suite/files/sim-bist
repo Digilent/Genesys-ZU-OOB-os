@@ -59,8 +59,8 @@ modem=$(gammu identify)
 log "$modem"
 
 if echo "$modem" | grep -q SIM; then
-  exit 1;
+  exit 0;
 else
   echo "ERROR no SIM found"
-  exit 0;
+  exit 1;
 fi
