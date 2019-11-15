@@ -32,6 +32,12 @@ fi
 #  exit 2
 #fi
 
+# Since wilc pollutes the kernel log we need to lower console level,
+# potentially disrupting other log messages. Also, we cannot restore
+# console level at the end, because bringing down wlan0 might cause
+# CPU stall. TODO: driver patch when stall is fixed.
+dmesg -n 5
+
 # Set the testing interface up
 ip link set "$1" up
 echo "We set $1 up."
@@ -56,7 +62,11 @@ else
   echo "Host configuration DONE"
 fi
 
-ROUTER_ADDRESS=$(ip route | grep $1 | grep -m1 default | awk '{ print $3 }')
+# Get gateway IP. Do not filter for interface as udhcpc by default does
+# not set gateways for multiple interfaces. It does not matter for the
+# test since the router is configured for wifi and eth on the same subnet,
+# so the gateway published for either interface is accessible from the other.
+ROUTER_ADDRESS=$(ip route | grep -m1 default | awk '{ print $3 }')
 echo "$ROUTER_ADDRESS"
 if [ -z "$ROUTER_ADDRESS" ]; then
   echo "No IP received"
