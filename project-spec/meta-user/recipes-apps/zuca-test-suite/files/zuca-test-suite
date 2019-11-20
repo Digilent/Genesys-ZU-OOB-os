@@ -23,6 +23,39 @@ btn() {
 	wait $test_pid
 }
 
+# This test returns two decimal arguments representing
+# the current state of the buttons and switches, respectively
+# each btn/sw being represented by a bit in the order MSB first:
+# (btnU btnL btnD btnR btnC btn1 btn0)
+# and (sw3 sw2 sw1 sw0)
+user_io() {
+	btns=(btnU btnL btnD btnR btnC btn1 btn0)
+	arg1=0
+	for btn in "${btns[@]}"; do
+		btn_val=$(gpioget $(gpiofind $btn));
+		rc=$?
+		if [[ $rc -ne 0 ]]; then
+			return $rc;
+		fi;
+		arg1=$((arg1<<1));
+		arg1=$((arg1+btn_val));
+	done
+
+	sws=(sw3 sw2 sw1 sw0)
+	arg2=0
+	for sw in "${sws[@]}"; do
+                sw_val=$(gpioget $(gpiofind $sw));
+                rc=$?
+                if [[ $rc -ne 0 ]]; then
+                        return $rc;
+                fi;
+		arg2=$((arg2<<1));
+                arg2=$((arg2+sw_val));
+        done
+	RET_INFO="$arg1,$arg2"
+	return 0
+}
+
 test1(){
 	log "test1";
 }
