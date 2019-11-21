@@ -26,6 +26,7 @@ Usage : ${0##*/} [-h] [-t device_type] [-i index] [-d delay] [-m max_fill] [-s s
 					"sw" (for switches), "led" ,
 					"rgb_led" RGB led controlled by pwm
 
+	--silent		Less verbose.
 	Options for button, switch, led:
 	-i --index		Index of switch , led or button
 				Example:
@@ -42,6 +43,9 @@ EOF
 }
 
 show_vars(){
+	if [ $verbose -eq 0 ]; then
+		return;
+	fi;
 	echo file: $file;
 	echo
 	echo device type: $dev_type;
@@ -62,7 +66,7 @@ delay=1
 full=255
 value=1;
 
-verbose=0;
+verbose=1;
 
 while :; do
 	case $1 in
@@ -164,6 +168,9 @@ while :; do
 		--max-fill=)
 				die 'ERROR: "--max-fill=" requires a non-empty option argument.'
 			;;
+		--silent)
+				verbose=0
+			;;
 		--) # End of all option
 			shift
 			break
@@ -210,22 +217,18 @@ rgb_led_test(){
 
 case $dev_type in
 led)
-	echo Led
 	show_vars;
 	gpioset $(gpiofind led${index})=$value;
 	;;
 btn)
-	echo Button
 	show_vars;
 	gpiomon -n 1 -r -s $(gpiofind btn${index}) # return on press (rising edge)
 	;;
 sw)
-	echo Switch
 	show_vars;
 	gpiomon -n 1 -r -s $(gpiofind sw${index}) # return on press (rising edge)
 	;;
 rgb_led)
-	echo RGB Led
 	file=${file:-"/sys/module/pwm_rgb_led/parameters/pwm_color_fill"};
 	show_vars;
 	rgb_led_test;

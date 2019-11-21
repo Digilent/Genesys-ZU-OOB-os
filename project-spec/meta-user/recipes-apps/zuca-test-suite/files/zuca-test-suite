@@ -58,10 +58,20 @@ user_io() {
 
 user_led(){
 	for led in $(seq -s " " 0 4); do
-		uio-test -t led -i $led;
+		uio-test -t led -i $led --silent;
 	done;
+	# If there already is a process executing the loop below,
+	# kill it
+	# Full-feature ps from package procps required
+	if ppid=$(ps -o ppid= -C "uio-test -t rgb_led") && \
+		[[ "$(ps -o cmd= -p $ppid)" == *"zuca-test-suite"* ]]; then
+		log "killing:$(ps -p $ppid)";
+		kill $ppid;
+	else
+		echo no;
+	fi;
 	while true; do
-		uio-test -t rgb_led -d 0.1 -m 10 -s 1;
+		uio-test -t rgb_led -d 0.1 -m 10 -s 1 --silent;
 	done &
 	return 0;
 }
