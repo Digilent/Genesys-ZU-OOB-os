@@ -75,9 +75,17 @@ fi
 
 # Ping the router
 ping -c1 -I $1 $ROUTER_ADDRESS > /dev/null
-if [ "$?" = 0 ]; then
-  exit 0
-else
+if [ "$?" != 0 ]; then
   echo "<ping -c1 $ROUTER_ADDRESS > /dev/null> command failed!"
   exit 8
 fi
+
+# Release IP so that default route is reset for the next interface
+udhcpc -i $1 -n -q -R
+if [ "$?" != 0 ]; then
+  echo "<udhcpc -i $1 -n -q -R> command failed!"
+  exit 9
+fi
+
+exit 0
+
