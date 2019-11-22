@@ -15,6 +15,7 @@ SRC_URI = "file://zuca-test-suite \
 	file://usb-bist \
 	file://usb-reset \
 	file://DP-bist \
+	file://DP-bist-wrapper \
 	file://network-bist \
 	file://wifi-bist \
 	file://pci-bist \
@@ -39,6 +40,7 @@ do_install() {
 	install -m 0755 ${S}/usb-bist ${D}/${bindir}
 	install -m 0755 ${S}/usb-reset ${D}/${bindir}
 	install -m 0755 ${S}/DP-bist ${D}/${bindir}
+	install -m 0755 ${S}/DP-bist-wrapper ${D}/${bindir}
 	install -m 0755 ${S}/network-bist ${D}/${bindir}
 	install -m 0755 ${S}/wifi-bist ${D}/${bindir}
 	install -m 0755 ${S}/pci-bist ${D}/${bindir}

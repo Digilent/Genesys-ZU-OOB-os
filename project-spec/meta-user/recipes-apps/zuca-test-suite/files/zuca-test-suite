@@ -80,6 +80,12 @@ test1(){
 	log "test1";
 }
 
+displayport(){
+	log "bist:DP-bist"
+	# We need a second level of indirection in the form of this wrapper
+	# to be able to launch modetest in the background
+	coproc DP-bist-wrapper
+}
 
 sysmon(){
 	log "bist:sysmon";

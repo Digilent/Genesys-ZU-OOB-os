@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# If modetest is already running, kill it
+if pid=$(ps -o pid= -C "DP-bist"); then
+        log "killing: $(ps -p $pid)";
+        kill -9 $pid;
+fi;
+
+coproc DP-bist
+
+# Stay here to keep pattern displayed
+while :; do sleep 1; done
