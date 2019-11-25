@@ -54,6 +54,19 @@ if [ $1 = "wlan0" ]; then
   fi
 fi
 
+# Before requesting an IP, flush all addresses from the other interface
+# so that we do not have problems with multiple interfaces on the same
+# subnet
+if [ $1 = "wlan0" ]; then
+  OTHER="eth0"
+  log "flushing IPs for $OTHER"
+  ip a flush dev $OTHER
+elif [ $1 = "eth0" ]; then
+  OTHER="wlan0"
+  log "flushing IPs for $OTHER"
+  ip a flush dev $OTHER
+fi;
+
 udhcpc -i $1 -n -q
 if [ "$?" != 0 ]; then
   echo "<udhcpc -i $1 -n -q> command failed!"
@@ -78,13 +91,6 @@ ping -c1 -I $1 $ROUTER_ADDRESS > /dev/null
 if [ "$?" != 0 ]; then
   echo "<ping -c1 $ROUTER_ADDRESS > /dev/null> command failed!"
   exit 8
-fi
-
-# Release IP so that default route is reset for the next interface
-udhcpc -i $1 -n -q -R
-if [ "$?" != 0 ]; then
-  echo "<udhcpc -i $1 -n -q -R> command failed!"
-  exit 9
 fi
 
 exit 0

@@ -41,7 +41,7 @@ fi
 # Check if there is a wpa_supplicant daemon already running. If there is another
 # one we do not start a new one.
 # regex in grep patttern voids grep showing up in results
-ps | grep [w]pa_supplicant > /dev/null
+ps -e | grep [w]pa_supplicant > /dev/null
 if [ "$?" = 1 ]; then
   wpa_supplicant -B -i wlan0 -c $FILE -D nl80211
   if [ "$?" != 0 ]; then
@@ -59,9 +59,9 @@ fi
 # the wpa_supplicant daemon will maintain the first configuration.
 # From this reason we reconfigure the wpa_supplicant daemon with new ssid and
 # psk each time the scipt is run
-NETWORK_ID=$(wpa_cli -i wlan0 add_network)
-wpa_cli -i wlan0 set_network $NETWORK_ID ssid '"'$1'"'
-wpa_cli -i wlan0 set_network $NETWORK_ID psk '"'$2'"'
-wpa_cli -i wlan0 enable_network $NETWORK_ID # enables the new added network
-# select the new added network to be used and disable the other ones
+NETWORK_ID=$(wpa_cli -i wlan0 add_network) && \
+wpa_cli -i wlan0 set_network $NETWORK_ID ssid '"'$1'"' && \
+wpa_cli -i wlan0 set_network $NETWORK_ID psk '"'$2'"' && \
+wpa_cli -i wlan0 enable_network $NETWORK_ID && \
 wpa_cli -i wlan0 select_network $NETWORK_ID
+
