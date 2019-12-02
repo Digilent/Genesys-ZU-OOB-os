@@ -4208,6 +4208,7 @@ CONFIG_gammu=y
 CONFIG_mmc-utils=y
 CONFIG_nano=y
 CONFIG_picocom=y
+CONFIG_pv=y
 CONFIG_wilc-firmware-1000-wifi=y
 CONFIG_wilc-firmware-3000-ble=y
 CONFIG_wilc-firmware-3000-wifi=y
