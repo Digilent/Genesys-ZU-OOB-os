@@ -10,8 +10,7 @@
 
 # Return values:
 # 0 - everything OK
-# 1 - the cable orientation wasn't changed
-# 2 - there is no USB device connected in type-c connector
+# 1 - there is no USB device connected in type-c connector
 
 TUSB322_I2C_BUS=7
 CONNECTION_STATUS_REGISTER_ADDR=0x08
@@ -50,35 +49,12 @@ then
     CABLE_DIR=$(((CONNECTION_STATUS_AND_CONTROL_REGISTER >> CABLE_DIR_OFF) & 0x01))
     printf "Current cable orientation: 0x%x\n" "$CABLE_DIR"
 
-    # Verify if we run the type-c test for the first time
-    test -e /run/media/mmcblk0p1/type_c_orientation.txt
-    if [ "$?" != 0 ]; then
-        # We run this test for the first time
-        # We have to create a file that keeps the current type-c connector type_c_orientation
-        touch /run/media/mmcblk0p1/type_c_orientation.txt
-
-        if [ $CABLE_DIR -eq 1 ]; then
-            echo -n "1" > /tmp/type_c_orientation.txt
-        else
-            echo -n "0"; > /tmp/type_c_orientation.txt
-        fi
+    if [ $CABLE_DIR -eq 1 ]; then
+        echo -n "1" > /tmp/type_c_orientation.txt
     else
-        # We have run this test before
-        PREV_CABLE_DIR=$(head -c 1 /run/media/mmcblk0p1/type_c_orientation.txt)
-        printf "Previous cable orientation: 0x%x\n" "$PREV_CABLE_DIR"
-
-        if [ $CABLE_DIR -eq $PREV_CABLE_DIR ]; then
-            echo "You didn't change the type-c cable orientation!"
-            exit 1
-        else
-            # The type-c cable orientation was changed.
-            # We can delete the type_c_orientation.txt file
-            rm /run/media/mmcblk0p1/type_c_orientation.txt
-            exit 0
-        fi
+        echo -n "0" > /tmp/type_c_orientation.txt
     fi
-
 else
     echo "We don't have an USB connection!"
-    exit 2
+    exit 1
 fi
