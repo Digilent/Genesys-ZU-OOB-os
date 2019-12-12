@@ -58,9 +58,9 @@ then
         touch /run/media/mmcblk0p1/type_c_orientation.txt
 
         if [ $CABLE_DIR -eq 1 ]; then
-            echo "1" >> /run/media/mmcblk0p1/type_c_orientation.txt
+            echo -n "1" > /tmp/type_c_orientation.txt
         else
-            echo "0" >> /run/media/mmcblk0p1/type_c_orientation.txt
+            echo -n "0"; > /tmp/type_c_orientation.txt
         fi
     else
         # We have run this test before
