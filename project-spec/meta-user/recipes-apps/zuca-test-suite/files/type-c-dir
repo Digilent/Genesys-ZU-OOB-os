@@ -1,0 +1,84 @@
+#!/bin/bash
+
+# Run this script as root
+
+# This script is used to check the type-c cable orientation.
+# The testing procedure for Genesys ZU specifies that the type-c connector must
+# be tested with an USB 3.0 stick and a type-c to type A adapter. The test
+# performs a transfer on both type-c orientations. This script will return an
+# error code if it is called many times without type-c orientation changeing.
+
+# Return values:
+# 0 - everything OK
+# 1 - the cable orientation wasn't changed
+# 2 - there is no USB device connected in type-c connector
+
+TUSB322_I2C_BUS=7
+CONNECTION_STATUS_REGISTER_ADDR=0x08
+CONNECTION_STATUS_AND_CONTROL_REGISTER_ADDR=0x09
+GENERAL_CONTROL_REGISTER_ADDR=0x0A
+ATTACHED_STATE_OFF=6
+CABLE_DIR_OFF=5
+ID_ARRAY=()
+
+# Get device ID
+for (( i = 7; i >= 0; i-- )); do
+    READ_BYTE=$( i2cget -y $TUSB322_I2C_BUS 0x47 $i b )
+    ID_ARRAY+=($READ_BYTE)
+done
+
+echo "I2C mux ID: ${ID_ARRAY[@]}"
+
+CONNECTION_STATUS_REGISTER=$( i2cget -y $TUSB322_I2C_BUS 0x47 $CONNECTION_STATUS_REGISTER_ADDR b)
+echo "Connection Status Register: $CONNECTION_STATUS_REGISTER"
+
+CONNECTION_STATUS_AND_CONTROL_REGISTER=$( i2cget -y $TUSB322_I2C_BUS 0x47 $CONNECTION_STATUS_AND_CONTROL_REGISTER_ADDR b)
+echo "Connection Status and Control Register: $CONNECTION_STATUS_AND_CONTROL_REGISTER"
+
+GENERAL_CONTROL_REGISTER=$( i2cget -y $TUSB322_I2C_BUS 0x47 $GENERAL_CONTROL_REGISTER_ADDR b)
+echo "General Control Register: $GENERAL_CONTROL_REGISTER"
+
+# Verify if there is a valid connection
+ATTACHED_STATE=$((CONNECTION_STATUS_AND_CONTROL_REGISTER >> ATTACHED_STATE_OFF))
+printf "Attached state: 0x%x\n" "$ATTACHED_STATE"
+
+if [ $ATTACHED_STATE -eq 1 ]
+then
+    echo "We have an USB connection!"
+
+    # Verity connector's orientation
+    CABLE_DIR=$(((CONNECTION_STATUS_AND_CONTROL_REGISTER >> CABLE_DIR_OFF) & 0x01))
+    printf "Current cable orientation: 0x%x\n" "$CABLE_DIR"
+
+    # Verify if we run the type-c test for the first time
+    test -e /run/media/mmcblk0p1/type_c_orientation.txt
+    if [ "$?" != 0 ]; then
+        # We run this test for the first time
+        # We have to create a file that keeps the current type-c connector type_c_orientation
+        touch /run/media/mmcblk0p1/type_c_orientation.txt
+
+        if [ $CABLE_DIR -eq 1 ]; then
+            echo "1" >> /run/media/mmcblk0p1/type_c_orientation.txt
+        else
+            echo "0" >> /run/media/mmcblk0p1/type_c_orientation.txt
+        fi
+    else
+        # We have run this test before
+        PREV_CABLE_DIR=$(head -c 1 /run/media/mmcblk0p1/type_c_orientation.txt)
+        printf "Previous cable orientation: 0x%x\n" "$PREV_CABLE_DIR"
+
+        if [ $CABLE_DIR -eq $PREV_CABLE_DIR ]; then
+            echo "You didn't change the type-c cable orientation!"
+            exit 1
+        else
+            # The type-c cable orientation was changed.
+            # We can delete the type_c_orientation.txt file
+            rm /run/media/mmcblk0p1/type_c_orientation.txt
+            exit 0
+        fi
+    fi
+
+else
+    echo "We don't have an USB connection!"
+    exit 2
+fi
