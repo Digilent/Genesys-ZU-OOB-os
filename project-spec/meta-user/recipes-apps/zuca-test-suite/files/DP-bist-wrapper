@@ -6,7 +6,7 @@ if pid=$(ps -o pid= -C "DP-bist"); then
         kill -9 $pid;
 fi;
 
-coproc DP-bist
+coproc DP-bist -v
 
 # Stay here to keep pattern displayed
 while :; do sleep 1; done
