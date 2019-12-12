@@ -20,6 +20,7 @@ SRC_URI = "file://zuca-test-suite \
 	file://wifi-bist \
 	file://pci-bist \
 	file://zuca-init \
+	file://type-c-dir \
 	"
 
 inherit update-rc.d
@@ -44,6 +45,7 @@ do_install() {
 	install -m 0755 ${S}/network-bist ${D}/${bindir}
 	install -m 0755 ${S}/wifi-bist ${D}/${bindir}
 	install -m 0755 ${S}/pci-bist ${D}/${bindir}
+	install -m 0755 ${S}/type-c-dir ${D}/${bindir}
 
 	#config
 	install -d ${D}${sysconfdir}/init.d

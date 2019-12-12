@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Run this script as root
 
@@ -6,7 +6,7 @@
 # For more information regarding USB Classes: https://en.wikipedia.ort/wiki/USB
 
 # How to call this script?
-# Call this script with only one parameter: usb-bist <port_number>
+# Call this script with only one parameter: usb_bist <port_number>
 # <port_number> between 1 and 5
 # 1 - port 1(up) of USB 2.0 stacked connector
 # 2 - port 2(down) of USB 2.0 stacked connector
@@ -20,13 +20,19 @@
 # 2. Verify that the devices have the correct bInterfaceClass
 # 3. Verify that the port to which the devices are connected have the corrent speed
 
-# Return value: 0 for success; 1 for failure
+# Return value:
+# 0 - Success
+# 1 - No device connected
+# 2 - Wrong device class
+# 3 - Wrong device speed
+# 4 - Wrong type-c orientation
+# 5 - Wrong arguments
 
 # Reset all USB devices. We perform this operation because is some circumstances
 # a USB 3.0 device may be connected to USB 2.0 bus. In such a case the test will
 # fail. By resetting all USB devices we force the system to re-enumerate all
 # devices.
-usb-reset
+usb_reset
 
 # We need a delay here to establish a correct connection with all USB devices.
 sleep 2
@@ -61,7 +67,7 @@ USB_BUS_2_PORT_1_INTERFACE="2-1:1.0"
 
 if [ $# -ne "$ARGS" ]; then
 	echo "Wrong number of arguments!"
-	exit 4
+	exit 5
 fi
 
 case "$1" in
@@ -170,29 +176,38 @@ case "$1" in
 		fi
 		;;
 	5)
-		# We want to test if there is a USB 3.0 stick in Type-C Connector
-		if [ -d "${USB_DEVICES_PATH}${USB_BUS_2_PORT_1_INTERFACE}" ]; then
-			usbc_3_port_1_device_class=$(<"${USB_DEVICES_PATH}${USB_BUS_2_PORT_1_INTERFACE}/bInterfaceClass")
-			if [ "$usbc_3_port_1_device_class" != "$MASS_STORAGE_DEVICE" ]; then
-				echo "The USB device connected to bus 2 root hub -> port 1 is not a Mass Storage device!"
-				echo "We detect a ${usbc_3_port_1_device_class} class"
-				exit 2
-			fi
+        # We want to test if the type-c orientation is correct
+        type-c-dir
+        CABLE_DIR=$?
+        if [ $CABLE_DIR -eq 0 ]; then
+    		# We want to test if there is a USB 3.0 stick in Type-C Connector
+    		if [ -d "${USB_DEVICES_PATH}${USB_BUS_2_PORT_1_INTERFACE}" ]; then
+    			usbc_3_port_1_device_class=$(<"${USB_DEVICES_PATH}${USB_BUS_2_PORT_1_INTERFACE}/bInterfaceClass")
+    			if [ "$usbc_3_port_1_device_class" != "$MASS_STORAGE_DEVICE" ]; then
+    				echo "The USB device connected to bus 2 root hub -> port 1 is not a Mass Storage device!"
+    				echo "We detect a ${usbc_3_port_1_device_class} class"
+    				exit 2
+    			fi
 
-			usbc_3_port_1_device_speed=$(<"${USB_DEVICES_PATH}${USB_BUS_2_PORT_1}/speed")
-			if [ "$usbc_3_port_1_device_speed" != "5000" ]; then
-				echo "The USB device connected to bus 2 root hub -> port 1 has wrong speed configuration!"
-				echo "We detect ${usbc_3_port_1_device_speed} speed"
-				exit 3
-			fi
-		else
-			echo "No device connecte to bus 2 root hub -> port 1"
-			exit 1
-		fi
+    			usbc_3_port_1_device_speed=$(<"${USB_DEVICES_PATH}${USB_BUS_2_PORT_1}/speed")
+    			if [ "$usbc_3_port_1_device_speed" != "5000" ]; then
+    				echo "The USB device connected to bus 2 root hub -> port 1 has wrong speed configuration!"
+    				echo "We detect ${usbc_3_port_1_device_speed} speed"
+    				exit 3
+    			fi
+    		else
+    			echo "No device connecte to bus 2 root hub -> port 1"
+    			exit 1
+    		fi
+        elif [ $CABLE_DIR -eq 1 ]; then
+            exit 4
+        elif [ $CABLE_DIR -eq 2 ]; then
+            exit 1
+        fi
 		;;
 	*)
 		echo "Wrong option!"
-		exit 4
+		exit 5
 esac
 
 exit 0
