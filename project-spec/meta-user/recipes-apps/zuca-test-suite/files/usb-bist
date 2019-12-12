@@ -176,34 +176,25 @@ case "$1" in
 		fi
 		;;
 	5)
-        # We want to test if the type-c orientation is correct
-        type-c-dir
-        CABLE_DIR=$?
-        if [ $CABLE_DIR -eq 0 ]; then
-    		# We want to test if there is a USB 3.0 stick in Type-C Connector
-    		if [ -d "${USB_DEVICES_PATH}${USB_BUS_2_PORT_1_INTERFACE}" ]; then
-    			usbc_3_port_1_device_class=$(<"${USB_DEVICES_PATH}${USB_BUS_2_PORT_1_INTERFACE}/bInterfaceClass")
-    			if [ "$usbc_3_port_1_device_class" != "$MASS_STORAGE_DEVICE" ]; then
-    				echo "The USB device connected to bus 2 root hub -> port 1 is not a Mass Storage device!"
-    				echo "We detect a ${usbc_3_port_1_device_class} class"
-    				exit 2
-    			fi
+			# We want to test if there is a USB 3.0 stick in Type-C Connector
+			if [ -d "${USB_DEVICES_PATH}${USB_BUS_2_PORT_1_INTERFACE}" ]; then
+				usbc_3_port_1_device_class=$(<"${USB_DEVICES_PATH}${USB_BUS_2_PORT_1_INTERFACE}/bInterfaceClass")
+				if [ "$usbc_3_port_1_device_class" != "$MASS_STORAGE_DEVICE" ]; then
+					echo "The USB device connected to bus 2 root hub -> port 1 is not a Mass Storage device!"
+					echo "We detect a ${usbc_3_port_1_device_class} class"
+					exit 2
+				fi
 
-    			usbc_3_port_1_device_speed=$(<"${USB_DEVICES_PATH}${USB_BUS_2_PORT_1}/speed")
-    			if [ "$usbc_3_port_1_device_speed" != "5000" ]; then
-    				echo "The USB device connected to bus 2 root hub -> port 1 has wrong speed configuration!"
-    				echo "We detect ${usbc_3_port_1_device_speed} speed"
-    				exit 3
-    			fi
-    		else
-    			echo "No device connecte to bus 2 root hub -> port 1"
-    			exit 1
-    		fi
-        elif [ $CABLE_DIR -eq 1 ]; then
-            exit 4
-        elif [ $CABLE_DIR -eq 2 ]; then
-            exit 1
-        fi
+				usbc_3_port_1_device_speed=$(<"${USB_DEVICES_PATH}${USB_BUS_2_PORT_1}/speed")
+				if [ "$usbc_3_port_1_device_speed" != "5000" ]; then
+					echo "The USB device connected to bus 2 root hub -> port 1 has wrong speed configuration!"
+					echo "We detect ${usbc_3_port_1_device_speed} speed"
+					exit 3
+				fi
+			else
+				echo "No device connecte to bus 2 root hub -> port 1"
+				exit 1
+			fi
 		;;
 	*)
 		echo "Wrong option!"

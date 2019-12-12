@@ -23,6 +23,13 @@ btn() {
 	wait $test_pid
 }
 
+type-c-direction(){
+	c_dir_file="/tmp/type_c_orientation.txt"
+	type-c-dir > $bt_serial_log
+	rcode=$?
+	test -f $c_dir_file && RET_INFO=$(cat ${c_dir_file});
+	return $rcode
+}
 # This test returns two decimal arguments representing
 # the current state of the buttons and switches, respectively
 # each btn/sw being represented by a bit in the order MSB first:
