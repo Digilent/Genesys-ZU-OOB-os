@@ -1,6 +1,9 @@
 #!/bin/sh
 
 set -e
+# Use exapmples
+# rtc-test second_since_epoch write #This will set system and hwclock date
+# rtc-test second_since_epoch #This will return 0 if rtc time was preserved after powercycle 1 otherwise;
 
 aprox=20
 ref=$1

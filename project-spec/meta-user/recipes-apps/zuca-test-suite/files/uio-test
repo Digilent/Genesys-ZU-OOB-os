@@ -26,13 +26,16 @@ Usage : ${0##*/} [-h] [-t device_type] [-i index] [-d delay] [-m max_fill] [-s s
 					"sw" (for switches), "led" ,
 					"rgb_led" RGB led controlled by pwm
 
-	Optiont for button, switch, led:
+	--silent		Less verbose.
+	Options for button, switch, led:
 	-i --index		Index of switch , led or button
 				Example:
-				${0##*/} -t led -i 1
+				${0##*/} -t led -i 1 -v 0
+				${0##*/} -t led -i 1 -v 1
 				${0##*/} -t switch -i 0
+	-v --value		Value to set
 
-	Optiont for rgb_led:
+	Options for rgb_led:
 	-d --delay		Delay between steps in seconds example: --delay=0.2
 	-m --max-fill		Max fill for the pwm. Max value 255: --max-fill=200
 	-s --step		Step size when incrementing color fill: --step=10
@@ -40,6 +43,9 @@ EOF
 }
 
 show_vars(){
+	if [ $verbose -eq 0 ]; then
+		return;
+	fi;
 	echo file: $file;
 	echo
 	echo device type: $dev_type;
@@ -58,8 +64,9 @@ index=0;
 step=10
 delay=1
 full=255
+value=1;
 
-verbose=0;
+verbose=1;
 
 while :; do
 	case $1 in
@@ -96,6 +103,22 @@ while :; do
 			;;
 		--index=)
 				die 'ERROR: "--index=" requires a non-empty option argument.'
+			;;
+		-v|--value)
+			if [ "$2" ]; then
+				value=$2
+				isNAN $value && die 'ERROR: "-v|--value" requires a number option argument.';
+				shift
+			else
+				die 'ERROR: "-i|--index" requires a non-empty option argument.'
+			fi
+			;;
+		--value=?*)
+				value=${1#*=}
+				isNAN $value && die 'ERROR: "-v|--value" requires a number option argument.';
+			;;
+		--value=)
+				die 'ERROR: "--value=" requires a non-empty option argument.'
 			;;
 		-d|--delay)
 			if [ "$2" ]; then
@@ -145,6 +168,9 @@ while :; do
 		--max-fill=)
 				die 'ERROR: "--max-fill=" requires a non-empty option argument.'
 			;;
+		--silent)
+				verbose=0
+			;;
 		--) # End of all option
 			shift
 			break
@@ -191,24 +217,18 @@ rgb_led_test(){
 
 case $dev_type in
 led)
-	echo Led
 	show_vars;
-	gpioset $(gpiofind led${index})=1;
-	sleep $delay;
-	gpioset $(gpiofind led${index})=0;
+	gpioset $(gpiofind led${index})=$value;
 	;;
 btn)
-	echo Button
 	show_vars;
 	gpiomon -n 1 -r -s $(gpiofind btn${index}) # return on press (rising edge)
 	;;
 sw)
-	echo Switch
 	show_vars;
 	gpiomon -n 1 -r -s $(gpiofind sw${index}) # return on press (rising edge)
 	;;
 rgb_led)
-	echo RGB Led
 	file=${file:-"/sys/module/pwm_rgb_led/parameters/pwm_color_fill"};
 	show_vars;
 	rgb_led_test;

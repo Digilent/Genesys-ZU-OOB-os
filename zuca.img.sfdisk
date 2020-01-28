@@ -1,0 +1,6 @@
+label: dos
+label-id: 0xd1098ef9
+device: images/linux/zuca-5ev.img
+unit: sectors
+
+images/linux/zuca-5ev.img1 : start=        2048, size=      612352, type=c

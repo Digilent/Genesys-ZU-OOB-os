@@ -1,0 +1,67 @@
+# !/bin/sh
+
+# Run this script using sudo
+
+# This script is used to test the on-board wifi module for Genesys ZU board.
+
+# How to call this script?
+# Call this script with two parameters: wifi ssid and password:
+# wifi-bist <ssid> <password>
+
+# Make sure that wpa_supplicant does not start automatically after boot.
+# If it starts automatically without a configuration file we cannot reconfigure
+# it using wpa_cli and the test will fail.
+
+# This script performs the following operations:
+# Sets the wlan0 interface down
+# Sets the wlan- interface up
+# Configures wpa_supplicant
+# Obtains IP using DHCP
+# Pings the default gateway
+
+# This script returns the following values:
+# 0 - test succeeded
+# 1 - Invalid number of arguments
+# 2 - WPA configuration file already exists
+# 3 - Set wlan0 down failed
+# 4 - Set wlan0 up failed
+# 5 - WPA supplicant configuration failed
+# 6 - DHCP IP obtaining failed
+# 7 - Invalid IP
+# 8 - Ping failed
+
+ARGS=2
+FILE="/etc/wpa_supplicant.conf"
+
+if [ $# -ne "$ARGS" ]; then
+	echo "Wrong number of arguments!"
+	exit 1
+fi
+
+# Check if there is a wpa_supplicant daemon already running. If there is another
+# one we do not start a new one.
+# regex in grep patttern voids grep showing up in results
+ps -e | grep [w]pa_supplicant > /dev/null
+if [ "$?" = 1 ]; then
+  wpa_supplicant -B -i wlan0 -c $FILE -D nl80211
+  if [ "$?" != 0 ]; then
+    echo "<wpa_supplicant -B -i wlan0 -c $FILE -D nl80211> command failed!"
+    exit 5
+  else
+    echo "wpa_supplicant configuration DONE"
+  fi
+fi
+
+# There can't be more than 1 wpa_supplicant daemon runnin on a linux machine.
+# If this script is called with wrong ssid or password the board cannot connect
+# to wifi router and a wrong configured wpa_supplicant daemon will run on the
+# system. In this case, even if we call the script again with correct parameters
+# the wpa_supplicant daemon will maintain the first configuration.
+# From this reason we reconfigure the wpa_supplicant daemon with new ssid and
+# psk each time the scipt is run
+NETWORK_ID=$(wpa_cli -i wlan0 add_network) && \
+wpa_cli -i wlan0 set_network $NETWORK_ID ssid '"'$1'"' && \
+wpa_cli -i wlan0 set_network $NETWORK_ID psk '"'$2'"' && \
+wpa_cli -i wlan0 enable_network $NETWORK_ID && \
+wpa_cli -i wlan0 select_network $NETWORK_ID
+

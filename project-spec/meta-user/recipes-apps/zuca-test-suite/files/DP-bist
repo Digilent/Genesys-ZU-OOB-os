@@ -42,4 +42,5 @@ log "$encoder_id_parse"
 encoder_id_1=${encoder_id_parse##*encoders}
 encoder_id_2=${encoder_id_1:1:2}
 ##echo "$encoder_id_2"
+
 modetest -M xlnx -s $encoder_id_2:1920x1080@RG16 

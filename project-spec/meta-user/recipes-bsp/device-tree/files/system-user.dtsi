@@ -3,6 +3,7 @@
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/media/xilinx-vip.h>
 #include <dt-bindings/net/ti-dp83867.h>
+#include <dt-bindings/phy/phy.h>
 
 / {
 };
@@ -26,13 +27,13 @@ devicetree/bindings/net/phy.txt
 	phy-mode = "rgmii-id";
 	phy0: phy@15 {
 		reg = <0x0F>;
-		reset-gpios = <&gpio 43 GPIO_ACTIVE_LOW>; //changes to 44 in rev B
+		reset-gpios = <&gpio 44 GPIO_ACTIVE_LOW>;
 		reset-assert-us = <1>;
 		reset_deassert-us = <200>;
 		interrupt-parent = <&gpio>;
 		interrupts = <38 IRQ_TYPE_LEVEL_LOW>;
 		ti,rx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>; //overwrites strap config
-		ti,tx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>; //overwrites strap config
+		ti,tx-internal-delay = <DP83867_RGMIIDCTL_1_50_NS>; //overwrites strap config
 		ti,fifo-depth = <DP83867_PHYCR_FIFO_DEPTH_4_B_NIB>;
 		ti,clk-output-sel = <DP83867_CLK_O_SEL_REF_CLK>;
 	};
@@ -129,7 +130,7 @@ EMIO[0] which is line 78.
 		#reset-cells = <1>;
 		#gpio-cells = <2>;
 		interrupt-parent = <&gpio>;
-		interrupts = <25 8>;
+		interrupts = <25 IRQ_TYPE_LEVEL_LOW>;
 		microchip,spi-present-mask = <0x01>;
 		interrupt-controller;
 		#interrupt-cells = <0x2>;
@@ -164,7 +165,8 @@ EMIO[0] which is line 78.
 	dr_mode = "host";
 	snps,usb3_lpm_capable;
 	phy-names = "usb3-phy";
-	phys = <&lane1 4 0 0 100000000>;
+	//phys = <PHANDLE CONTROLLER_TYPE CONTROLLER_INSTANCE LANE_NUM LANE_FREQ>;
+	phys = <&lane1 PHY_TYPE_USB3 0 0 100000000>;
 	snps,dis_u2_susphy_quirk ;
 	snps,dis_u3_susphy_quirk ;
 	maximum-speed = "super-speed";

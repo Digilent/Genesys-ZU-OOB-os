@@ -1,0 +1,97 @@
+# !/bin/sh
+
+ARGS_WIFI=3
+ARGS_ETH=1
+
+if [ $# -ne "$ARGS_ETH" ] && [ $# -ne "$ARGS_WIFI" ]; then
+  echo "Wrong number of arguments!"
+  exit 1
+fi
+
+if [ $1 != "eth0" ] && [ $1 != "wlan0" ]; then
+  echo "Wrong network interfaces!"
+  exit 1
+fi
+
+if [ $1 = "eth0" ] && [ $# -ne "$ARGS_ETH" ]; then
+  echo "Incorrent arguments for eth0 interface testing!"
+  exit 1
+fi
+
+if [ $1 = "wlan0" ] && [ $# -ne "$ARGS_WIFI" ]; then
+  echo "Incorrent arguments for wlan0 interface testing!"
+  exit 1
+fi
+
+# Bringing wlan0 down sometimes causes CPU stall with WILC 15.3.1
+# Set the testing interface down
+#ip link set "$1" down
+#echo "We set $1 down."
+#if [ "$?" != 0 ]; then
+#  echo "<ip link set $1 down> command failed!"
+#  exit 2
+#fi
+
+# Since wilc pollutes the kernel log we need to lower console level,
+# potentially disrupting other log messages. Also, we cannot restore
+# console level at the end, because bringing down wlan0 might cause
+# CPU stall. TODO: driver patch when stall is fixed.
+dmesg -n 5
+
+# Set the testing interface up
+ip link set "$1" up
+echo "We set $1 up."
+if [ "$?" != 0 ]; then
+  echo "<ip link set $1 up> command failed!"
+  exit 2
+fi
+
+if [ $1 = "wlan0" ]; then
+  wifi-bist "$2" "$3"
+  if [ "$?" != 0 ]; then
+    echo "WPA configuration script failed!"
+    exit 1
+  fi
+fi
+
+# Before requesting an IP, flush all addresses from the other interface
+# so that we do not have problems with multiple interfaces on the same
+# subnet
+if [ $1 = "wlan0" ]; then
+  OTHER="eth0"
+  log "flushing IPs for $OTHER"
+  ip a flush dev $OTHER
+elif [ $1 = "eth0" ]; then
+  OTHER="wlan0"
+  log "flushing IPs for $OTHER"
+  ip a flush dev $OTHER
+fi;
+
+udhcpc -i $1 -n -q
+if [ "$?" != 0 ]; then
+  echo "<udhcpc -i $1 -n -q> command failed!"
+  exit 6
+else
+  echo "Host configuration DONE"
+fi
+
+# Get gateway IP. Do not filter for interface as udhcpc by default does
+# not set gateways for multiple interfaces. It does not matter for the
+# test since the router is configured for wifi and eth on the same subnet,
+# so the gateway published for either interface is accessible from the other.
+ROUTER_ADDRESS=$(ip route | grep -m1 default | awk '{ print $3 }')
+echo "$ROUTER_ADDRESS"
+if [ -z "$ROUTER_ADDRESS" ]; then
+  echo "No IP received"
+  exit 7
+fi
+
+# Ping the router
+ping -c1 -I $1 $ROUTER_ADDRESS > /dev/null
+if [ "$?" != 0 ]; then
+  echo "<ping -c1 $ROUTER_ADDRESS > /dev/null> command failed!"
+  exit 8
+fi
+
+exit 0
+

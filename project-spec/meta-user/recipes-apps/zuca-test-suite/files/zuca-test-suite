@@ -23,10 +23,76 @@ btn() {
 	wait $test_pid
 }
 
+typecdirection(){
+	c_dir_file="/tmp/type_c_orientation.txt"
+	type-c-dir > $bt_serial_log
+	rcode=$?
+	test -f $c_dir_file && RET_INFO=$(cat ${c_dir_file});
+	return "$rcode"
+}
+# This test returns two decimal arguments representing
+# the current state of the buttons and switches, respectively
+# each btn/sw being represented by a bit in the order MSB first:
+# (btnU btnL btnD btnR btnC btn1 btn0)
+# and (sw3 sw2 sw1 sw0)
+user_io() {
+	btns=(btnU btnL btnD btnR btnC btn1 btn0)
+	arg1=0
+	for btn in "${btns[@]}"; do
+		btn_val=$(gpioget $(gpiofind $btn));
+		rc=$?
+		if [[ $rc -ne 0 ]]; then
+			return $rc;
+		fi;
+		arg1=$((arg1<<1));
+		arg1=$((arg1+btn_val));
+	done
+
+	sws=(sw3 sw2 sw1 sw0)
+	arg2=0
+	for sw in "${sws[@]}"; do
+                sw_val=$(gpioget $(gpiofind $sw));
+                rc=$?
+                if [[ $rc -ne 0 ]]; then
+                        return $rc;
+                fi;
+		arg2=$((arg2<<1));
+                arg2=$((arg2+sw_val));
+        done
+	RET_INFO="$arg1,$arg2"
+	return 0
+}
+
+user_led(){
+	for led in $(seq -s " " 0 4); do
+		uio-test -t led -i $led --silent;
+	done;
+	# If there already is a process executing the loop below,
+	# kill it
+	# Full-feature ps from package procps required
+	if ppid=$(ps -o ppid= -C "uio-test -t rgb_led") && \
+		[[ "$(ps -o cmd= -p $ppid)" == *"zuca-test-suite"* ]]; then
+		log "killing:$(ps -p $ppid)";
+		kill $ppid;
+	else
+		echo no;
+	fi;
+	while true; do
+		uio-test -t rgb_led -d 0.1 -m 10 -s 1 --silent;
+	done &
+	return 0;
+}
+
 test1(){
 	log "test1";
 }
 
+displayport(){
+	log "bist:DP-bist"
+	# We need a second level of indirection in the form of this wrapper
+	# to be able to launch modetest in the background
+	coproc DP-bist-wrapper
+}
 
 sysmon(){
 	log "bist:sysmon";
@@ -34,11 +100,12 @@ sysmon(){
 	rc=$?
 	#sysmon will return the voltage in mV across pins VP and VN
 	#the test fixture will generate a voltage of 520.5 mV nominal
-	if [[ $rc -eq 0 && $(bc <<< "$vccvpvn < 543 && $vccvpvn > 498") -eq 1 ]]; then
-		echo PASS > $bt_serial
-	else
-		log "rc:$rc, vccvpvn:$vccvpvn"
-		echo FAIL > $bt_serial
+	if [[ $rc -eq 0 ]]; then
+		log "vccvpvn:$vccvpvn";
+		if [[ $(bc <<< "$vccvpvn < 543 && $vccvpvn > 498") -eq 0 ]]; then
+			RET_INFO="vccvpvn:$vccvpvn";
+			return 1;
+		fi;
 	fi;
 }
 
@@ -105,6 +172,7 @@ run_command () {
 	IFS=" ";
 	cmd=${cmda[*]};
 	cmd=${cmd//[$'\r\n']} #remove \r\n
+	cmd=${cmd//[,]/ } #replace coma with space
 	#echo "HEX|RX:" > $bt_serial_log
 	#echo -n $cmd | hexdump -C > $bt_serial_log
 	$cmd > $bt_serial_log
@@ -116,7 +184,7 @@ run_command () {
 			log "$cmd ok";
 			;;
 		1)
-			RET_INFO="generic,$rc";
+			#RET_INFO="generic,$rc";
 			fail generic;
 			log "Command '$cmd' return generic fail error";
 			;;
