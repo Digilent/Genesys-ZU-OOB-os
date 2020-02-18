@@ -156,9 +156,20 @@ EMIO[0] which is line 78.
 	u-boot,dm-pre-reloc;
 };
 
+/* flash0 node is defined in system-conf by Petalinux */
 &flash0 {
 	compatible = "is25lp256d", "jedec,spi-nor";
-	spi-max-frequency = <25000000>; /*Zynq UltraScale+ maximum FQSPICLK1 according to ds925 */
+	/* The maximum frequency of the is25lp256d is 145 MHz for Fast Read Quad Output (0x6B)
+	   at default number of dummy cycles.
+	   The maximum for Zynq UltraScale+ FQSPICLK1 is 150MHz according to ds925.
+	   Therefore, 145 MHz is requested here.
+	   However, the smallest divisor possible for QSPI reference clock is 2.
+	   A reference clock of 290 would be needed, but we can only obtain 250MHz
+	   easily. So, the resulting clock will be 125 MHz, due to MPSoC clock config.
+	   */
+	spi-max-frequency = <145000000>;
+	spi-tx-bus-width = <1>; /*TODO: Would quad write work?*/
+	spi-rx-bus-width = <4>;
 };
 
 &dwc3_0 {
