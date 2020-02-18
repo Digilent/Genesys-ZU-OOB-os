@@ -633,7 +633,7 @@ set psu_clock_init_data {
 		# PSU_CRL_APB_QSPI_REF_CTRL_DIVISOR1                                              0x1
 
 		# 6 bit divider
-		# PSU_CRL_APB_QSPI_REF_CTRL_DIVISOR0                                              0x5
+		# PSU_CRL_APB_QSPI_REF_CTRL_DIVISOR0                                              0x6
 
 		# 000 = IOPLL; 010 = RPLL; 011 = DPLL; (This signal may only be toggled af
     # ter 4 cycles of the old clock and 4 cycles of the new clock. This is not
@@ -641,8 +641,8 @@ set psu_clock_init_data {
 		# PSU_CRL_APB_QSPI_REF_CTRL_SRCSEL                                                0x0
 
 		# This register controls this reference clock
-		#(OFFSET, MASK, VALUE)      (0XFF5E0068, 0x013F3F07U ,0x01010500U)  */
-    mask_write 0XFF5E0068 0x013F3F07 0x01010500
+		#(OFFSET, MASK, VALUE)      (0XFF5E0068, 0x013F3F07U ,0x01010600U)  */
+    mask_write 0XFF5E0068 0x013F3F07 0x01010600
 		# Register : SDIO1_REF_CTRL @ 0XFF5E0070</p>
 
 		# Clock active signal. Switch to 0 to disable the clock
@@ -12391,19 +12391,19 @@ set psu_mio_init_data {
 		# PSU_IOU_SLCR_BANK0_CTRL1_DRIVE1_BIT_0                                           1
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL1_DRIVE1_BIT_1                                           1
+		# PSU_IOU_SLCR_BANK0_CTRL1_DRIVE1_BIT_1                                           0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL1_DRIVE1_BIT_2                                           1
+		# PSU_IOU_SLCR_BANK0_CTRL1_DRIVE1_BIT_2                                           0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL1_DRIVE1_BIT_3                                           1
+		# PSU_IOU_SLCR_BANK0_CTRL1_DRIVE1_BIT_3                                           0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL1_DRIVE1_BIT_4                                           1
+		# PSU_IOU_SLCR_BANK0_CTRL1_DRIVE1_BIT_4                                           0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL1_DRIVE1_BIT_5                                           1
+		# PSU_IOU_SLCR_BANK0_CTRL1_DRIVE1_BIT_5                                           0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
 		# PSU_IOU_SLCR_BANK0_CTRL1_DRIVE1_BIT_6                                           1
@@ -12466,8 +12466,8 @@ set psu_mio_init_data {
 		# PSU_IOU_SLCR_BANK0_CTRL1_DRIVE1_BIT_25                                          1
 
 		# Drive1 control to MIO Bank 0 - control MIO[25:0]
-		#(OFFSET, MASK, VALUE)      (0XFF18013C, 0x03FFFFFFU ,0x03FFFFFFU)  */
-    mask_write 0XFF18013C 0x03FFFFFF 0x03FFFFFF
+		#(OFFSET, MASK, VALUE)      (0XFF18013C, 0x03FFFFFFU ,0x03FFFFC1U)  */
+    mask_write 0XFF18013C 0x03FFFFFF 0x03FFFFC1
 		# Register : bank0_ctrl3 @ 0XFF180140</p>
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
@@ -12725,7 +12725,7 @@ set psu_mio_init_data {
 		# PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_4                                 0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_5                                 0
+		# PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_5                                 1
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
 		# PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_6                                 0
@@ -12788,8 +12788,8 @@ set psu_mio_init_data {
 		# PSU_IOU_SLCR_BANK0_CTRL6_SLOW_FAST_SLEW_N_BIT_25                                1
 
 		# Slew rate control to MIO Bank 0 - control MIO[25:0]
-		#(OFFSET, MASK, VALUE)      (0XFF18014C, 0x03FFFFFFU ,0x03FBFF81U)  */
-    mask_write 0XFF18014C 0x03FFFFFF 0x03FBFF81
+		#(OFFSET, MASK, VALUE)      (0XFF18014C, 0x03FFFFFFU ,0x03FBFFA1U)  */
+    mask_write 0XFF18014C 0x03FFFFFF 0x03FBFFA1
 		# Register : bank1_ctrl0 @ 0XFF180154</p>
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
