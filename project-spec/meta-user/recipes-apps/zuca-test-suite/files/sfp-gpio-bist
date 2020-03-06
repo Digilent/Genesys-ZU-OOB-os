@@ -1,0 +1,53 @@
+#!/bin/sh
+
+# This script is used to test the gpio pins of the SFP module.
+# Use Molex Loopback module to run this test.
+
+readonly GPIO_EXP_ADDR=0x1D
+readonly GPIO_EXP_DIR_REG=0x03
+readonly GPIO_EXP_INPUT_REG=0x00
+readonly GPIO_EXP_POL_REG=0x02
+
+# Find the i2c segment for SFP+
+grep_result=$(i2cdetect -l | grep -e 'chan_id 6')
+i2c_segment=$(echo -e $grep_result | grep -Eo '^i2c-[0-9][0-9]?' | cut -d '-' -f 2)
+
+# Set all pins from gpio expander as input
+i2cset -y $i2c_segment $GPIO_EXP_ADDR $GPIO_EXP_DIR_REG 0xFF
+
+# Maintain the input pins polarity
+i2cset -y $i2c_segment $GPIO_EXP_ADDR $GPIO_EXP_POL_REG 0x00
+
+shift_mask=0x20
+
+for index in {0..5}
+do
+        # Write all pins to 0
+        gpioset $(gpiofind sfp_tx_fault)=$(((shift_mask & 0x20) >> 5))
+        gpioset $(gpiofind sfp_tx_disable)=$(((shift_mask & 0x10) >> 4))
+        gpioset $(gpiofind sfp_mod_detect)=$(((shift_mask & 0x08) >> 3))
+        gpioset $(gpiofind sfp_rs1)=$(((shift_mask & 0x04) >> 2))
+        gpioset $(gpiofind sfp_rs0)=$(((shift_mask & 0x02) >> 1))
+        gpioset $(gpiofind sfp_rx_los)=$(((shift_mask & 0x01) >> 0))
+
+        # Read Optional Control/Status bits
+        gpio_value=$(i2cget -y $i2c_segment $GPIO_EXP_ADDR $GPIO_EXP_INPUT_REG)
+
+        # Mask the VccT and VccR
+        gpio_value_mask=$(printf "0x%x" $((gpio_value >> 2)))
+
+        if [ "$shift_mask" != "$gpio_value_mask" ]
+        then
+                echo "Connection error!"
+                echo "Expected value: $shift_mask"
+                echo "Read value: $gpio_value_mask"
+                echo "SFP gpio test FAILED"
+                exit 1
+        fi
+
+        shift_mask=$(printf "0x%x" $((shift_mask >> 1)))
+done
+
+echo "SFP gpio test PASSED"
+exit 0
+

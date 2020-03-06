@@ -22,6 +22,7 @@ SRC_URI = "file://zuca-test-suite \
 	file://zuca-init \
 	file://find-i2c-bus \
 	file://type-c-dir \
+	file://sfp-gpio-bist \
 	"
 
 inherit update-rc.d
@@ -48,6 +49,7 @@ do_install() {
 	install -m 0755 ${S}/pci-bist ${D}/${bindir}
 	install -m 0755 ${S}/find-i2c-bus ${D}/${bindir}
 	install -m 0755 ${S}/type-c-dir ${D}/${bindir}
+	install -m 0755 ${S}/sfp-gpio-bist ${D}/${bindir}
 
 	#config
 	install -d ${D}${sysconfdir}/init.d
