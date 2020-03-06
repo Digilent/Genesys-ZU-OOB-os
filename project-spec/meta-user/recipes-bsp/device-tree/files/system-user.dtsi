@@ -400,3 +400,7 @@ devicetree/bindings/mux/mux-controller.txt
 &uio_pwm_rgb_led {
 	compatible = "digilent,pwm-rgb-led";
 };
+
+&gpio_sfp_ip {
+	gpio-line-names = "sfp_mod_detect", "sfp_rs0", "sfp_rs1", "sfp_rx_los", "sfp_tx_disable", "sfp_tx_fault";
+};
