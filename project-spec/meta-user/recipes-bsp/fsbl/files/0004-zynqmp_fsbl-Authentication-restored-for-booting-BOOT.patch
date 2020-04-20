@@ -1,7 +1,7 @@
 From 5accd463fdd0b9746cf5c9dcaa48f9237b9d474a Mon Sep 17 00:00:00 2001
 From: Elod Gyorgy <elod.gyorgy@digilent.ro>
 Date: Wed, 6 Nov 2019 12:07:02 +0200
-Subject: [PATCH 4/4] zynqmp_fsbl:Authentication restored for booting BOOT.BIN
+Subject: [PATCH 4/5] zynqmp_fsbl:Authentication restored for booting BOOT.BIN
  from QSPI
 
 ---
@@ -22,5 +22,5 @@ index 89efa84d7..d229bbe8c 100644
  #define FSBL_EARLY_HANDOFF_EXCLUDE_VAL	(1U)
  #define FSBL_WDT_EXCLUDE_VAL			(1U)
 -- 
-2.17.1
+2.26.0.windows.1
 
