@@ -1,4 +1,4 @@
-From 10b8c3c49fbdb88455bf176da4e8b5409957275c Mon Sep 17 00:00:00 2001
+From 8005d30748edb6b580ee9956136362809f95213f Mon Sep 17 00:00:00 2001
 From: Elod Gyorgy <elod.gyorgy@digilent.ro>
 Date: Thu, 20 Feb 2020 12:03:56 +0200
 Subject: [PATCH 5/5] zynqmp_fsbl: Fixed Genesys ZU board defines to match
@@ -11,7 +11,7 @@ Subject: [PATCH 5/5] zynqmp_fsbl: Fixed Genesys ZU board defines to match
  3 files changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/lib/sw_apps/zynqmp_fsbl/src/spi_gpio.c b/lib/sw_apps/zynqmp_fsbl/src/spi_gpio.c
-index 48d2c88d4..02dd26415 100644
+index 48d2c88d4b..02dd264152 100644
 --- a/lib/sw_apps/zynqmp_fsbl/src/spi_gpio.c
 +++ b/lib/sw_apps/zynqmp_fsbl/src/spi_gpio.c
 @@ -28,7 +28,7 @@
@@ -30,10 +30,10 @@ index 48d2c88d4..02dd26415 100644
 -#endif//XPS_BOARD_GZU
 +#endif//defined(XPS_BOARD_GZU_3EG) || defined(XPS_BOARD_GZU_5EV)
 diff --git a/lib/sw_apps/zynqmp_fsbl/src/xfsbl_board.c b/lib/sw_apps/zynqmp_fsbl/src/xfsbl_board.c
-index 5010c003c..37e663b58 100644
+index 643348dfa6..6e61a3dbdc 100644
 --- a/lib/sw_apps/zynqmp_fsbl/src/xfsbl_board.c
 +++ b/lib/sw_apps/zynqmp_fsbl/src/xfsbl_board.c
-@@ -765,7 +765,7 @@ static void XFsbl_PcieReset(void)
+@@ -788,7 +788,7 @@ static void XFsbl_PcieReset(void)
  }
  #endif
  #endif
@@ -42,7 +42,7 @@ index 5010c003c..37e663b58 100644
  #include "sleep.h"
  #include "xgpiops.h"
  /*
-@@ -880,7 +880,7 @@ u32 XFsbl_BoardInit(void)
+@@ -904,7 +904,7 @@ u32 XFsbl_BoardInit(void)
  #if defined(XPS_BOARD_ZCU102)
  	XFsbl_PcieReset();
  #endif
@@ -52,10 +52,10 @@ index 5010c003c..37e663b58 100644
  	Status = InitGpios();
  #else
 diff --git a/lib/sw_apps/zynqmp_fsbl/src/xfsbl_board.h b/lib/sw_apps/zynqmp_fsbl/src/xfsbl_board.h
-index 55e8d60d1..e9155982b 100644
+index 7949082d25..531274b08a 100644
 --- a/lib/sw_apps/zynqmp_fsbl/src/xfsbl_board.h
 +++ b/lib/sw_apps/zynqmp_fsbl/src/xfsbl_board.h
-@@ -198,7 +198,7 @@ typedef struct XVoutCommands {
+@@ -177,7 +177,7 @@ typedef struct XVoutCommands {
  /************************** Function Prototypes ******************************/
  #endif
  
@@ -65,5 +65,5 @@ index 55e8d60d1..e9155982b 100644
  #include "spi_gpio.h"
  /*
 -- 
-2.26.0.windows.1
+2.17.1
 
