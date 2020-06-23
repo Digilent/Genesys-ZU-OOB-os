@@ -1,21 +1,21 @@
-From 347e09a676856105bb46e04965d006f8c296ad08 Mon Sep 17 00:00:00 2001
+From 2b90cdf6fd72f290433d5117d0bad5aa1a341888 Mon Sep 17 00:00:00 2001
 From: Ionel Badisor <ionel.badisor@digilent.ro>
 Date: Thu, 5 Dec 2019 12:33:59 +0200
 Subject: [PATCH] zynq: MAC in flash
 
 ---
- board/xilinx/common/board.c | 37 ++++++++++++++++++++-----------------
+ board/xilinx/common/board.c | 39 ++++++++++++++++++++-----------------
  drivers/misc/Kconfig        |  8 ++++++++
- 2 files changed, 28 insertions(+), 17 deletions(-)
+ 2 files changed, 29 insertions(+), 18 deletions(-)
 
 diff --git a/board/xilinx/common/board.c b/board/xilinx/common/board.c
-index b1853a87a2..f89c6774cf 100644
+index 5fdd994705..3d6eb69fc0 100644
 --- a/board/xilinx/common/board.c
 +++ b/board/xilinx/common/board.c
-@@ -8,32 +8,35 @@
+@@ -9,33 +9,36 @@
  #include <dm/uclass.h>
  #include <i2c.h>
- #include <mach/sys_proto.h>
+ #include "board.h"
 +#include <spi.h>
 +#include <spi_flash.h>
  
@@ -26,16 +26,17 @@ index b1853a87a2..f89c6774cf 100644
 -#if defined(CONFIG_ZYNQ_GEM_I2C_MAC_OFFSET)
 -	struct udevice *dev;
 -	ofnode eeprom;
+-
+-	eeprom = ofnode_get_chosen_node("xlnx,eeprom");
+-	if (!ofnode_valid(eeprom))
+-		return -ENODEV;
 +#if defined(CONFIG_ZYNQ_GEM_SPI_MAC_OFFSET)
 +	struct spi_flash *flash;
 +	flash = spi_flash_probe(CONFIG_SF_DEFAULT_BUS,
 +				CONFIG_SF_DEFAULT_CS,
 +				CONFIG_SF_DEFAULT_SPEED,
 +				CONFIG_SF_DEFAULT_MODE);
- 
--	eeprom = ofnode_get_chosen_node("xlnx,eeprom");
--	if (!ofnode_valid(eeprom))
--		return -ENODEV;
++
 +	if (!flash) {
 +		printf("no flash\n");
 +		printf("SPI(bus:%u cs:%u) probe failed\n",
@@ -65,11 +66,12 @@ index b1853a87a2..f89c6774cf 100644
 -
  	return ret;
  }
+ 
 diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-index d6e677fba8..fc66499270 100644
+index 82bb093c56..828080cb57 100644
 --- a/drivers/misc/Kconfig
 +++ b/drivers/misc/Kconfig
-@@ -249,6 +249,14 @@ config ZYNQ_GEM_I2C_MAC_OFFSET
+@@ -334,6 +334,14 @@ config ZYNQ_GEM_I2C_MAC_OFFSET
  	help
  	  Set the MAC offset for i2C.
  
@@ -85,5 +87,5 @@ index d6e677fba8..fc66499270 100644
  
  config SYS_I2C_EEPROM_ADDR
 -- 
-2.25.1
+2.17.1
 
