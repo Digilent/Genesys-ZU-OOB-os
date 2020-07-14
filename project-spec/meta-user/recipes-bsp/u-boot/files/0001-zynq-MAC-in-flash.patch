@@ -34,8 +34,8 @@ index 5fdd994705..3d6eb69fc0 100644
 +	struct spi_flash *flash;
 +	flash = spi_flash_probe(CONFIG_SF_DEFAULT_BUS,
 +				CONFIG_SF_DEFAULT_CS,
-+				CONFIG_SF_DEFAULT_SPEED,
-+				CONFIG_SF_DEFAULT_MODE);
++				0,
++				0);
 +
 +	if (!flash) {
 +		printf("no flash\n");

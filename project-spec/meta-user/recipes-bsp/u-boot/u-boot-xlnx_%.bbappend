@@ -6,9 +6,6 @@ SRC_URI += "file://platform-top.h \
 
 SRC_URI += "file://0001-zynq-MAC-in-flash.patch"
 
-UBRANCH = "master"
-SRCREV = "b97bd1e1c0f59e967044a7e6ac75bd96b559f68c"
-
 do_configure_append () {
 	if [ "${U_BOOT_AUTO_CONFIG}" = "1" ]; then
 		install ${WORKDIR}/platform-auto.h ${S}/include/configs/
