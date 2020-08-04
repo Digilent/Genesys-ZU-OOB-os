@@ -1,7 +1,7 @@
-From 8005d30748edb6b580ee9956136362809f95213f Mon Sep 17 00:00:00 2001
+From 23226f8f01b77d7373d6b142ccf050ef22acfd36 Mon Sep 17 00:00:00 2001
 From: Elod Gyorgy <elod.gyorgy@digilent.ro>
 Date: Thu, 20 Feb 2020 12:03:56 +0200
-Subject: [PATCH 5/5] zynqmp_fsbl: Fixed Genesys ZU board defines to match
+Subject: [PATCH 5/6] zynqmp_fsbl: Fixed Genesys ZU board defines to match
  board defintion files.
 
 ---

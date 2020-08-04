@@ -1,7 +1,7 @@
-From c916dd85615499ad63522f4a0fd4cbe6d2955acd Mon Sep 17 00:00:00 2001
+From db2538bce2ee661b49a5f0be2facdfbf69a00276 Mon Sep 17 00:00:00 2001
 From: Elod Gyorgy <elod.gyorgy@digilent.ro>
 Date: Tue, 29 Oct 2019 15:27:00 +0200
-Subject: [PATCH 3/5] fsbl: Reset usb phys and hub upon board init
+Subject: [PATCH 3/6] fsbl: Reset usb phys and hub upon board init
 
 ---
  lib/sw_apps/zynqmp_fsbl/src/spi_gpio.c    | 180 ++++++++++++++++++++++
