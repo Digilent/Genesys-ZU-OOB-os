@@ -1,0 +1,91 @@
+From 2b90cdf6fd72f290433d5117d0bad5aa1a341888 Mon Sep 17 00:00:00 2001
+From: Ionel Badisor <ionel.badisor@digilent.ro>
+Date: Thu, 5 Dec 2019 12:33:59 +0200
+Subject: [PATCH] zynq: MAC in flash
+
+---
+ board/xilinx/common/board.c | 39 ++++++++++++++++++++-----------------
+ drivers/misc/Kconfig        |  8 ++++++++
+ 2 files changed, 29 insertions(+), 18 deletions(-)
+
+diff --git a/board/xilinx/common/board.c b/board/xilinx/common/board.c
+index 5fdd994705..3d6eb69fc0 100644
+--- a/board/xilinx/common/board.c
++++ b/board/xilinx/common/board.c
+@@ -9,33 +9,36 @@
+ #include <dm/uclass.h>
+ #include <i2c.h>
+ #include "board.h"
++#include <spi.h>
++#include <spi_flash.h>
+ 
+ int zynq_board_read_rom_ethaddr(unsigned char *ethaddr)
+ {
+ 	int ret = -EINVAL;
+ 
+-#if defined(CONFIG_ZYNQ_GEM_I2C_MAC_OFFSET)
+-	struct udevice *dev;
+-	ofnode eeprom;
+-
+-	eeprom = ofnode_get_chosen_node("xlnx,eeprom");
+-	if (!ofnode_valid(eeprom))
+-		return -ENODEV;
++#if defined(CONFIG_ZYNQ_GEM_SPI_MAC_OFFSET)
++	struct spi_flash *flash;
++	flash = spi_flash_probe(CONFIG_SF_DEFAULT_BUS,
++				CONFIG_SF_DEFAULT_CS,
++				0,
++				0);
++
++	if (!flash) {
++		printf("no flash\n");
++		printf("SPI(bus:%u cs:%u) probe failed\n",
++			CONFIG_SF_DEFAULT_BUS,
++			CONFIG_SF_DEFAULT_CS);
++		return 0;
++	}
+ 
+-	debug("%s: Path to EEPROM %s\n", __func__,
+-	      ofnode_get_chosen_prop("xlnx,eeprom"));
++	if (spi_flash_read(flash, CONFIG_ZYNQ_GEM_SPI_MAC_OFFSET, 6, ethaddr))
++		printf("%s:SPI MAC address read failed\n", __func__);
+ 
+-	ret = uclass_get_device_by_ofnode(UCLASS_I2C_EEPROM, eeprom, &dev);
+-	if (ret)
+-		return ret;
++	printf("%s: SPI ethaddr: %02X:%02X:%02X:%02X:%02X:%02X\n", __func__, ethaddr[0], ethaddr[1], ethaddr[2], ethaddr[3], ethaddr[4], ethaddr[5]);
+ 
+-	ret = dm_i2c_read(dev, CONFIG_ZYNQ_GEM_I2C_MAC_OFFSET, ethaddr, 6);
+-	if (ret)
+-		debug("%s: I2C EEPROM MAC address read failed\n", __func__);
+-	else
+-		debug("%s: I2C EEPROM MAC %pM\n", __func__, ethaddr);
++	if (flash)
++		spi_flash_free(flash);
+ #endif
+-
+ 	return ret;
+ }
+ 
+diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+index 82bb093c56..828080cb57 100644
+--- a/drivers/misc/Kconfig
++++ b/drivers/misc/Kconfig
+@@ -334,6 +334,14 @@ config ZYNQ_GEM_I2C_MAC_OFFSET
+ 	help
+ 	  Set the MAC offset for i2C.
+ 
++config ZYNQ_GEM_SPI_MAC_OFFSET
++	hex "Set the SPI MAC offset"
++	default 0x0
++	depends on DM_SPI
++	help
++	  Set the MAC offset for spi.
++
++
+ if I2C_EEPROM
+ 
+ config SYS_I2C_EEPROM_ADDR
+-- 
+2.17.1
+

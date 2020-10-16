@@ -1,0 +1,26 @@
+From 44d592a58258daa1be50e7b9387f8377dc9722a4 Mon Sep 17 00:00:00 2001
+From: Elod Gyorgy <elod.gyorgy@digilent.ro>
+Date: Wed, 6 Nov 2019 12:07:02 +0200
+Subject: [PATCH 4/6] zynqmp_fsbl:Authentication restored for booting BOOT.BIN
+ from QSPI
+
+---
+ lib/sw_apps/zynqmp_fsbl/src/xfsbl_config.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/sw_apps/zynqmp_fsbl/src/xfsbl_config.h b/lib/sw_apps/zynqmp_fsbl/src/xfsbl_config.h
+index 43a85070bd..e6fd7bbede 100644
+--- a/lib/sw_apps/zynqmp_fsbl/src/xfsbl_config.h
++++ b/lib/sw_apps/zynqmp_fsbl/src/xfsbl_config.h
+@@ -112,7 +112,7 @@ extern "C" {
+ #define FSBL_NAND_EXCLUDE_VAL			(1U)
+ #define FSBL_QSPI_EXCLUDE_VAL			(0U)
+ #define FSBL_SD_EXCLUDE_VAL				(0U)
+-#define FSBL_SECURE_EXCLUDE_VAL			(1U)
++#define FSBL_SECURE_EXCLUDE_VAL			(0U)
+ #define FSBL_BS_EXCLUDE_VAL				(0U)
+ #define FSBL_EARLY_HANDOFF_EXCLUDE_VAL	(1U)
+ #define FSBL_WDT_EXCLUDE_VAL			(1U)
+-- 
+2.17.1
+

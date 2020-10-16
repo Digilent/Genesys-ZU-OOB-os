@@ -1,0 +1,59 @@
+From 841923a3eaa73dc48e84995694b95cc1b0c2ef73 Mon Sep 17 00:00:00 2001
+From: Elod Gyorgy <elod.gyorgy@digilent.ro>
+Date: Mon, 3 Aug 2020 18:56:29 +0300
+Subject: [PATCH 6/6] zynqmp_fsbl: Missing includes and guards for board define
+
+---
+ lib/sw_apps/zynqmp_fsbl/src/spi_gpio.c |  3 ++-
+ lib/sw_apps/zynqmp_fsbl/src/spi_gpio.h | 12 ++++++++++++
+ 2 files changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/lib/sw_apps/zynqmp_fsbl/src/spi_gpio.c b/lib/sw_apps/zynqmp_fsbl/src/spi_gpio.c
+index 02dd264152..ef48603035 100644
+--- a/lib/sw_apps/zynqmp_fsbl/src/spi_gpio.c
++++ b/lib/sw_apps/zynqmp_fsbl/src/spi_gpio.c
+@@ -25,10 +25,11 @@
+  */
+ 
+ #include "spi_gpio.h"
++
++#if defined(XPS_BOARD_GZU_3EG) || defined(XPS_BOARD_GZU_5EV)
+ #include "xspips.h"
+ #include "sleep.h"
+ 
+-#if defined(XPS_BOARD_GZU_3EG) || defined(XPS_BOARD_GZU_5EV)
+ //MCP23S08
+ #define SCLK_MAX_FREQ 10000000
+ #define MCP23S08_READ 1
+diff --git a/lib/sw_apps/zynqmp_fsbl/src/spi_gpio.h b/lib/sw_apps/zynqmp_fsbl/src/spi_gpio.h
+index 0d8ad27f68..cc2a66a057 100644
+--- a/lib/sw_apps/zynqmp_fsbl/src/spi_gpio.h
++++ b/lib/sw_apps/zynqmp_fsbl/src/spi_gpio.h
+@@ -27,6 +27,13 @@
+ #ifndef SRC_SPI_GPIO_H_
+ #define SRC_SPI_GPIO_H_
+ 
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++#include "xfsbl_hw.h"
++
++#if defined(XPS_BOARD_GZU_3EG) || defined(XPS_BOARD_GZU_5EV)
+ #include "xstatus.h"
+ 
+ #define SPI_GPIO_DEVICE_ID XPAR_PSU_SPI_0_DEVICE_ID
+@@ -37,5 +44,10 @@
+ XStatus SpiGpioInit(u32 dev_id, u8 ss_id);
+ XStatus SpiGpioReadReg(u8 reg, u8* value);
+ XStatus SpiGpioWriteReg(u8 reg, u8 value);
++#endif /* XPS_BOARD_GZU_3EG || XPS_BOARD_GZU_5EV */
++
++#ifdef __cplusplus
++}
++#endif
+ 
+ #endif /* SRC_SPI_GPIO_H_ */
+-- 
+2.17.1
+

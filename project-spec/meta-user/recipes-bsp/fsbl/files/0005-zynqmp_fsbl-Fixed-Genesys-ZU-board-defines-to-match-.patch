@@ -1,0 +1,69 @@
+From 23226f8f01b77d7373d6b142ccf050ef22acfd36 Mon Sep 17 00:00:00 2001
+From: Elod Gyorgy <elod.gyorgy@digilent.ro>
+Date: Thu, 20 Feb 2020 12:03:56 +0200
+Subject: [PATCH 5/6] zynqmp_fsbl: Fixed Genesys ZU board defines to match
+ board defintion files.
+
+---
+ lib/sw_apps/zynqmp_fsbl/src/spi_gpio.c    | 4 ++--
+ lib/sw_apps/zynqmp_fsbl/src/xfsbl_board.c | 4 ++--
+ lib/sw_apps/zynqmp_fsbl/src/xfsbl_board.h | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/lib/sw_apps/zynqmp_fsbl/src/spi_gpio.c b/lib/sw_apps/zynqmp_fsbl/src/spi_gpio.c
+index 48d2c88d4b..02dd264152 100644
+--- a/lib/sw_apps/zynqmp_fsbl/src/spi_gpio.c
++++ b/lib/sw_apps/zynqmp_fsbl/src/spi_gpio.c
+@@ -28,7 +28,7 @@
+ #include "xspips.h"
+ #include "sleep.h"
+ 
+-#ifdef XPS_BOARD_GZU
++#if defined(XPS_BOARD_GZU_3EG) || defined(XPS_BOARD_GZU_5EV)
+ //MCP23S08
+ #define SCLK_MAX_FREQ 10000000
+ #define MCP23S08_READ 1
+@@ -177,4 +177,4 @@ XStatus SpiGpioWriteReg(u8 reg, u8 value)
+ 
+ 	return XST_SUCCESS;
+ }
+-#endif//XPS_BOARD_GZU
++#endif//defined(XPS_BOARD_GZU_3EG) || defined(XPS_BOARD_GZU_5EV)
+diff --git a/lib/sw_apps/zynqmp_fsbl/src/xfsbl_board.c b/lib/sw_apps/zynqmp_fsbl/src/xfsbl_board.c
+index 643348dfa6..6e61a3dbdc 100644
+--- a/lib/sw_apps/zynqmp_fsbl/src/xfsbl_board.c
++++ b/lib/sw_apps/zynqmp_fsbl/src/xfsbl_board.c
+@@ -788,7 +788,7 @@ static void XFsbl_PcieReset(void)
+ }
+ #endif
+ #endif
+-#if defined(XPS_BOARD_GZU)
++#if defined(XPS_BOARD_GZU_3EG) || defined(XPS_BOARD_GZU_5EV)
+ #include "sleep.h"
+ #include "xgpiops.h"
+ /*
+@@ -904,7 +904,7 @@ u32 XFsbl_BoardInit(void)
+ #if defined(XPS_BOARD_ZCU102)
+ 	XFsbl_PcieReset();
+ #endif
+-#elif defined(XPS_BOARD_GZU)
++#elif defined(XPS_BOARD_GZU_3EG) || defined(XPS_BOARD_GZU_5EV)
+ 	XFsbl_Printf(DEBUG_INFO,"Digilent Genesys ZU board-specific init\n\r");
+ 	Status = InitGpios();
+ #else
+diff --git a/lib/sw_apps/zynqmp_fsbl/src/xfsbl_board.h b/lib/sw_apps/zynqmp_fsbl/src/xfsbl_board.h
+index 7949082d25..531274b08a 100644
+--- a/lib/sw_apps/zynqmp_fsbl/src/xfsbl_board.h
++++ b/lib/sw_apps/zynqmp_fsbl/src/xfsbl_board.h
+@@ -177,7 +177,7 @@ typedef struct XVoutCommands {
+ /************************** Function Prototypes ******************************/
+ #endif
+ 
+-#if defined(XPS_BOARD_GZU)
++#if defined(XPS_BOARD_GZU_3EG) || defined(XPS_BOARD_GZU_5EV)
+ #include "xgpiops_hw.h"
+ #include "spi_gpio.h"
+ /*
+-- 
+2.17.1
+
