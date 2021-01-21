@@ -4,6 +4,7 @@
 #include <dt-bindings/media/xilinx-vip.h>
 #include <dt-bindings/net/ti-dp83867.h>
 #include <dt-bindings/phy/phy.h>
+#include <dt-bindings/mux/mux.h>
 
 / {
 };
@@ -44,6 +45,8 @@ devicetree/bindings/net/phy.txt
 Adding support for the mux and expose all 8 segments.
 RESET# pin of TCA9548 is inverted on-board. Mapped to
 EMIO[0] which is line 78.
+devicetree/bindings/i2c/i2c-mux-pca954x.txt
+devicetree/bindings/mux/mux-controller.txt
 */
 &i2c0 {
 	i2c-mux@70 {
@@ -52,6 +55,8 @@ EMIO[0] which is line 78.
 		#size-cells = <0>;
 		reg = <0x70>;
 		reset-gpios = <&gpio 78 GPIO_ACTIVE_HIGH>;
+		i2c-mux-idle-disconnect;
+		idle-state = <MUX_IDLE_DISCONNECT>;
 		i2c@0 {
 			#address-cells = <1>;
 			#size-cells = <0>;
