@@ -1,0 +1,4 @@
+#!/bin/sh
+
+mux_chan=$1
+i2cdetect -l | grep "chan_id $mux_chan" | awk '{print $1;}' | cut -c5-
