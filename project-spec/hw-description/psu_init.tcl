@@ -12468,10 +12468,10 @@ set psu_mio_init_data {
 		# PSU_IOU_SLCR_BANK0_CTRL0_DRIVE0_BIT_13                                          1
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL0_DRIVE0_BIT_14                                          1
+		# PSU_IOU_SLCR_BANK0_CTRL0_DRIVE0_BIT_14                                          0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL0_DRIVE0_BIT_15                                          1
+		# PSU_IOU_SLCR_BANK0_CTRL0_DRIVE0_BIT_15                                          0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
 		# PSU_IOU_SLCR_BANK0_CTRL0_DRIVE0_BIT_16                                          1
@@ -12504,8 +12504,8 @@ set psu_mio_init_data {
 		# PSU_IOU_SLCR_BANK0_CTRL0_DRIVE0_BIT_25                                          1
 
 		# Drive0 control to MIO Bank 0 - control MIO[25:0]
-		#(OFFSET, MASK, VALUE)      (0XFF180138, 0x03FFFFFFU ,0x033FFCFFU)  */
-    mask_write 0XFF180138 0x03FFFFFF 0x033FFCFF
+		#(OFFSET, MASK, VALUE)      (0XFF180138, 0x03FFFFFFU ,0x033F3CFFU)  */
+    mask_write 0XFF180138 0x03FFFFFF 0x033F3CFF
 		# Register : bank0_ctrl1 @ 0XFF18013C</p>
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
@@ -12672,70 +12672,10 @@ set psu_mio_init_data {
 		# Selects either Schmitt or CMOS input for MIO Bank 0 - control MIO[25:0]
 		#(OFFSET, MASK, VALUE)      (0XFF180140, 0x03FFFFFFU ,0x00000000U)  */
     mask_write 0XFF180140 0x03FFFFFF 0x00000000
-		# Register : bank0_ctrl4 @ 0XFF180144</p>
-
-		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_0                                  1
-
-		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_1                                  1
-
-		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_2                                  1
-
-		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_3                                  1
-
-		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_4                                  1
-
-		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_5                                  1
-
-		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_6                                  1
-
-		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_7                                  1
-
-		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_12                                 1
-
-		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_14                                 1
-
-		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_15                                 1
-
-		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_16                                 1
-
-		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_17                                 1
-
-		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_18                                 1
-
-		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_19                                 1
-
-		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_20                                 1
-
-		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_21                                 0
-
-		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_25                                 1
-
-		# When mio_bank0_pull_enable is set, this selects pull up or pull down for
-    #  MIO Bank 0 - control MIO[25:0]
-		#(OFFSET, MASK, VALUE)      (0XFF180144, 0x023FD0FFU ,0x021FD0FFU)  */
-    mask_write 0XFF180144 0x023FD0FF 0x021FD0FF
 		# Register : bank0_ctrl5 @ 0XFF180148</p>
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL5_PULL_ENABLE_BIT_0                                      1
+		# PSU_IOU_SLCR_BANK0_CTRL5_PULL_ENABLE_BIT_0                                      0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
 		# PSU_IOU_SLCR_BANK0_CTRL5_PULL_ENABLE_BIT_1                                      1
@@ -12777,19 +12717,19 @@ set psu_mio_init_data {
 		# PSU_IOU_SLCR_BANK0_CTRL5_PULL_ENABLE_BIT_13                                     0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL5_PULL_ENABLE_BIT_14                                     1
+		# PSU_IOU_SLCR_BANK0_CTRL5_PULL_ENABLE_BIT_14                                     0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL5_PULL_ENABLE_BIT_15                                     1
+		# PSU_IOU_SLCR_BANK0_CTRL5_PULL_ENABLE_BIT_15                                     0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL5_PULL_ENABLE_BIT_16                                     1
+		# PSU_IOU_SLCR_BANK0_CTRL5_PULL_ENABLE_BIT_16                                     0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL5_PULL_ENABLE_BIT_17                                     1
+		# PSU_IOU_SLCR_BANK0_CTRL5_PULL_ENABLE_BIT_17                                     0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
-		# PSU_IOU_SLCR_BANK0_CTRL5_PULL_ENABLE_BIT_18                                     1
+		# PSU_IOU_SLCR_BANK0_CTRL5_PULL_ENABLE_BIT_18                                     0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
 		# PSU_IOU_SLCR_BANK0_CTRL5_PULL_ENABLE_BIT_19                                     1
@@ -12814,8 +12754,8 @@ set psu_mio_init_data {
 
 		# When set, this enables mio_bank0_pullupdown to selects pull up or pull d
     # own for MIO Bank 0 - control MIO[25:0]
-		#(OFFSET, MASK, VALUE)      (0XFF180148, 0x03FFFFFFU ,0x023FD0FFU)  */
-    mask_write 0XFF180148 0x03FFFFFF 0x023FD0FF
+		#(OFFSET, MASK, VALUE)      (0XFF180148, 0x03FFFFFFU ,0x023810FEU)  */
+    mask_write 0XFF180148 0x03FFFFFF 0x023810FE
 		# Register : bank0_ctrl6 @ 0XFF18014C</p>
 
 		# Each bit applies to a single IO. Bit 0 for MIO[0].
@@ -12899,6 +12839,48 @@ set psu_mio_init_data {
 		# Slew rate control to MIO Bank 0 - control MIO[25:0]
 		#(OFFSET, MASK, VALUE)      (0XFF18014C, 0x03FFFFFFU ,0x03DBFF81U)  */
     mask_write 0XFF18014C 0x03FFFFFF 0x03DBFF81
+		# Register : bank0_ctrl4 @ 0XFF180144</p>
+
+		# Each bit applies to a single IO. Bit 0 for MIO[0].
+		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_1                                  1
+
+		# Each bit applies to a single IO. Bit 0 for MIO[0].
+		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_2                                  1
+
+		# Each bit applies to a single IO. Bit 0 for MIO[0].
+		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_3                                  1
+
+		# Each bit applies to a single IO. Bit 0 for MIO[0].
+		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_4                                  1
+
+		# Each bit applies to a single IO. Bit 0 for MIO[0].
+		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_5                                  1
+
+		# Each bit applies to a single IO. Bit 0 for MIO[0].
+		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_6                                  1
+
+		# Each bit applies to a single IO. Bit 0 for MIO[0].
+		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_7                                  1
+
+		# Each bit applies to a single IO. Bit 0 for MIO[0].
+		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_12                                 1
+
+		# Each bit applies to a single IO. Bit 0 for MIO[0].
+		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_19                                 1
+
+		# Each bit applies to a single IO. Bit 0 for MIO[0].
+		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_20                                 1
+
+		# Each bit applies to a single IO. Bit 0 for MIO[0].
+		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_21                                 0
+
+		# Each bit applies to a single IO. Bit 0 for MIO[0].
+		# PSU_IOU_SLCR_BANK0_CTRL4_PULL_HIGH_LOW_N_BIT_25                                 1
+
+		# When mio_bank0_pull_enable is set, this selects pull up or pull down for
+    #  MIO Bank 0 - control MIO[25:0]
+		#(OFFSET, MASK, VALUE)      (0XFF180144, 0x023810FEU ,0x021810FEU)  */
+    mask_write 0XFF180144 0x023810FE 0x021810FE
 		# Register : bank1_ctrl0 @ 0XFF180154</p>
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
@@ -12941,7 +12923,7 @@ set psu_mio_init_data {
 		# PSU_IOU_SLCR_BANK1_CTRL0_DRIVE0_BIT_12                                          1
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL0_DRIVE0_BIT_13                                          1
+		# PSU_IOU_SLCR_BANK1_CTRL0_DRIVE0_BIT_13                                          0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
 		# PSU_IOU_SLCR_BANK1_CTRL0_DRIVE0_BIT_14                                          1
@@ -12953,7 +12935,7 @@ set psu_mio_init_data {
 		# PSU_IOU_SLCR_BANK1_CTRL0_DRIVE0_BIT_16                                          1
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL0_DRIVE0_BIT_17                                          1
+		# PSU_IOU_SLCR_BANK1_CTRL0_DRIVE0_BIT_17                                          0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
 		# PSU_IOU_SLCR_BANK1_CTRL0_DRIVE0_BIT_18                                          1
@@ -12980,8 +12962,8 @@ set psu_mio_init_data {
 		# PSU_IOU_SLCR_BANK1_CTRL0_DRIVE0_BIT_25                                          1
 
 		# Drive0 control to MIO Bank 1 - control MIO[51:26]
-		#(OFFSET, MASK, VALUE)      (0XFF180154, 0x03FFFFFFU ,0x03FFFFFFU)  */
-    mask_write 0XFF180154 0x03FFFFFF 0x03FFFFFF
+		#(OFFSET, MASK, VALUE)      (0XFF180154, 0x03FFFFFFU ,0x03FDDFFFU)  */
+    mask_write 0XFF180154 0x03FFFFFF 0x03FDDFFF
 		# Register : bank1_ctrl1 @ 0XFF180158</p>
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
@@ -13190,7 +13172,7 @@ set psu_mio_init_data {
 		# PSU_IOU_SLCR_BANK1_CTRL5_PULL_ENABLE_BIT_12                                     0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL5_PULL_ENABLE_BIT_13                                     1
+		# PSU_IOU_SLCR_BANK1_CTRL5_PULL_ENABLE_BIT_13                                     0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
 		# PSU_IOU_SLCR_BANK1_CTRL5_PULL_ENABLE_BIT_14                                     1
@@ -13230,8 +13212,8 @@ set psu_mio_init_data {
 
 		# When set, this enables mio_bank1_pullupdown to selects pull up or pull d
     # own for MIO Bank 1 - control MIO[51:26]
-		#(OFFSET, MASK, VALUE)      (0XFF180164, 0x03FFFFFFU ,0x03F03F1EU)  */
-    mask_write 0XFF180164 0x03FFFFFF 0x03F03F1E
+		#(OFFSET, MASK, VALUE)      (0XFF180164, 0x03FFFFFFU ,0x03F03F1CU)  */
+    mask_write 0XFF180164 0x03FFFFFF 0x03F03F1C
 		# Register : bank1_ctrl6 @ 0XFF180168</p>
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
@@ -13274,7 +13256,7 @@ set psu_mio_init_data {
 		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_12                                1
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_13                                0
+		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_13                                1
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
 		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_14                                0
@@ -13286,7 +13268,7 @@ set psu_mio_init_data {
 		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_16                                0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_17                                0
+		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_17                                1
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
 		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_18                                1
@@ -13313,8 +13295,8 @@ set psu_mio_init_data {
 		# PSU_IOU_SLCR_BANK1_CTRL6_SLOW_FAST_SLEW_N_BIT_25                                0
 
 		# Slew rate control to MIO Bank 1 - control MIO[51:26]
-		#(OFFSET, MASK, VALUE)      (0XFF180168, 0x03FFFFFFU ,0x0004103FU)  */
-    mask_write 0XFF180168 0x03FFFFFF 0x0004103F
+		#(OFFSET, MASK, VALUE)      (0XFF180168, 0x03FFFFFFU ,0x0006303FU)  */
+    mask_write 0XFF180168 0x03FFFFFF 0x0006303F
 		# Register : bank1_ctrl4 @ 0XFF180160</p>
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
@@ -13334,9 +13316,6 @@ set psu_mio_init_data {
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
 		# PSU_IOU_SLCR_BANK1_CTRL4_PULL_HIGH_LOW_N_BIT_11                                 0
-
-		# Each bit applies to a single IO. Bit 0 for MIO[26].
-		# PSU_IOU_SLCR_BANK1_CTRL4_PULL_HIGH_LOW_N_BIT_13                                 1
 
 		# Each bit applies to a single IO. Bit 0 for MIO[26].
 		# PSU_IOU_SLCR_BANK1_CTRL4_PULL_HIGH_LOW_N_BIT_14                                 1
@@ -13367,8 +13346,8 @@ set psu_mio_init_data {
 
 		# When mio_bank1_pull_enable is set, this selects pull up or pull down for
     #  MIO Bank 1 - control MIO[51:26]
-		#(OFFSET, MASK, VALUE)      (0XFF180160, 0x03F1EFC0U ,0x03F1E000U)  */
-    mask_write 0XFF180160 0x03F1EFC0 0x03F1E000
+		#(OFFSET, MASK, VALUE)      (0XFF180160, 0x03F1CFC0U ,0x03F1C000U)  */
+    mask_write 0XFF180160 0x03F1CFC0 0x03F1C000
 		# Register : bank2_ctrl0 @ 0XFF180170</p>
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
@@ -13444,14 +13423,14 @@ set psu_mio_init_data {
 		# PSU_IOU_SLCR_BANK2_CTRL0_DRIVE0_BIT_23                                          1
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
-		# PSU_IOU_SLCR_BANK2_CTRL0_DRIVE0_BIT_24                                          1
+		# PSU_IOU_SLCR_BANK2_CTRL0_DRIVE0_BIT_24                                          0
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
-		# PSU_IOU_SLCR_BANK2_CTRL0_DRIVE0_BIT_25                                          1
+		# PSU_IOU_SLCR_BANK2_CTRL0_DRIVE0_BIT_25                                          0
 
 		# Drive0 control to MIO Bank 2 - control MIO[77:52]
-		#(OFFSET, MASK, VALUE)      (0XFF180170, 0x03FFFFFFU ,0x03FFFFFFU)  */
-    mask_write 0XFF180170 0x03FFFFFF 0x03FFFFFF
+		#(OFFSET, MASK, VALUE)      (0XFF180170, 0x03FFFFFFU ,0x00FFFFFFU)  */
+    mask_write 0XFF180170 0x03FFFFFF 0x00FFFFFF
 		# Register : bank2_ctrl1 @ 0XFF180174</p>
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
@@ -13696,12 +13675,12 @@ set psu_mio_init_data {
 		# PSU_IOU_SLCR_BANK2_CTRL5_PULL_ENABLE_BIT_24                                     1
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
-		# PSU_IOU_SLCR_BANK2_CTRL5_PULL_ENABLE_BIT_25                                     1
+		# PSU_IOU_SLCR_BANK2_CTRL5_PULL_ENABLE_BIT_25                                     0
 
 		# When set, this enables mio_bank2_pullupdown to selects pull up or pull d
     # own for MIO Bank 2 - control MIO[77:52]
-		#(OFFSET, MASK, VALUE)      (0XFF180180, 0x03FFFFFFU ,0x0304A04AU)  */
-    mask_write 0XFF180180 0x03FFFFFF 0x0304A04A
+		#(OFFSET, MASK, VALUE)      (0XFF180180, 0x03FFFFFFU ,0x0104A04AU)  */
+    mask_write 0XFF180180 0x03FFFFFF 0x0104A04A
 		# Register : bank2_ctrl6 @ 0XFF180184</p>
 
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
@@ -13808,13 +13787,10 @@ set psu_mio_init_data {
 		# Each bit applies to a single IO. Bit 0 for MIO[52].
 		# PSU_IOU_SLCR_BANK2_CTRL4_PULL_HIGH_LOW_N_BIT_24                                 1
 
-		# Each bit applies to a single IO. Bit 0 for MIO[52].
-		# PSU_IOU_SLCR_BANK2_CTRL4_PULL_HIGH_LOW_N_BIT_25                                 1
-
 		# When mio_bank2_pull_enable is set, this selects pull up or pull down for
     #  MIO Bank 2 - control MIO[77:52]
-		#(OFFSET, MASK, VALUE)      (0XFF18017C, 0x0304A04AU ,0x03040040U)  */
-    mask_write 0XFF18017C 0x0304A04A 0x03040040
+		#(OFFSET, MASK, VALUE)      (0XFF18017C, 0x0104A04AU ,0x01040040U)  */
+    mask_write 0XFF18017C 0x0104A04A 0x01040040
 		# : LOOPBACK
 		# Register : MIO_LOOPBACK @ 0XFF180200</p>
 
