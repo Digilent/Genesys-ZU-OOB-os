@@ -1,8 +1,9 @@
 From 6a16f98de02ea4376811bde78ec44bf3048e5ebd Mon Sep 17 00:00:00 2001
 From: Ionel Badisor <ionel.badisor@digilent.ro>
 Date: Wed, 7 Aug 2019 15:50:58 +0300
-Subject: [PATCH 2/6] Exclude fsbl code to make it fit.
+Subject: [PATCH 2/8] Exclude fsbl code to make it fit.
 
+Signed-off-by: Elod Gyorgy <elod.gyorgy@digilent.ro>
 ---
  lib/sw_apps/zynqmp_fsbl/src/xfsbl_config.h | 14 +++++++-------
  1 file changed, 7 insertions(+), 7 deletions(-)

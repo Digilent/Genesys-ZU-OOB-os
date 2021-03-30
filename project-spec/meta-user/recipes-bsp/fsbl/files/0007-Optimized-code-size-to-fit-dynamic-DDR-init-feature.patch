@@ -1,0 +1,104 @@
+From b2e0a00e637013432131cb83917ca946472d35df Mon Sep 17 00:00:00 2001
+From: Elod Gyorgy <elod.gyorgy@digilent.ro>
+Date: Mon, 22 Mar 2021 18:28:31 +0200
+Subject: [PATCH 7/8] Optimized code size to fit dynamic DDR init feature.
+
+Signed-off-by: Elod Gyorgy <elod.gyorgy@digilent.ro>
+---
+ lib/sw_apps/zynqmp_fsbl/src/spi_gpio.c     | 25 ++++++++++++----------
+ lib/sw_apps/zynqmp_fsbl/src/xfsbl_config.h |  8 +++----
+ 2 files changed, 18 insertions(+), 15 deletions(-)
+
+diff --git a/lib/sw_apps/zynqmp_fsbl/src/spi_gpio.c b/lib/sw_apps/zynqmp_fsbl/src/spi_gpio.c
+index ef48603035..26cd218df7 100644
+--- a/lib/sw_apps/zynqmp_fsbl/src/spi_gpio.c
++++ b/lib/sw_apps/zynqmp_fsbl/src/spi_gpio.c
+@@ -22,6 +22,9 @@
+  *
+  *  Created on: Oct 28, 2019
+  *      Author: Elod Gyorgy
++ *
++ *  Changelog:
++ *  	March 22, 2021	- Optimizations for code size
+  */
+ 
+ #include "spi_gpio.h"
+@@ -39,23 +42,23 @@
+ 
+ struct prescale_t
+ {
+-	u32 div;
++	u8 div;
+ 	u8 prescale;
+ };
+ static const struct prescale_t prescalers[] =
+ {
+-		{4, XSPIPS_CLK_PRESCALE_4},
+-		{8, XSPIPS_CLK_PRESCALE_8},
+-		{16, XSPIPS_CLK_PRESCALE_16},
+-		{32, XSPIPS_CLK_PRESCALE_32},
+-		{64, XSPIPS_CLK_PRESCALE_64},
+-		{128, XSPIPS_CLK_PRESCALE_128},
+-		{256, XSPIPS_CLK_PRESCALE_256}
++		{4-1, XSPIPS_CLK_PRESCALE_4},
++		{8-1, XSPIPS_CLK_PRESCALE_8},
++		{16-1, XSPIPS_CLK_PRESCALE_16},
++		{32-1, XSPIPS_CLK_PRESCALE_32},
++		{64-1, XSPIPS_CLK_PRESCALE_64},
++		{128-1, XSPIPS_CLK_PRESCALE_128},
++		{256-1, XSPIPS_CLK_PRESCALE_256}
+ };
+ 
+ static XSpiPs drv_inst;
+-static u8 send_buf_[8];
+-static u8 recv_buf_[8];
++static u8 send_buf_[3];
++static u8 recv_buf_[3];
+ 
+ /*
+  * @param dev_id SPI controller Device ID
+@@ -102,7 +105,7 @@ XStatus SpiGpioInit(u32 dev_id, u8 ss_id)
+ 	size_t i;
+ 	for (i=0; i<sizeof(prescalers)/sizeof(prescalers[0]); ++i)
+ 	{
+-		if (SpiConfig->InputClockHz / prescalers[i].div <= SCLK_MAX_FREQ)
++		if (SpiConfig->InputClockHz / (prescalers[i].div+1) <= SCLK_MAX_FREQ)
+ 			break;
+ 	}
+ 
+diff --git a/lib/sw_apps/zynqmp_fsbl/src/xfsbl_config.h b/lib/sw_apps/zynqmp_fsbl/src/xfsbl_config.h
+index e6fd7bbede..14648554bb 100644
+--- a/lib/sw_apps/zynqmp_fsbl/src/xfsbl_config.h
++++ b/lib/sw_apps/zynqmp_fsbl/src/xfsbl_config.h
+@@ -64,9 +64,9 @@ extern "C" {
+  *       all data exchanged.
+  */
+ #define FSBL_PRINT_VAL              (0U)
+-#define FSBL_DEBUG_VAL              (0U)
++#define FSBL_DEBUG_VAL              (1U)
+ #define FSBL_DEBUG_INFO_VAL         (0U)
+-#define FSBL_DEBUG_DETAILED_VAL     (1U)
++#define FSBL_DEBUG_DETAILED_VAL     (0U)
+ 
+ /**
+  * FSBL Debug options
+@@ -115,14 +115,14 @@ extern "C" {
+ #define FSBL_SECURE_EXCLUDE_VAL			(0U)
+ #define FSBL_BS_EXCLUDE_VAL				(0U)
+ #define FSBL_EARLY_HANDOFF_EXCLUDE_VAL	(1U)
+-#define FSBL_WDT_EXCLUDE_VAL			(1U)
++#define FSBL_WDT_EXCLUDE_VAL			(0U)
+ #define FSBL_PERF_EXCLUDE_VAL			(1U)
+ #define FSBL_A53_TCM_ECC_EXCLUDE_VAL	(1U)
+ #define FSBL_PL_CLEAR_EXCLUDE_VAL		(1U)
+ #define FSBL_USB_EXCLUDE_VAL			(1U)
+ #define FSBL_PROT_BYPASS_EXCLUDE_VAL	(1U)
+ #define FSBL_PARTITION_LOAD_EXCLUDE_VAL (0U)
+-#define FSBL_FORCE_ENC_EXCLUDE_VAL		(1U)
++#define FSBL_FORCE_ENC_EXCLUDE_VAL		(0U)
+ #define FSBL_DDR_SR_EXCLUDE_VAL			(1U)
+ 
+ #if FSBL_NAND_EXCLUDE_VAL
+-- 
+2.17.1
+

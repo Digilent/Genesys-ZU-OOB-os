@@ -1,9 +1,10 @@
 From 44d592a58258daa1be50e7b9387f8377dc9722a4 Mon Sep 17 00:00:00 2001
 From: Elod Gyorgy <elod.gyorgy@digilent.ro>
 Date: Wed, 6 Nov 2019 12:07:02 +0200
-Subject: [PATCH 4/6] zynqmp_fsbl:Authentication restored for booting BOOT.BIN
+Subject: [PATCH 4/8] zynqmp_fsbl:Authentication restored for booting BOOT.BIN
  from QSPI
 
+Signed-off-by: Elod Gyorgy <elod.gyorgy@digilent.ro>
 ---
  lib/sw_apps/zynqmp_fsbl/src/xfsbl_config.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)

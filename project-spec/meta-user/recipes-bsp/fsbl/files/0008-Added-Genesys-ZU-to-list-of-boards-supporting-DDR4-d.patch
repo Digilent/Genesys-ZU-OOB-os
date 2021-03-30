@@ -1,0 +1,98 @@
+From ee228e2c79ae936bf0936b21716e7ed745dad9df Mon Sep 17 00:00:00 2001
+From: Elod Gyorgy <elod.gyorgy@digilent.ro>
+Date: Fri, 26 Mar 2021 15:46:53 +0200
+Subject: [PATCH 8/8] Added Genesys ZU to list of boards supporting DDR4
+ dynamic init
+
+Signed-off-by: Elod Gyorgy <elod.gyorgy@digilent.ro>
+---
+ lib/sw_apps/zynqmp_fsbl/src/xfsbl_ddr_init.c | 24 +++++++++++++-------
+ 1 file changed, 16 insertions(+), 8 deletions(-)
+
+diff --git a/lib/sw_apps/zynqmp_fsbl/src/xfsbl_ddr_init.c b/lib/sw_apps/zynqmp_fsbl/src/xfsbl_ddr_init.c
+index d056d25dea..7fccbc40ee 100644
+--- a/lib/sw_apps/zynqmp_fsbl/src/xfsbl_ddr_init.c
++++ b/lib/sw_apps/zynqmp_fsbl/src/xfsbl_ddr_init.c
+@@ -714,7 +714,8 @@ u32 XFsbl_ComputeLpDdrParams(u8 *SpdData, struct DdrcInitData *DdrDataPtr)
+ 
+ #if !(defined(XPS_BOARD_ZCU102) || defined(XPS_BOARD_ZCU106) \
+ 	|| defined(XPS_BOARD_ZCU111) || defined(XPS_BOARD_ZCU216) \
+-	|| defined(XPS_BOARD_ZCU208))
++	|| defined(XPS_BOARD_ZCU208) \
++	|| defined(XPS_BOARD_GZU_3EG) || defined(XPS_BOARD_GZU_5EV))
+ /*****************************************************************************/
+ /**
+  * This function computes DIMM parameters based upon the SPD information.
+@@ -1891,7 +1892,8 @@ static u32 XFsbl_DdrcCalcDdr4RegVal(XFsbl_DimmParams *PDimmPtr, u32 *DdrCfg)
+ 
+ #if !(defined(XPS_BOARD_ZCU102) || defined(XPS_BOARD_ZCU106) \
+ 	|| defined(XPS_BOARD_ZCU111) || defined(XPS_BOARD_ZCU216) \
+-	|| defined(XPS_BOARD_ZCU208))
++	|| defined(XPS_BOARD_ZCU208) \
++	|| defined(XPS_BOARD_GZU_3EG) || defined(XPS_BOARD_GZU_5EV))
+ /*****************************************************************************/
+ /**
+  * This function calculates the DDRC register values for DDR3
+@@ -2963,7 +2965,8 @@ static void XFsbl_DdrcRegsWrite(XFsbl_DimmParams *PDimmPtr, u32 *DdrCfg)
+ 
+ #if !(defined(XPS_BOARD_ZCU102) || defined(XPS_BOARD_ZCU106) \
+ 	|| defined(XPS_BOARD_ZCU111) || defined(XPS_BOARD_ZCU216) \
+-	|| defined(XPS_BOARD_ZCU208))
++	|| defined(XPS_BOARD_ZCU208) \
++	|| defined(XPS_BOARD_GZU_3EG) || defined(XPS_BOARD_GZU_5EV))
+ /*****************************************************************************/
+ /**
+  * This function calculates and writes DDR controller registers
+@@ -3434,7 +3437,8 @@ static u32 XFsbl_PhyCalcDdr4RegVal(XFsbl_DimmParams *PDimmPtr, u32 *PhyCfg)
+ 
+ #if !(defined(XPS_BOARD_ZCU102) || defined(XPS_BOARD_ZCU106) \
+ 	|| defined(XPS_BOARD_ZCU111) || defined(XPS_BOARD_ZCU216) \
+-	|| defined(XPS_BOARD_ZCU208))
++	|| defined(XPS_BOARD_ZCU208) \
++	|| defined(XPS_BOARD_GZU_3EG) || defined(XPS_BOARD_GZU_5EV))
+ /*****************************************************************************/
+ /**
+  * This function calculates the PHY register values for DDR3
+@@ -5194,7 +5198,8 @@ static void XFsbl_PhyRegsWrite(XFsbl_DimmParams *PDimmPtr, u32 *PhyCfg)
+ 
+ #if !(defined(XPS_BOARD_ZCU102) || defined(XPS_BOARD_ZCU106) \
+ 	|| defined(XPS_BOARD_ZCU111) || defined(XPS_BOARD_ZCU216) \
+-	|| defined(XPS_BOARD_ZCU208))
++	|| defined(XPS_BOARD_ZCU208) \
++	|| defined(XPS_BOARD_GZU_3EG) || defined(XPS_BOARD_GZU_5EV))
+ /*****************************************************************************/
+ /**
+  * This function calculates and writes the DDR-PHY registers
+@@ -6518,7 +6523,8 @@ static void XFsbl_InitilizeDdrParams(struct DdrcInitData *DdrDataPtr)
+ 
+ #if defined(XPS_BOARD_ZCU102) || defined(XPS_BOARD_ZCU106) \
+ 	|| defined(XPS_BOARD_ZCU111) || defined(XPS_BOARD_ZCU216) \
+-	|| defined(XPS_BOARD_ZCU208)
++	|| defined(XPS_BOARD_ZCU208) \
++	|| defined(XPS_BOARD_GZU_3EG) || defined(XPS_BOARD_GZU_5EV)
+ /*****************************************************************************/
+ /**
+  * This function calculates and writes DDR controller registers
+@@ -6835,7 +6841,8 @@ u32 XFsbl_DdrInit(void)
+ 	u8 SpdData[512U];
+ #if !(defined(XPS_BOARD_ZCU102) || defined(XPS_BOARD_ZCU106) \
+ 	|| defined(XPS_BOARD_ZCU111) || defined(XPS_BOARD_ZCU216) \
+-	|| defined(XPS_BOARD_ZCU208)) || defined(XFSBL_ENABLE_DDR_SR)
++	|| defined(XPS_BOARD_ZCU208) \
++	|| defined(XPS_BOARD_GZU_3EG) || defined(XPS_BOARD_GZU_5EV)) || defined(XFSBL_ENABLE_DDR_SR)
+ 	u32 RegVal;
+ #endif
+ 
+@@ -6854,7 +6861,8 @@ u32 XFsbl_DdrInit(void)
+ 
+ #if defined(XPS_BOARD_ZCU102) || defined(XPS_BOARD_ZCU106) \
+ 	|| defined(XPS_BOARD_ZCU111) || defined(XPS_BOARD_ZCU216) \
+-	|| defined(XPS_BOARD_ZCU208)
++	|| defined(XPS_BOARD_ZCU208) \
++	|| defined(XPS_BOARD_GZU_3EG) || defined(XPS_BOARD_GZU_5EV)
+ 	/* ZCU102, ZCU106 and ZCU111, ZCU216 and ZCU208 Boards have support
+ 	 * only for DDR4 DIMMs. Skip checking for DDR type for these boards.
+ 	 */
+-- 
+2.17.1
+
