@@ -11,5 +11,7 @@ SRC_URI += "\
 	file://0008-Added-Genesys-ZU-to-list-of-boards-supporting-DDR4-d.patch \
 	"
 
+# Exclude Secure feature from FSBL until -O2 compilation bug is fixed 
+YAML_COMPILER_FLAGS_append = " -DFSBL_SECURE_EXCLUDE"
 YAML_COMPILER_FLAGS_append = " -DUHS_MODE_ENABLE"
 YAML_COMPILER_FLAGS_append = " -DXPS_BOARD_GZU_5EV"
