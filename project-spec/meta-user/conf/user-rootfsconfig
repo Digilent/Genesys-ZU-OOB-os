@@ -15,4 +15,6 @@ CONFIG_mmc-utils
 CONFIG_gammu
 CONFIG_nano
 CONFIG_pv
+CONFIG_lshw
+CONFIG_memtester
 

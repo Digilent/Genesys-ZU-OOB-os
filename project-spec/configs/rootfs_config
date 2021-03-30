@@ -4232,6 +4232,8 @@ CONFIG_pwm-rgb-led=y
 #
 # CONFIG_evtest is not set
 CONFIG_gammu=y
+CONFIG_lshw=y
+CONFIG_memtester=y
 CONFIG_mmc-utils=y
 CONFIG_nano=y
 CONFIG_picocom=y
