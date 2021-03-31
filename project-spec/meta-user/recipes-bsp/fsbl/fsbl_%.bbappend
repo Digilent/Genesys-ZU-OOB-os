@@ -9,6 +9,7 @@ SRC_URI += "\
 	file://0006-zynqmp_fsbl-Missing-includes-and-guards-for-board-de.patch \
 	file://0007-Optimized-code-size-to-fit-dynamic-DDR-init-feature.patch \
 	file://0008-Added-Genesys-ZU-to-list-of-boards-supporting-DDR4-d.patch \
+	file://0009-Print-board-specific-message-at-current-DEBUG-level.patch \
 	"
 
 # Exclude Secure feature from FSBL until -O2 compilation bug is fixed 

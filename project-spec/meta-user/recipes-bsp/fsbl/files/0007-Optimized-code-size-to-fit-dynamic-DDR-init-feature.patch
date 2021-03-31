@@ -1,7 +1,7 @@
 From b2e0a00e637013432131cb83917ca946472d35df Mon Sep 17 00:00:00 2001
 From: Elod Gyorgy <elod.gyorgy@digilent.ro>
 Date: Mon, 22 Mar 2021 18:28:31 +0200
-Subject: [PATCH 7/8] Optimized code size to fit dynamic DDR init feature.
+Subject: [PATCH 7/9] Optimized code size to fit dynamic DDR init feature.
 
 Signed-off-by: Elod Gyorgy <elod.gyorgy@digilent.ro>
 ---
@@ -100,5 +100,5 @@ index e6fd7bbede..14648554bb 100644
  
  #if FSBL_NAND_EXCLUDE_VAL
 -- 
-2.17.1
+2.28.0.windows.1
 

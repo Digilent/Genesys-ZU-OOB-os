@@ -1,0 +1,26 @@
+From 5e8649cf13d7cff6c54d96af8db138f688e97963 Mon Sep 17 00:00:00 2001
+From: Elod Gyorgy <elod.gyorgy@digilent.ro>
+Date: Wed, 31 Mar 2021 14:27:14 +0300
+Subject: [PATCH 9/9] Print board-specific message at current DEBUG level
+
+Signed-off-by: Elod Gyorgy <elod.gyorgy@digilent.ro>
+---
+ lib/sw_apps/zynqmp_fsbl/src/xfsbl_board.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/sw_apps/zynqmp_fsbl/src/xfsbl_board.c b/lib/sw_apps/zynqmp_fsbl/src/xfsbl_board.c
+index 6e61a3dbdc..318bf9142b 100644
+--- a/lib/sw_apps/zynqmp_fsbl/src/xfsbl_board.c
++++ b/lib/sw_apps/zynqmp_fsbl/src/xfsbl_board.c
+@@ -905,7 +905,7 @@ u32 XFsbl_BoardInit(void)
+ 	XFsbl_PcieReset();
+ #endif
+ #elif defined(XPS_BOARD_GZU_3EG) || defined(XPS_BOARD_GZU_5EV)
+-	XFsbl_Printf(DEBUG_INFO,"Digilent Genesys ZU board-specific init\n\r");
++	XFsbl_Printf(DEBUG_GENERAL,"Digilent Genesys ZU board-specific init\n\r");
+ 	Status = InitGpios();
+ #else
+ 	Status = XFSBL_SUCCESS;
+-- 
+2.28.0.windows.1
+
