@@ -47,6 +47,7 @@ build_image: prepare_image
 	if mountpoint -q -- "${emmc_img_boot_path}"; then \
 		cp -v ${input_dir}/BOOT.BIN ${emmc_img_boot_path}; \
 		cp -v ${input_dir}/image.ub ${emmc_img_boot_path}; \
+		cp -v ${input_dir}/boot.scr ${emmc_img_boot_path}; \
 		sync; \
 		sudo umount -v $${disk_file}p1 && \
 		rm -rv ${emmc_img_boot_path}; \
