@@ -8,7 +8,7 @@ ifeq ($(OS), NAME="Arch Linux")
 	export PATH := $(PATH):/usr/sbin:/sbin:/bin
 endif
 
-BOARD ?= zuca
+BOARD ?= genesys-zu
 BOARD_TYPE ?= 5ev
 
 output_dir = images/linux
