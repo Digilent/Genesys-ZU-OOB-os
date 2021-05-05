@@ -32,7 +32,7 @@
 # a USB 3.0 device may be connected to USB 2.0 bus. In such a case the test will
 # fail. By resetting all USB devices we force the system to re-enumerate all
 # devices.
-usb_reset
+usb-reset
 
 # We need a delay here to establish a correct connection with all USB devices.
 sleep 2
