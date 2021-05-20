@@ -28,15 +28,6 @@
 # 4 - Wrong type-c orientation
 # 5 - Wrong arguments
 
-# Reset all USB devices. We perform this operation because is some circumstances
-# a USB 3.0 device may be connected to USB 2.0 bus. In such a case the test will
-# fail. By resetting all USB devices we force the system to re-enumerate all
-# devices.
-usb-reset
-
-# We need a delay here to establish a correct connection with all USB devices.
-sleep 2
-
 ARGS=1 # Script requires 1 argument
 MASS_STORAGE_DEVICE="08"
 WIRELESS_CONTROLLER="e0"
@@ -176,6 +167,14 @@ case "$1" in
 		fi
 		;;
 	5)
+		# Reset USB Type C devices. We perform this operation because is some circumstances
+		# a USB 3.0 device may be connected to USB 2.0 bus. In such a case the test will
+		# fail.
+		usb-c-reset
+		
+		# We need a delay here to establish a correct connection with all USB devices.
+		sleep 2
+		
 		# We want to test if there is a USB 3.0 stick in Type-C Connector
 		if [ -d "${USB_DEVICES_PATH}${USB_BUS_2_PORT_1_INTERFACE}" ]; then
 			usbc_3_port_1_device_class=$(<"${USB_DEVICES_PATH}${USB_BUS_2_PORT_1_INTERFACE}/bInterfaceClass")

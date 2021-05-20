@@ -12,10 +12,11 @@ if ! cd $USB_DRIVERS_PATH ; then
   exit 1
 fi
 
-echo Resetting devices from $USB_DRIVERS_PATH...
+echo Resetting TypeC from $USB_DRIVERS_PATH...
 
-for i in ?-? ; do
-  echo "$i"
-  echo -n "$i" > unbind
-  echo -n "$i" > bind
-done
+#Assuming that USB type C 2.0 is always 1-1
+#and 3.0 is 2-1
+echo -n "1-1" > unbind
+sleep 0.5
+echo -n "1-1" > bind
+

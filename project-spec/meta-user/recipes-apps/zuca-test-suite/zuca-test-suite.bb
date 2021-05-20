@@ -13,7 +13,7 @@ SRC_URI = "file://zuca-test-suite \
 	file://sysmon \
 	file://sim-bist \
 	file://usb-bist \
-	file://usb-reset \
+	file://usb-c-reset \
 	file://DP-bist \
 	file://DP-bist-wrapper \
 	file://network-bist \
@@ -41,7 +41,7 @@ do_install() {
 	install -m 0755 ${S}/sysmon ${D}/${bindir}
 	install -m 0755 ${S}/sim-bist ${D}/${bindir}
 	install -m 0755 ${S}/usb-bist ${D}/${bindir}
-	install -m 0755 ${S}/usb-reset ${D}/${bindir}
+	install -m 0755 ${S}/usb-c-reset ${D}/${bindir}
 	install -m 0755 ${S}/DP-bist ${D}/${bindir}
 	install -m 0755 ${S}/DP-bist-wrapper ${D}/${bindir}
 	install -m 0755 ${S}/network-bist ${D}/${bindir}
